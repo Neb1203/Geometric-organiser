@@ -28,7 +28,7 @@ black = (0, 0, 0)
 gray = (128, 128, 128)
 
 # Loop until the user clicks the close button.
-done = False
+gameRunning = True
 clock = pygame.time.Clock()
 fps = 25
 counter = 0
@@ -40,7 +40,7 @@ pressing_down = False
 pressing_right = False
 pressing_left = False
 
-while not done:
+while gameRunning:
     print(pygame.display.get_window_size())
     if game.figure is None:
         game.new_figure()
@@ -64,7 +64,7 @@ while not done:
             game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
         if event.type == pygame.QUIT:
-            done = True
+            gameRunning = False
 
         if event.type == pygame.KEYDOWN: #Down keys for rotating
             if event.key == pygame.K_q:

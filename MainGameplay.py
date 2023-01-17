@@ -3,16 +3,6 @@ import pygame
 from Tetris import Tetris
 from Window import Window
 
-colors = [
-    (30, 21, 42), #Dark purple
-    (78, 103, 102), #Deep Space Sparkle
-    (90, 177, 187), #Cadet Blue
-    (128, 189, 159), #Eton Blue
-    (165, 200, 130),
-    (206, 211, 122), #Straw
-    (247, 221, 114), #Jasmine
-]
-
 window = Window()
 
 class resizableWindowUpdate:
@@ -117,7 +107,7 @@ while not done:
         for j in range(game.width):
             pygame.draw.rect(window.displaySize, gray, [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY], 1)
             if game.field[i][j] > 0:
-                pygame.draw.rect(window.displaySize, colors[game.field[i][j]],
+                pygame.draw.rect(window.displaySize, window.colors[game.field[i][j]],
                                  [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j + 1, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i + 1, resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 1])
     #
     if game.figure is not None:
@@ -125,7 +115,7 @@ while not done:
             for j in range(4):
                 p = i * 4 + j
                 if p in game.figure.image():
-                    pygame.draw.rect(window.displaySize, colors[game.figure.color],
+                    pygame.draw.rect(window.displaySize, window.colors[game.figure.color],
                                      [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * (j + game.figure.x) + 1,
                                       game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * (i + game.figure.y) + 1,
                                       resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 2])

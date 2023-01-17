@@ -1,7 +1,7 @@
 import pygame
-from Window import Window
-from Figure import Figure
+
 from Tetris import Tetris
+from Window import Window
 
 colors = [
     (30, 21, 42), #Dark purple

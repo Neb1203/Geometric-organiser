@@ -41,7 +41,6 @@ pressing_right = False
 pressing_left = False
 
 while gameRunning:
-    print(pygame.display.get_window_size())
     if game.figure is None:
         game.new_figure()
     counter += 1
@@ -109,7 +108,6 @@ while gameRunning:
             if game.field[i][j] > 0:
                 pygame.draw.rect(window.displaySize, window.colors[game.field[i][j]],
                                  [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j + 1, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i + 1, resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 1])
-    #
     if game.figure is not None:
         for i in range(4):
             for j in range(4):

@@ -9,7 +9,7 @@ window = Window()
 resizableWindowUpdateVar = resizableWindowUpdate()
 
 
-game = Tetris(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
+game = Tetris(22, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
 # Define some colors
 black = (0, 0, 0)
@@ -21,8 +21,8 @@ clock = pygame.time.Clock()
 fps = 25
 counter = 0
 
-speed = 1
-delay = 400000
+interval = 100
+delay = 300
 
 pressing_down = False
 pressing_right = False
@@ -39,16 +39,11 @@ while gameRunning:
         if game.state == "start":
             game.go_down()
 
-    if pressing_right == True: #Used for hold to move
-        game.go_side(1)
-    if pressing_left == True:
-        game.go_side(-1)
-
     for event in pygame.event.get():
 
-        if event.type == pygame.WINDOWRESIZED:
-            resizableWindowUpdateVar.update()
-            game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
+        # if event.type == pygame.WINDOWRESIZED:
+        #     resizableWindowUpdateVar.update()
+        #     game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
         if event.type == pygame.QUIT:
             gameRunning = False
@@ -63,13 +58,11 @@ while gameRunning:
                 pressing_down = True
 
             if event.key == pygame.K_a or event.key == pygame.K_LEFT:
-                pressing_left = True
-                pygame.key.set_repeat(delay, speed)
+                pygame.key.set_repeat(delay, interval)
                 game.go_side(-1)
 
             if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
-                pressing_right = True
-                pygame.key.set_repeat(delay, speed)
+                pygame.key.set_repeat(delay, interval)
                 game.go_side(1)
 
             if event.key == pygame.K_SPACE:

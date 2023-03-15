@@ -9,7 +9,7 @@ window = Window()
 resizableWindowUpdateVar = resizableWindowUpdate()
 
 
-game = Tetris(22, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
+game = Tetris(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
 # Define some colors
 black = (0, 0, 0)
@@ -41,9 +41,9 @@ while gameRunning:
 
     for event in pygame.event.get():
 
-        # if event.type == pygame.WINDOWRESIZED:
-        #     resizableWindowUpdateVar.update()
-        #     game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
+        if event.type == pygame.WINDOWRESIZED:
+            resizableWindowUpdateVar.update()
+            # game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
         if event.type == pygame.QUIT:
             gameRunning = False

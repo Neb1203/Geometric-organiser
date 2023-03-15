@@ -1,7 +1,8 @@
 import pygame
 
-from Tetris import Tetris
+from gridDraw import Tetris
 from Window import Window
+from Window import colours
 from ResizeableWindow import resizableWindowUpdate
 
 window = Window()
@@ -12,8 +13,7 @@ resizableWindowUpdateVar = resizableWindowUpdate()
 game = Tetris(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
 
 # Define some colors
-black = (0, 0, 0)
-gray = (128, 128, 128)
+
 
 # Loop until the user clicks the close button.
 gameRunning = True
@@ -81,11 +81,11 @@ while gameRunning:
         if event.key == pygame.K_a or pygame.K_LEFT:
             pressing_left = False
 
-    window.displaySize.fill(window.orange)
+    window.displaySize.fill(window.backGroundColour)
 
     for i in range(game.height):
         for j in range(game.width):
-            pygame.draw.rect(window.displaySize, gray, [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY], 1)
+            pygame.draw.rect(window.displaySize, window.gridColour, [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY], 1)
             if game.field[i][j] > 0:
                 pygame.draw.rect(window.displaySize, window.colors[game.field[i][j]],
                                  [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j + 1, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i + 1, resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 1])
@@ -103,12 +103,12 @@ while gameRunning:
     font_Fredoka_one_65 = pygame.font.SysFont('Fredoka One', 65, True, False)
     font_Alata_25 = pygame.font.SysFont('Alata', 25)
     font_Alata_65 = pygame.font.SysFont('Alata', 65)
-    score_tracker = font_Alata_25.render("Score: " + str(game.score), True, black)
+    score_tracker = font_Alata_25.render("Score: " + str(game.score), True, colours.black)
     text_game_over = font_Fredoka_one_65.render("Game Over", True, (255, 125, 0))
     text_game_over1 = font_Fredoka_one_65.render("Press ESC", True, (255, 215, 0))
 
     #Restart game font button
-    restart_text = font_Alata_25.render("Restart with Esc", True, black)
+    restart_text = font_Alata_25.render("Restart with Esc", True, colours.black)
     window.displaySize.blit(score_tracker, [0, 0])
     window.displaySize.blit(restart_text, [132, 480])
     if game.state == "gameover":

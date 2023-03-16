@@ -1,9 +1,9 @@
 import pygame
 
 from gridDraw import Tetris
-from Window import Window
-from Window import colours
+from Window import Window, colours
 from ResizeableWindow import resizableWindowUpdate
+from Figure import Figure
 
 window = Window()
 
@@ -87,14 +87,14 @@ while gameRunning:
         for j in range(game.width):
             pygame.draw.rect(window.displaySize, window.gridColour, [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY], 1)
             if game.field[i][j] > 0:
-                pygame.draw.rect(window.displaySize, window.colors[game.field[i][j]],
+                pygame.draw.rect(window.displaySize, Figure.colors[game.field[i][j]],
                                  [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j + 1, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i + 1, resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 1])
     if game.figure is not None:
         for i in range(4):
             for j in range(4):
                 p = i * 4 + j
                 if p in game.figure.image():
-                    pygame.draw.rect(window.displaySize, window.colors[game.figure.color],
+                    pygame.draw.rect(window.displaySize, Figure.colors[game.figure.color],
                                      [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * (j + game.figure.x) + 1,
                                       game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * (i + game.figure.y) + 1,
                                       resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 2])

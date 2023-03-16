@@ -15,13 +15,24 @@ class Figure:
         [[1, 2, 5, 6]],
     ]
 
+    colors = [
+        # The below color is never called, do not touch, otherwise when this color shape is shown it will # disappear when it should freeze
+        (0, 0, 0),
+        (30, 21, 42),
+        (78, 103, 102),
+        (90, 177, 187),
+        (128, 189, 159),
+        (165, 200, 130),
+        (206, 211, 122),
+        (247, 221, 114),
+    ]
+
     def __init__(self, x, y):
         self.x = x
         self.y = y
         self.type = random.randint(0, len(self.figures) - 1)
-        self.color = self.type
+        self.color = random.randint(1, len(self.colors) - 1)
         self.rotation = 0
-        self.color = self.type
 
 
     def image(self):

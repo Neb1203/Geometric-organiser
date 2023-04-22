@@ -11,10 +11,10 @@ background.fill(pygame.Color('#000000'))
 manager = pygame_gui.UIManager((menuWindow.vduDimensions))
 
 buttonLayoutRect = pygame.Rect(30, 20, 100, 20)
-hello_button = pygame_gui.elements.UIButton(relative_rect=buttonLayoutRect,
-                                        text='Say Hello',
-                                        manager=manager,
-                                        container=menuWindow.displaySize)
+helloButton = pygame_gui.elements.UIButton(relative_rect=buttonLayoutRect,
+                                           text='Say Hello',
+                                           manager=manager,
+                                           container=menuWindow.displaySize)
 
 clock = pygame.time.Clock()
 isRunning = True
@@ -26,7 +26,7 @@ while isRunning:
             isRunning = False
 
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
-            if event.ui_element == hello_button:
+            if event.ui_element == helloButton:
                 print('Hello World!')
 
         manager.process_events(event)

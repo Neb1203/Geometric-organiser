@@ -38,7 +38,7 @@ class Figure:
     def image(self):
         return self.figures[self.type][self.rotation]
 
-    def rotate_right(self): # Defines rotate right/left + or - 1
+    def rotateRight(self): # Defines rotate right/left + or - 1
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
-    def rotate_left(self):
+    def rotateRight(self):
         self.rotation = (self.rotation + -1) % len(self.figures[self.type])

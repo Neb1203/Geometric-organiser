@@ -1,7 +1,7 @@
 import pygame
 from GridDraw import Tetris
 from Window import Window
-class resizableWindowUpdate:
+class ResizeableWindow:
     def __init__(self):
         self.windowSize = pygame.display.get_window_size()
         self.scaleWVduDimensionsX = (int(self.windowSize[0]) / 500) * 20

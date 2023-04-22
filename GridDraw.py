@@ -25,7 +25,7 @@ class Tetris:
                 new_line.append(0)
             self.field.append(new_line)
 
-    def new_figure(self):
+    def newFigure(self):
         self.figure = Figure(3, 0)
 
     def intersects(self):
@@ -40,7 +40,7 @@ class Tetris:
                         intersection = True
         return intersection
 
-    def break_lines(self):
+    def breakLines(self):
         lines = 0
         for i in range(1, self.height):
             zeros = 0
@@ -54,13 +54,13 @@ class Tetris:
                         self.field[i1][j] = self.field[i1 - 1][j]
         self.score += lines ** 2
 
-    def go_space(self):
+    def goSpace(self):
         while not self.intersects():
             self.figure.y += 1
         self.figure.y -= 1
         self.freeze()
 
-    def go_down(self):
+    def goDown(self):
         self.figure.y += 1
         if self.intersects():
             self.figure.y -= 1
@@ -71,25 +71,25 @@ class Tetris:
             for j in range(4):
                 if i * 4 + j in self.figure.image():
                     self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
-        self.break_lines()
-        self.new_figure()
+        self.breakLines()
+        self.newFigure()
         if self.intersects():
             self.state = "gameover"
 
-    def go_side(self, dx):
+    def goSide(self, dx):
         old_x = self.figure.x
         self.figure.x += dx
         if self.intersects():
             self.figure.x = old_x
 
-    def rotate_left(self):
+    def rotateLeft(self):
         old_rotation = self.figure.rotation
-        self.figure.rotate_left()
+        self.figure.rotateRight()
         if self.intersects():
             self.figure.rotation = old_rotation
 
-    def rotate_right(self):
+    def rotateRight(self):
         old_rotation = self.figure.rotation
-        self.figure.rotate_right()
+        self.figure.rotateRight()
         if self.intersects():
             self.figure.rotation = old_rotation

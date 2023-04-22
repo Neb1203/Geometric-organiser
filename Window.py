@@ -1,8 +1,5 @@
 import pygame
-
-class colours:
-    black = (0, 0, 0)
-    gray = (128, 128, 128)
+from Colours import Colours
 
 class Window:
     def __init__(self):
@@ -13,10 +10,10 @@ class Window:
         self.vduDimensions = (800,600)
         self.displaySize = pygame.display.set_mode((self.vduDimensions), pygame.RESIZABLE)
 
-        self.backGroundColour = (255, 154, 0)
-        self.gridColour = colours.gray
+        self.backgroundColor = (255, 154, 0)
+        self.gridColour = Colours.gray
     def invisibleGrid(self):
-        self.gridColour = self.backGroundColour
+        self.gridColour = self.backgroundColor
 
 
 

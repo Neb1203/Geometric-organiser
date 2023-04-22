@@ -1,5 +1,5 @@
 import pygame
-from gridDraw import Tetris
+from GridDraw import Tetris
 from Window import Window
 class resizableWindowUpdate:
     def __init__(self):

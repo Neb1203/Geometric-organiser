@@ -1,7 +1,7 @@
 # import startScreen
 
 
-class gameStates:
+class GameStates:
     startScreenState = True
     mainMenuState = False
     is_running = True

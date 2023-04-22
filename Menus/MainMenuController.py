@@ -1,4 +1,4 @@
-class mainMenu:
+class MainMenuController:
     def play():
         print("play")
     def profile():

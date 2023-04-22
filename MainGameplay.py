@@ -1,6 +1,6 @@
 import pygame
 
-from gridDraw import Tetris
+from GridDraw import Tetris
 from Window import Window, colours
 from ResizeableWindow import resizableWindowUpdate
 from Figure import Figure

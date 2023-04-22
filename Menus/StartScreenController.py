@@ -1,4 +1,4 @@
-class startScreen:
+class StartScreenController:
     def goToMainMenu():
         print("goToMainMenu")
         # gameStates.mainMenuState == True

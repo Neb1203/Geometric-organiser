@@ -1,6 +1,6 @@
 import pygame
-from guiWindow import menuWindow
+from GuiWindow import menuWindow
 
-class mainMenuWindow:
+class MainMenu:
     menuWindow()
 

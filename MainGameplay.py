@@ -33,7 +33,7 @@ while gameRunning:
         iterCounter = 0
     if iterCounter % (fps // tetris.level // 2) == 0 or pressingDown:
         if tetris.state.gameStarted():
-            tetris.goDown()
+            tetris.moveDown()
 
     for event in pygame.event.get():
         if event.type == pygame.WINDOWRESIZED:
@@ -45,9 +45,9 @@ while gameRunning:
 
         if event.type == pygame.KEYDOWN: # When any key is pressed
             if event.key == pygame.K_q:
-                tetris.rotateRight()
-            if event.key == pygame.K_e:
                 tetris.rotateLeft()
+            if event.key == pygame.K_e:
+                tetris.rotateRight()
 
             if event.key == pygame.K_s:
                 pressingDown = True
@@ -61,7 +61,7 @@ while gameRunning:
                 tetris.goSide(1)
 
             if event.key == pygame.K_SPACE:
-                tetris.goSpace()
+                tetris.hardDrop()
             if event.key == pygame.K_ESCAPE:
                 tetris.__init__(20, 10)
 
@@ -75,8 +75,8 @@ while gameRunning:
 
     window.displaySize.fill(Colours.backgroundColor)
 
-    for i in range(tetris.height):
-        for j in range(tetris.width):
+    for i in range(tetris.gridHeight):
+        for j in range(tetris.gridWidth):
             pygame.draw.rect(window.displaySize, Colours.gray, [tetris.x + window.scaleWVduDimensionsX * j, tetris.y + window.scaleWVduDimensionsY * i, window.scaleWVduDimensionsX, window.scaleWVduDimensionsY], 1)
             if tetris.field[i][j] > 0:  # If piece reached bottom
                 pygame.draw.rect(window.displaySize, Figure.colors[tetris.field[i][j]],

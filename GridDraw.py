@@ -7,24 +7,19 @@ class Tetris:
     score = 0
     state = GameStateEnum.STARTED
     field = []
-    height = 0
-    width = 0
     figure = None
 
-    def __init__(self, height, width, scaleWVduDimensionsX, scaleWVduDimensionsY, windowSize):
-        self.height = height
-        self.width = width
-        self.x = (int(windowSize[0]) - (scaleWVduDimensionsX * 10)) / 2
+    def __init__(self, gridHeight, gridWidth, scaleWVduDimensionsX, scaleWVduDimensionsY, windowSize):
+        self.gridHeight = gridHeight
+        self.gridWidth = gridWidth
+        self.x = (windowSize[0] - (scaleWVduDimensionsX * 10)) / 2
         self.y = 0
         self.windowSize = pygame.display.get_window_size()
-        self.field = []
-        self.score = 0
-        self.state = GameStateEnum.STARTED
-        for i in range(height):
-            new_line = []
-            for j in range(width):
-                new_line.append(0)
-            self.field.append(new_line)
+        for squareHeight in range(gridHeight):
+            newColumn = []
+            for squareWidth in range(gridWidth):
+                newColumn.append(0)
+            self.field.append(newColumn)
 
     def newFigure(self):
         self.figure = Figure(3, 0)
@@ -34,34 +29,34 @@ class Tetris:
         for i in range(4):
             for j in range(4):
                 if i * 4 + j in self.figure.image():
-                    if i + self.figure.y > self.height - 1 or \
-                            j + self.figure.x > self.width - 1 or \
+                    if i + self.figure.y > self.gridHeight - 1 or \
+                            j + self.figure.x > self.gridWidth - 1 or \
                             j + self.figure.x < 0 or \
                             self.field[i + self.figure.y][j + self.figure.x] > 0:
                         intersection = True
         return intersection
 
-    def breakLines(self):
+    def reachedBottom(self):
         lines = 0
-        for i in range(1, self.height):
+        for i in range(1, self.gridHeight):
             zeros = 0
-            for j in range(self.width):
+            for j in range(self.gridWidth):
                 if self.field[i][j] == 0:
                     zeros += 1
             if zeros == 0:
                 lines += 1
                 for i1 in range(i, 1, -1):
-                    for j in range(self.width):
+                    for j in range(self.gridWidth):
                         self.field[i1][j] = self.field[i1 - 1][j]
         self.score += lines ** 2
 
-    def goSpace(self):
+    def hardDrop(self):
         while not self.intersects():
             self.figure.y += 1
         self.figure.y -= 1
         self.freeze()
 
-    def goDown(self):
+    def moveDown(self):
         self.figure.y += 1
         if self.intersects():
             self.figure.y -= 1
@@ -72,7 +67,7 @@ class Tetris:
             for j in range(4):
                 if i * 4 + j in self.figure.image():
                     self.field[i + self.figure.y][j + self.figure.x] = self.figure.color
-        self.breakLines()
+        self.reachedBottom()
         self.newFigure()
         if self.intersects():
             self.state = GameStateEnum.GAME_OVER
@@ -83,13 +78,13 @@ class Tetris:
         if self.intersects():
             self.figure.x = old_x
 
-    def rotateLeft(self):
+    def rotateRight(self):
         old_rotation = self.figure.rotation
         self.figure.rotateRight()
         if self.intersects():
             self.figure.rotation = old_rotation
 
-    def rotateRight(self):
+    def rotateLeft(self):
         old_rotation = self.figure.rotation
         self.figure.rotateRight()
         if self.intersects():

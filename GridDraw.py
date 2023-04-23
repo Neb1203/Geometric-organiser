@@ -1,10 +1,11 @@
 import pygame
 from Figure import Figure
+from GameStateEnum import GameStateEnum
 
 class Tetris:
     level = 2
     score = 0
-    state = "start"
+    state = GameStateEnum.STARTED
     field = []
     height = 0
     width = 0
@@ -18,7 +19,7 @@ class Tetris:
         self.windowSize = pygame.display.get_window_size()
         self.field = []
         self.score = 0
-        self.state = "start"
+        self.state = GameStateEnum.STARTED
         for i in range(height):
             new_line = []
             for j in range(width):
@@ -74,7 +75,7 @@ class Tetris:
         self.breakLines()
         self.newFigure()
         if self.intersects():
-            self.state = "gameover"
+            self.state = GameStateEnum.GAME_OVER
 
     def goSide(self, dx):
         old_x = self.figure.x

@@ -10,12 +10,16 @@ class Tetris:
     width = 0
     figure = None
 
-    def __init__(self, height, width, scaleWVduDimensionsX, scaleWVduDimensionsY, windowSize):
+    def __init__(self, width, height, zoomX, zoomY):
         self.height = height
         self.width = width
-        self.x = (int(windowSize[0]) - (scaleWVduDimensionsX * 10)) / 2
-        self.y = 0
         self.windowSize = pygame.display.get_window_size()
+
+        self.zoomX = zoomX
+        self.zoomY = zoomY #(int(self.windowSize[0] / ) / self.windowSize[1] / 20) * 22.5
+        self.gridX = 30 #(int(self.windowSize[0]) - (self.zoom * 10)) / 2
+        self.gridY = 0
+
         self.field = []
         self.score = 0
         self.state = "start"

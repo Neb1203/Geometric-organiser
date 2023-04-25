@@ -6,9 +6,9 @@ class Window:
         # Initialize the game engine
         pygame.init()
         pygame.display.set_caption("Geometric Organiser")
-
-        self.vduDimensions = (800,600)
-        self.setMode = pygame.display.set_mode((self.vduDimensions), pygame.RESIZABLE)
+        screenSize = 50
+        self.vduDimensions = (8 * screenSize, 9 * screenSize)
+        self.setMode = pygame.display.set_mode(self.vduDimensions)
 
         self.backgroundColor = (255, 154, 0)
         self.gridColour = Colours.gray

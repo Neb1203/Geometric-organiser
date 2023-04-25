@@ -12,8 +12,8 @@ def set_difficulty(value, difficulty):
 
 def startGame():
     # Do the job here !
-    # MainGameplay()
-    pass
+    MainGameplay.mainGameplay(10, 20, 18, 18)
+
 
 surface = window.setMode
 
@@ -22,6 +22,10 @@ startScreen = pygame_menu.Menu('Start Screen',
                                window.vduDimensions[1],
                             theme=mainTheme)
 playMenu = pygame_menu.Menu('Play',
+                            window.vduDimensions[0],
+                            window.vduDimensions[1],
+                            theme=mainTheme)
+settings = pygame_menu.Menu('settings',
                             window.vduDimensions[0],
                             window.vduDimensions[1],
                             theme=mainTheme)
@@ -42,11 +46,17 @@ startScreen.add.button('Quit', pygame_menu.events.EXIT)
 
 #create buttons for mainMenu
 mainMenu.add.button('Play', playMenu)
+mainMenu.add.button('Settings', settings)
 mainMenu.add.button('Back', pygame_menu.events.BACK)
+
+#settings
+settings.add.range_slider('Set screen size',
+                          range_values=[1,2,3,4,5],
+                          default=3)
 
 #Create buttons for playMenu
 playMenu.add.selector('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)], onchange=set_difficulty)
-playMenu.add.button('Start Game', startGame())
+playMenu.add.button('Start Game', startGame)
 playMenu.add.button('back', pygame_menu.events.BACK)
 
 #buttons for player profiles

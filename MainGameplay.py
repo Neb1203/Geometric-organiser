@@ -6,7 +6,7 @@ from Colours import Colours
 from Figure import Figure
 class MainGameplay:
     def mainGameplay(width, height, zoomX, zoomY):
-        window = Window()
+        window = Window(3)
         y = 0
         game = Tetris(width,height, zoomX, zoomY)
 

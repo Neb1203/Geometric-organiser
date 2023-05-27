@@ -2,17 +2,18 @@ import pygame
 from Colours import Colours
 
 class Window:
-    def __init__(self, screenSize):
+    def __init__(self):
         # Initialize the game engine
         pygame.init()
         pygame.display.set_caption("Geometric Organiser")
-        self.screenSize = screenSize
-        print(self.screenSize)
-        self.vduDimensions = (((1080/5)*(4/5)) * screenSize, (1080/5) * screenSize)
-        self.setMode = pygame.display.set_mode(self.vduDimensions)
+        self.screenSize = (3)
+        self.vduDimensions = (500, 400)
+        self.surface = pygame.display.set_mode(self.vduDimensions)
 
-        self.backgroundColor = (255, 154, 0)
-        self.gridColour = Colours.gray
+        self.zoomX = (int(self.vduDimensions[0]) / 500) * 20
+        self.scaleY = (int(self.vduDimensions[1]) / 400) * 20
+
+
     def invisibleGrid(self):
         self.gridColour = self.backgroundColor
 

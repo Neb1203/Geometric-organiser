@@ -1,24 +1,36 @@
 import pygame
 import pygame_menu
-from Window import Window
 from MainGameplay import MainGameplay
+from Window import Window
 
+subTheme = pygame_menu.themes.THEME_SOLARIZED
 
-mainTheme = pygame_menu.themes.THEME_BLUE
-window = Window(2)
-def set_difficulty(value, difficulty):
+mainTheme = pygame_menu.themes.THEME_ORANGE
+window = Window()
+# subWindow = (300,200)
+
+def setDifficulty(value, difficulty):
     # Do the job here
     # Window(50)
     pass
-def startGame():
-    # Do the job here !
-    MainGameplay.mainGameplay(10, 20, 18, 18)
+
 def screenSize(screenSize):
-    Window.screenSize(screenSize)
+    Window.newScreenSize = screenSize
 
 def userName(userName):
     print(userName)
-surface = window.setMode
+def email(email):
+    pass
+def pickGameMode(value, gameMode):
+    global gameModeSelected
+    gameModeSelected = gameMode
+def startGame():
+    # Do the job here !
+    if gameModeSelected == False:
+        MainGameplay()
+    elif gameModeSelected == True:
+        print("cum")
+surface = window.surface
 
 startScreen = pygame_menu.Menu('Start Screen',
                                window.vduDimensions[0],
@@ -40,6 +52,10 @@ mainMenu = pygame_menu.Menu('Main Menu',
                             window.vduDimensions[0],
                             window.vduDimensions[1],
                             theme=mainTheme)
+# profileCreation = pygame_menu.Menu('Create a profile',
+#                                    subWindow[0],
+#                                    subWindow[1],
+#                                    theme=subTheme)
 
 #create buttons for startScreen
 startScreen.add.label("Geometric Organiser")
@@ -59,13 +75,21 @@ settings.add.range_slider('Set screen size',
                           onchange=screenSize)
 
 #Create buttons for playMenu
-playMenu.add.selector('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)], onchange=set_difficulty)
+playMenu.add.selector('Gamemode : ', [('Campaign', True), ('Endless', False)], onchange = pickGameMode)
+playMenu.add.selector('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)], onchange = setDifficulty)
 playMenu.add.button('Start Game', startGame)
 playMenu.add.button('back', pygame_menu.events.BACK)
 
 #buttons for player profiles
-playerProfile.add.text_input('Name :', default='Insert Name here', onchange=userName)
+# playerProfile.add.button('Create a profile', profileCreation)
 playerProfile.add.button('back', pygame_menu.events.BACK)
+
+#buttons for profile creation
+# profileCreation.add.text_input('User Name :', onchange=userName)
+# profileCreation.add.text_input('Email :', onchange=email)
+
+#world map
+
 
 if startScreen.is_enabled():
     startScreen.mainloop(surface)

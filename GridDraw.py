@@ -6,19 +6,14 @@ class Tetris:
     score = 0
     state = "start"
     field = []
-    height = 0
-    width = 0
+    x = 0
+    y = 0
     figure = None
 
-    def __init__(self, width, height, zoomX, zoomY):
+    def __init__(self, width, height):
         self.height = height
         self.width = width
-        self.windowSize = pygame.display.get_window_size()
 
-        self.zoomX = zoomX
-        self.zoomY = zoomY #(int(self.windowSize[0] / ) / self.windowSize[1] / 20) * 22.5
-        self.gridX = 30 #(int(self.windowSize[0]) - (self.zoom * 10)) / 2
-        self.gridY = 0
 
         self.field = []
         self.score = 0

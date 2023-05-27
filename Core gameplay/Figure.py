@@ -28,8 +28,8 @@ class Figure:
     ]
 
     def __init__(self, x, y):
-        self.x = 0
-        self.y = 0
+        self.x = x
+        self.y = y
         self.type = random.randint(0, len(self.figures) - 1)
         self.color = random.randint(1, len(self.colors) - 1)
         self.rotation = 0
@@ -38,7 +38,7 @@ class Figure:
     def image(self):
         return self.figures[self.type][self.rotation]
 
-    def rotateRight(self): # Defines rotate right/left + or - 1
+    def rotate_right(self): # Defines rotate right/left + or - 1
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
-    def rotateRight(self):
+    def rotate_left(self):
         self.rotation = (self.rotation + -1) % len(self.figures[self.type])

@@ -1,14 +1,20 @@
 import pygame
 
+from Colours import Colours
 from GridDraw import Tetris
 from Window import Window
-from Colours import Colours
+from ResizeableWindow import resizableWindowUpdate
 from Figure import Figure
+
 class MainGameplay:
-    def mainGameplay(width, height, zoomX, zoomY):
-        window = Window(3)
-        y = 0
-        game = Tetris(width,height, zoomX, zoomY)
+    def __init__(self):
+        window = Window()
+        colours = Colours()
+
+        resizableWindowUpdateVar = resizableWindowUpdate()
+
+
+        game = Tetris(10, 20)
 
         # Define some colors
 
@@ -22,9 +28,9 @@ class MainGameplay:
         interval = 100
         delay = 300
 
-        pressingDown = False
-        pressingRight = False
-        pressingLeft = False
+        pressing_down = False
+        pressing_right = False
+        pressing_left = False
 
         while gameRunning:
             if game.figure is None:
@@ -33,13 +39,11 @@ class MainGameplay:
             if counter > 100000:
                 counter = 0
 
-            if counter % (fps // game.level // 2) == 0 or pressingDown:
+            if counter % (fps // game.level // 2) == 0 or pressing_down:
                 if game.state == "start":
                     game.goDown()
 
             for event in pygame.event.get():
-                    # game(20, 10, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY, resizableWindowUpdateVar.windowSize)
-
                 if event.type == pygame.QUIT:
                     gameRunning = False
 
@@ -50,7 +54,7 @@ class MainGameplay:
                         game.rotateLeft()
 
                     if event.key == pygame.K_s:
-                        pressingDown = True
+                        pressing_down = True
 
                     if event.key == pygame.K_a or event.key == pygame.K_LEFT:
                         pygame.key.set_repeat(delay, interval)
@@ -68,48 +72,47 @@ class MainGameplay:
                     if event.key == pygame.K_p:
                         pygame.quit()
 
-
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_s: #knows when i lift the down key up
-                    pressingDown = False
+                    pressing_down = False
                 if event.key == pygame.K_d or pygame.K_RIGHT:
-                    pressingRight = False
+                    pressing_right = False
                 if event.key == pygame.K_a or pygame.K_LEFT:
-                    pressingLeft = False
+                    pressing_left = False
 
-            window.setMode.fill(window.backgroundColor)
+            window.surface.fill(colours.backgroundColour)
 
             for i in range(game.height):
                 for j in range(game.width):
-                    pygame.draw.rect(window.setMode, window.gridColour, [game.gridX + game.zoomX * j, game.gridY + game.zoomY * i, game.zoomX, game.zoomY], 1)
+                    pygame.draw.rect(window.surface, colours.gridColour, [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i, resizableWindowUpdateVar.scaleWVduDimensionsX, resizableWindowUpdateVar.scaleWVduDimensionsY], 1)
                     if game.field[i][j] > 0:
-                        pygame.draw.rect(window.setMode, Figure.colors[game.field[i][j]],
-                                         [game.gridX + game.zoomX * j + 1, game.gridY + game.zoomY * i + 1, game.zoomX - 2, game.zoomY - 1])
+                        pygame.draw.rect(window.surface, Figure.colors[game.field[i][j]],
+                                         [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * j + 1, game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * i + 1, resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 1])
             if game.figure is not None:
                 for i in range(4):
                     for j in range(4):
                         p = i * 4 + j
                         if p in game.figure.image():
-                            pygame.draw.rect(window.setMode, Figure.colors[game.figure.color],
-                                             [game.gridX + game.zoomX * (j + game.figure.x) + 1,
-                                              game.gridY + game.zoomY * (i +game.figure.y) + 1,
-                                              game.zoomX - 2, game.zoomY - 2])
+                            pygame.draw.rect(window.surface, Figure.colors[game.figure.color],
+                                             [game.x + resizableWindowUpdateVar.scaleWVduDimensionsX * (j + game.figure.x) + 1,
+                                              game.y + resizableWindowUpdateVar.scaleWVduDimensionsY * (i + game.figure.y) + 1,
+                                              resizableWindowUpdateVar.scaleWVduDimensionsX - 2, resizableWindowUpdateVar.scaleWVduDimensionsY - 2])
 
-            fontFredokaOne25 = pygame.font.SysFont('Fredoka One', 25, True, False)
-            fontFredokaOne65 = pygame.font.SysFont('Fredoka One', 65, True, False)
-            fontAlata25 = pygame.font.SysFont('Alata', 25)
-            fontAlata65 = pygame.font.SysFont('Alata', 65)
-            scoreTracker = fontAlata25.render("Score: " + str(game.score), True, Colours.black)
-            textGameOver = fontFredokaOne65.render("Game Over", True, (255, 125, 0))
-            textPressEsc = fontFredokaOne65.render("Press ESC", True, (255, 215, 0))
+            font_Fredoka_one_25 = pygame.font.SysFont('Fredoka One', 25, True, False)
+            font_Fredoka_one_65 = pygame.font.SysFont('Fredoka One', 65, True, False)
+            font_Alata_25 = pygame.font.SysFont('Alata', 25)
+            font_Alata_65 = pygame.font.SysFont('Alata', 65)
+            score_tracker = font_Alata_25.render("Score: " + str(game.score), True, colours.black)
+            text_game_over = font_Fredoka_one_65.render("Game Over", True, (255, 125, 0))
+            text_game_over1 = font_Fredoka_one_65.render("Press ESC", True, (255, 215, 0))
 
             #Restart game font button
-            restartText = fontAlata25.render("Restart with Esc", True, Colours.black)
-            window.setMode.blit(scoreTracker, [0, 0])
-            window.setMode.blit(restartText, [132, 480])
+            restart_text = font_Alata_25.render("Restart with Esc", True, colours.black)
+            window.surface.blit(score_tracker, [0, 0])
+            window.surface.blit(restart_text, [132, 480])
             if game.state == "gameover":
-                window.setMode.blit(textGameOver, [20, 200])
-                window.setMode.blit(textPressEsc, [25, 265])
+                window.surface.blit(text_game_over, [20, 200])
+                window.surface.blit(text_game_over1, [25, 265])
 
             pygame.display.flip()
             clock.tick(fps)

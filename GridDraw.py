@@ -1,12 +1,12 @@
 import pygame
 from Figure import Figure
-
+from Window import Window
 class Tetris:
     level = 2
     score = 0
     state = "start"
     field = []
-    x = 0
+    x = (int(Window().vduDimensions[0]) - (Window().zoomX * 10)) / 2
     y = 0
     figure = None
 

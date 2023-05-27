@@ -11,7 +11,7 @@ class Window:
         self.surface = pygame.display.set_mode(self.vduDimensions)
 
         self.zoomX = (int(self.vduDimensions[0]) / 500) * 20
-        self.scaleY = (int(self.vduDimensions[1]) / 400) * 20
+        self.zoomY = (int(self.vduDimensions[1]) / 400) * 20
 
 
     def invisibleGrid(self):

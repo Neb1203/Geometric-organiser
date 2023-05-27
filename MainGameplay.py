@@ -16,9 +16,6 @@ class MainGameplay:
 
         game = Tetris(10, 20)
 
-        # Define some colors
-
-
         # Loop until the user clicks the close button.
         gameRunning = True
         clock = pygame.time.Clock()
@@ -67,7 +64,7 @@ class MainGameplay:
                     if event.key == pygame.K_SPACE:
                         game.goSpace()
                     if event.key == pygame.K_ESCAPE:
-                        game.__init__(20, 10)
+                        game.__init__(10, 20)
 
                     if event.key == pygame.K_p:
                         pygame.quit()

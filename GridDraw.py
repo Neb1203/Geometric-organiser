@@ -14,7 +14,6 @@ class Tetris:
         self.height = height
         self.width = width
 
-
         self.field = []
         self.score = 0
         self.state = "start"

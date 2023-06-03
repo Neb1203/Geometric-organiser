@@ -2,12 +2,13 @@ import pygame
 import pygame_menu
 from MainGameplay import MainGameplay
 from Window import Window
+import requests
 
 subTheme = pygame_menu.themes.THEME_SOLARIZED
 
 mainTheme = pygame_menu.themes.THEME_ORANGE
 window = Window()
-# subWindow = (300,200)
+subWindow = (300,200)
 
 def setDifficulty(value, difficulty):
     # Do the job here
@@ -18,7 +19,8 @@ def screenSize(screenSize):
     Window.newScreenSize = screenSize
 
 def userName(userName):
-    print(userName)
+    user_Name = userName
+
 def email(email):
     pass
 def pickGameMode(value, gameMode):
@@ -30,6 +32,9 @@ def startGame():
         MainGameplay()
     elif gameModeSelected == True:
         print("cum")
+def confirmProfile(userName):
+    payload = {'james'}
+    r = requests.post('127.0.0.2:5000/playerDetails', params=payload)
 surface = window.surface
 
 startScreen = pygame_menu.Menu('Start Screen',
@@ -52,10 +57,10 @@ mainMenu = pygame_menu.Menu('Main Menu',
                             window.vduDimensions[0],
                             window.vduDimensions[1],
                             theme=mainTheme)
-# profileCreation = pygame_menu.Menu('Create a profile',
-#                                    subWindow[0],
-#                                    subWindow[1],
-#                                    theme=subTheme)
+profileCreation = pygame_menu.Menu('Create a profile',
+                                   subWindow[0],
+                                   subWindow[1],
+                                   theme=subTheme)
 
 #create buttons for startScreen
 startScreen.add.label("Geometric Organiser")
@@ -81,12 +86,13 @@ playMenu.add.button('Start Game', startGame)
 playMenu.add.button('back', pygame_menu.events.BACK)
 
 #buttons for player profiles
-# playerProfile.add.button('Create a profile', profileCreation)
+playerProfile.add.button('Create a profile', profileCreation)
 playerProfile.add.button('back', pygame_menu.events.BACK)
 
 #buttons for profile creation
-# profileCreation.add.text_input('User Name :', onchange=userName)
-# profileCreation.add.text_input('Email :', onchange=email)
+profileCreation.add.text_input('User Name :', onchange=confirmProfile)
+profileCreation.add.text_input('Email :', onchange=email)
+profileCreation.add.button('confirm', confirmProfile)
 
 #world map
 

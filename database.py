@@ -8,10 +8,11 @@ addPlayerDetails = ("INSERT INTO playerDetails "
                "VALUES (%s, %s, %s)")
 
 
-playerData = ('neb1203', 'Bentofon123', 'neb120345@gmail.com')
+playerData = [('neb1203', 'Bentofon123', 'neb120345@`gmail.com'),
+              ('james', 'jameson', 'jameson@gmail.com')]
 
 # Insert new player
-cursor.execute(addPlayerDetails, playerData)
+cursor.executemany(addPlayerDetails, playerData)
 
 cnx.commit()
 

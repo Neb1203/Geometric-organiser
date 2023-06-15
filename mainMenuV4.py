@@ -3,7 +3,7 @@ import pygame_menu
 from MainGameplay import MainGameplay
 from Window import Window
 import requests
-import pprint
+import json
 from hashGenerator import HashingGenerator
 
 subTheme = pygame_menu.themes.THEME_SOLARIZED
@@ -36,9 +36,9 @@ class menuOptions:
     def password(self, password):
         self.user_password = password
 
-
     def email(self, email):
         self.user_email = email
+
 
     def pickGameMode(self, value, gameMode):
         global gameModeSelected
@@ -50,20 +50,52 @@ class menuOptions:
         elif gameModeSelected == True:
             print("cum")
 
-    def confirmProfile(self):
-        print(self.user_email, self.user_password)
+    def signup(self):
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
 
         r = requests.post('http://127.0.0.2:5000/player_details', params=signup)
 
-        # payload = {'james'}
-        # r = requests.post('127.0.0.2:5000/playerDetails', params=payload)
+    def login(self):
+        login = {'email': self.user_email, 'password': self.user_password}
+
+        response = requests.get('http://127.0.0.2:5000/player_details', params=login)
+
+        if response.status_code == 200:
+            try:
+                response_content = response.content.decode('utf-8')  # Decode the response content from bytes to a string
+                print("Response Content:", response_content)
+
+                if response_content == 'null': # Handle the case when the response is 'null'
+                    pass
+                else:
+                    data = response.json()  # Parse the response content as JSON
+                    print("Response JSON:", data)
+
+                    if isinstance(data, dict):
+                        user_name = data.get('username')
+                        print("Extracted username:", user_name)
+
+                        if user_name is not None: # Pass the extracted username to the read function
+                            self.read(self.user_email, self.user_password)
+                        else: # Handle the case when the username is None
+                            pass
+                    else: # Handle the case when the response is not a JSON object
+                        pass
+            except ValueError: # Handle the case when the response content cannot be parsed as JSON
+                pass
+        else: # Handle the case when the request was not successful
+            pass
+
     def profileCreation():
         pass
 menuOptions = menuOptions()
 surface = window.surface
 
 signup = pygame_menu.Menu('signup Screen',
+                               window.vduDimensions[0],
+                               window.vduDimensions[1],
+                            theme=mainTheme)
+login = pygame_menu.Menu('Login screen',
                                window.vduDimensions[0],
                                window.vduDimensions[1],
                             theme=mainTheme)
@@ -91,8 +123,14 @@ mainMenu = pygame_menu.Menu('Main Menu',
 #signup screen
 signup.add.text_input('User name :', copy_paste_enable=True, onchange=menuOptions.userName)
 signup.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
-signup.add.text_input('Password :', copy_paste_enable=True, onchange=menuOptions.password)
-signup.add.button('Signup', menuOptions.confirmProfile)
+signup.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
+signUpButton = signup.add.button('Signup', login)
+signUpButton.set_onselect(menuOptions.signup)
+#login screen
+login.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
+login.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
+login.add.button('Login', menuOptions.login)
+
 #create buttons for startScreen
 startScreen.add.label("Geometric Organiser")
 startScreen.add.button('Go to main menu', mainMenu)

@@ -59,20 +59,17 @@ class menuOptions:
         login = {'email': self.user_email, 'password': self.user_password}
 
         response = requests.get('http://127.0.0.2:5000/player_details', params=login)
-
         if response.status_code == 200:
             try:
                 response_content = response.content.decode('utf-8')  # Decode the response content from bytes to a string
-                print("Response Content:", response_content)
-
                 if response_content == 'null': # Handle the case when the response is 'null'
-                    pass
+                    print('No account with details')
                 else:
-                    data = response.json()  # Parse the response content as JSON
-                    print("Response JSON:", data)
+                    jsonResponse = response.json()  # Parse the response content as JSON
+                    print("Response JSON:", jsonResponse)
 
-                    if isinstance(data, dict):
-                        user_name = data.get('username')
+                    if isinstance(jsonResponse, dict):
+                        user_name = jsonResponse.get('username')
                         print("Extracted username:", user_name)
 
                         if user_name is not None: # Pass the extracted username to the read function
@@ -124,17 +121,21 @@ mainMenu = pygame_menu.Menu('Main Menu',
 signup.add.text_input('User name :', copy_paste_enable=True, onchange=menuOptions.userName)
 signup.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
 signup.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
-signUpButton = signup.add.button('Signup', login)
-signUpButton.set_onselect(menuOptions.signup)
+signup.add.button('Signup', onselect = menuOptions.signup)
+
+signup.add.button('Back', pygame_menu.events.BACK)
 #login screen
 login.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
 login.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
 login.add.button('Login', menuOptions.login)
 
+login.add.button('back', pygame_menu.events.BACK)
+
 #create buttons for startScreen
 startScreen.add.label("Geometric Organiser")
 startScreen.add.button('Go to main menu', mainMenu)
-startScreen.add.button('Change player profile', playerProfile)
+startScreen.add.button('Login', login)
+startScreen.add.button('SignUp', signup)
 startScreen.add.button('Quit', pygame_menu.events.EXIT)
 
 #create buttons for mainMenu
@@ -155,16 +156,12 @@ playMenu.add.button('Start Game', menuOptions.startGame)
 playMenu.add.button('back', pygame_menu.events.BACK)
 
 #buttons for player profiles
-playerProfile.add.button('Create a profile', menuOptions.profileCreation)
+playerProfile.add.button('Create a profile', signup)
 playerProfile.add.button('back', pygame_menu.events.BACK)
 
-#buttons for profile creation
-# profileCreation.add.text_input('User Name :', onchange=confirmProfile)
-# profileCreation.add.text_input('Email :', onchange=email)
-# profileCreation.add.button('confirm', confirmProfile)
 
 #world map
 
 
-if signup.is_enabled():
-    signup.mainloop(surface)
+if startScreen.is_enabled():
+    startScreen.mainloop(surface)

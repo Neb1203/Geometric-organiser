@@ -18,6 +18,9 @@ window = Window()
 hashGenerator = HashingGenerator()
 subWindow = (300,200)
 
+signupState = False
+loginState = False
+
 class menuOptions:
     def __init__(self):
         self.user_email = 'null'
@@ -106,8 +109,6 @@ settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimen
 playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
 mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
 
-signupState = False
-loginState = False
 def menuChanged(current, menu):
     global signupState
     global loginState
@@ -151,11 +152,11 @@ signup.add.text_input('Password :', copy_paste_enable=True, password=True, oncha
 signupButton = signup.add.button('Signup', mainMenu)
 signup.add.button('Back', pygame_menu.events.BACK)
 
+
 #login screen
 login.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
 login.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
 loginButton = login.add.button('Login', mainMenu)
-loginButton.set_onselect(menuOptions.login)
 
 login.add.button('back', pygame_menu.events.BACK)
 

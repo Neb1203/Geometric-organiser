@@ -6,7 +6,7 @@ class Window:
         # Initialize the game engine
         pygame.init()
         pygame.display.set_caption("Geometric Organiser")
-        self.screenSize = (3)
+        self.screenSize = (5)
         self.vduDimensions = (self.screenSize * 160, self.screenSize * 120)
         self.surface = pygame.display.set_mode(self.vduDimensions)
 

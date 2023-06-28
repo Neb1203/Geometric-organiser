@@ -7,12 +7,21 @@ from hashGenerator import HashingGenerator
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
+
 subTheme = pygame_menu.themes.THEME_SOLARIZED
-mainTheme = pygame_menu.themes.Theme(background_color=(177, 94, 108),
-                  title_background_color=(252, 100, 88),
-                                     title_font_shadow=True,
-                  title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
-                  widget_font=pygame_menu.font.FONT_8BIT)
+mainTheme = pygame_menu.themes.Theme(background_color=(255, 166, 158),
+                                     title_font_antialias = True,
+                                     title_background_color=(252, 100, 88),
+                                     selection_color=(140, 94, 88),
+                                     widget_background_color=(255, 247, 248),
+                                     widget_font_antialias = True,
+                                     title_close_button = False,
+                                     widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
+                                     title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
+                                     widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
+
+mainTheme.widget_margin = (20, 15)
+mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
 
 window = Window()
 hashGenerator = HashingGenerator()
@@ -146,26 +155,27 @@ playerProfile.set_onbeforeopen(lambda current, menu: menuChanged(current, 'playe
 mainMenu.set_onbeforeopen(lambda current, menu: menuChanged(current, 'mainMenu'))
 
 #signup screen
-signup.add.text_input('User name :', copy_paste_enable=True, onchange=menuOptions.userName)
-signup.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
-signup.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
+signup.add.text_input('User name: ', copy_paste_enable=True, onchange=menuOptions.userName)
+signup.add.text_input('Email: ', copy_paste_enable=True, onchange=menuOptions.email)
+signup.add.text_input('Password: ', copy_paste_enable=True, password=True, onchange=menuOptions.password)
 signupButton = signup.add.button('Signup', mainMenu)
 signup.add.button('Back', pygame_menu.events.BACK)
-
-
-#login screen
-login.add.text_input('Email :', copy_paste_enable=True, onchange=menuOptions.email)
-login.add.text_input('Password :', copy_paste_enable=True, password=True, onchange=menuOptions.password)
+#login screen)
+login.add.text_input('Email: ', copy_paste_enable=True, onchange=menuOptions.email)
+login.add.text_input('Password: ', copy_paste_enable=True, password=True, onchange=menuOptions.password)
 loginButton = login.add.button('Login', mainMenu)
 
 login.add.button('back', pygame_menu.events.BACK)
 
 
+
 #create buttons for startScreen
-startScreen.add.label("Geometric Organiser")
-startScreen.add.button('Go to main menu', mainMenu)
+middle_label = startScreen.add.label('Geometric Organiser')
+middle_label.set_alignment(pygame_menu.locals.ALIGN_CENTER)
+middle_label.set_font(font=pygame_menu.font.FONT_8BIT, font_size=35, color=(0, 0, 0), selected_color=(140, 94, 88), readonly_color=(203, 243, 240), readonly_selected_color=(203, 243, 240), background_color=(255, 247, 248))
 startScreen.add.button('Login', login)
 startScreen.add.button('SignUp', signup)
+
 startScreen.add.button('Quit', pygame_menu.events.EXIT)
 
 #create buttons for mainMenu
@@ -184,10 +194,11 @@ settings.add.range_slider('Set screen size',
 
 #Create buttons for playMenu
 playMenu.add.selector('Gamemode : ', [('Campaign', True), ('Endless', False)], onchange = menuOptions.pickGameMode)
-playMenu.add.selector('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)], onchange = menuOptions.setDifficulty)
+playMenu.add.dropselect('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)], onchange = menuOptions.setDifficulty)
 playMenu.add.button('Start Game', menuOptions.startGame)
 playMenu.add.button('back', pygame_menu.events.BACK)
-
+# settings.add.toggle_switch('Game music muted', [('Muted',False), ('Unmuted', True)])
+settings.add.toggle_switch('Mute sounde effects', state_text=('Unmuted', 'Muted'))
 #buttons for player profiles
 playerProfile.add.button('Create a profile', signup)
 playerProfile.add.button('back', pygame_menu.events.BACK)

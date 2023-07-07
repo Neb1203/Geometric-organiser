@@ -8,24 +8,16 @@ from hashGenerator import HashingGenerator
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
 
-subTheme = pygame_menu.themes.THEME_SOLARIZED
-mainTheme = pygame_menu.themes.Theme(background_color=(255, 166, 158),
-                                     title_font_antialias = True,
-                                     title_background_color=(252, 100, 88),
-                                     selection_color=(140, 94, 88),
-                                     widget_background_color=(255, 247, 248),
-                                     widget_font_antialias = True,
-                                     title_close_button = False,
-                                     widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
-                                     title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
-                                     widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
 
-mainTheme.widget_margin = (20, 15)
-mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
 
 window = Window()
 hashGenerator = HashingGenerator()
-subWindow = (300,200)
+subwindow = (300,200)
+
+subTheme = pygame_menu.themes.THEME_SOLARIZED
+
+window.mainTheme.widget_margin = (20, 15)
+window.mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
 
 signupState = False
 loginState = False
@@ -38,11 +30,11 @@ class menuOptions:
         self.user_token = 'null'
     def setDifficulty(self, value, difficulty):
         # Do the job here
-        # Window(50)
+        # window(50)
         pass
 
     def screenSize(self, screenSize):
-        # Window.newScreenSize = screenSize
+        # window.newScreenSize = screenSize
         pass
 
     def userName(self, userName):
@@ -110,13 +102,13 @@ def update_label_widget():
 menuOptions = menuOptions()
 surface = window.surface
 
-signup = pygame_menu.Menu('signup Screen', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-login = pygame_menu.Menu('Login screen', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-startScreen = pygame_menu.Menu('Start Screen', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-playMenu = pygame_menu.Menu('Play', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
-mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=mainTheme)
+signup = pygame_menu.Menu('signup Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+login = pygame_menu.Menu('Login screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+startScreen = pygame_menu.Menu('Start Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+playMenu = pygame_menu.Menu('Play', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
 
 def menuChanged(current, menu):
     global signupState
@@ -135,6 +127,12 @@ def menuChanged(current, menu):
         print('settings')
     elif menu == 'playerProfile':
         print('playerProfile')
+    elif menu == 'paused':
+        print('paused')
+    elif menu == 'resume':
+        print('resume')
+    elif menu == 'quitPauseMenu':
+        print('quitPauseMenu')
     elif menu == 'mainMenu':
         print('mainMenu')
         if signupState == True:

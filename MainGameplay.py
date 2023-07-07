@@ -68,6 +68,7 @@ class MainGameplay:
                         game.goSpace()
                     if event.key == pygame.K_ESCAPE:
                         pygame_menu.events.BACK
+                        #game.__init__(10, 20)
 
                     if event.key == pygame.K_p:
                         pygame.quit()

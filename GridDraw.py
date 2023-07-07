@@ -52,16 +52,18 @@ class Tetris:
         self.score += lines ** 2
 
     def goSpace(self):
-        while not self.intersects():
-            self.figure.y += 1
-        self.figure.y -= 1
-        self.freeze()
-
-    def goDown(self):
-        self.figure.y += 1
-        if self.intersects():
+        if self.state.gameStarted():
+            while not self.intersects():
+                self.figure.y += 1
             self.figure.y -= 1
             self.freeze()
+
+    def goDown(self):
+        if self.state.gameStarted():
+            self.figure.y += 1
+            if self.intersects():
+                self.figure.y -= 1
+                self.freeze()
 
     def freeze(self):
         for i in range(4):
@@ -74,19 +76,22 @@ class Tetris:
             self.state = GameStateEnum.GAME_OVER
 
     def goSide(self, dx):
-        old_x = self.figure.x
-        self.figure.x += dx
-        if self.intersects():
-            self.figure.x = old_x
+        if self.state.gameStarted():
+            old_x = self.figure.x
+            self.figure.x += dx
+            if self.intersects():
+                self.figure.x = old_x
 
     def rotateLeft(self):
-        old_rotation = self.figure.rotation
-        self.figure.rotateRight()
-        if self.intersects():
-            self.figure.rotation = old_rotation
+        if self.state.gameStarted():
+            old_rotation = self.figure.rotation
+            self.figure.rotateRight()
+            if self.intersects():
+                self.figure.rotation = old_rotation
 
     def rotateRight(self):
-        old_rotation = self.figure.rotation
-        self.figure.rotateRight()
-        if self.intersects():
-            self.figure.rotation = old_rotation
+        if self.state.gameStarted():
+            old_rotation = self.figure.rotation
+            self.figure.rotateRight()
+            if self.intersects():
+                self.figure.rotation = old_rotation

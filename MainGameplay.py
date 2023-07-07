@@ -3,8 +3,9 @@ import pygame_menu
 from Colours import Colours
 from GridDraw import Tetris
 from Window import Window
-from ResizeableWindow import resizableWindowUpdate
 from Figure import Figure
+from GamePaused import GamePaused
+from GameStateEnum import GameStateEnum
 
 class MainGameplay:
     def __init__(self):
@@ -14,8 +15,7 @@ class MainGameplay:
         scaleWVduDimensionsX = (int(window.vduDimensions[0]) / 500) * 20
         scaleWVduDimensionsY = (int(window.vduDimensions[1]) / 400) * 20
 
-        resizableWindowUpdateVar = resizableWindowUpdate()
-
+        g = GamePaused()
 
         game = Tetris(10, 20)
 
@@ -40,7 +40,7 @@ class MainGameplay:
                 counter = 0
 
             if counter % (fps // game.level // 2) == 0 or pressing_down:
-                if game.state == "start":
+                if game.state.gameStarted():
                     game.goDown()
 
             for event in pygame.event.get():
@@ -63,11 +63,14 @@ class MainGameplay:
                     if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
                         pygame.key.set_repeat(delay, interval)
                         game.goSide(1)
-
                     if event.key == pygame.K_SPACE:
                         game.goSpace()
                     if event.key == pygame.K_ESCAPE:
-                        pygame_menu.events.BACK
+                        initialState = game.state
+                        if initialState == GameStateEnum.PAUSED:
+                            game.state = GameStateEnum.STARTED
+                        elif initialState == GameStateEnum.STARTED:
+                            game.state = GameStateEnum.PAUSED
                         #game.__init__(10, 20)
 
                     if event.key == pygame.K_p:
@@ -105,9 +108,10 @@ class MainGameplay:
 
             window.surface.blit(score_tracker, [0, 0])
             if game.state == "gameover":
-                pass
+                print("gameState = gameOver")
 
             pygame.display.flip()
             clock.tick(fps)
 
         pygame.quit()
+MainGameplay()

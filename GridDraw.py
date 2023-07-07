@@ -1,28 +1,27 @@
 import pygame
 from Figure import Figure
 from Window import Window
+from GameStateEnum import GameStateEnum
 class Tetris:
     level = 2
     score = 0
-    state = "start"
     field = []
     x = (int(Window().vduDimensions[0]) - (Window().zoomX * 10)) / 2
     y = 0
     figure = None
-
     def __init__(self, width, height):
         self.height = height
         self.width = width
 
         self.field = []
         self.score = 0
-        self.state = "start"
+        self.state = GameStateEnum.STARTED
+        print(self.state)
         for i in range(height):
             new_line = []
             for j in range(width):
                 new_line.append(0)
             self.field.append(new_line)
-
     def newFigure(self):
         self.figure = Figure(3, 0)
 
@@ -72,7 +71,7 @@ class Tetris:
         self.breakLines()
         self.newFigure()
         if self.intersects():
-            self.state = "gameover"
+            self.state = GameStateEnum.GAME_OVER
 
     def goSide(self, dx):
         old_x = self.figure.x

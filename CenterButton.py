@@ -12,11 +12,11 @@ class CenterButton:
     def centerButtonHeight(self, filePath, totalNumButtons, margins, buttonNum):
         image = Image.open(filePath)
         self.height = image.height
-        self.centerHeight = 1 / 2 * (window.vduDimensions[1] - ((self.height * (totalNumButtons+1)) + (margins * totalNumButtons)))
+        self.centerHeight = 1 / 2 * (window.vduDimensions[1] - ((self.height * (totalNumButtons + 1)) + (margins * totalNumButtons)))
         if buttonNum > totalNumButtons:
             print("Error: button number immpossibe")
         elif buttonNum == 0:
             return self.centerHeight
         elif buttonNum > 0:
-            self.centerHeight = self.centerHeight + ((buttonNum + 1) * (self.height + 20))
+            self.centerHeight = self.height - self.centerHeight + ((buttonNum + 1) * (self.height + 20))
             return self.centerHeight

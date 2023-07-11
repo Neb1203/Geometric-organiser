@@ -7,11 +7,13 @@ from Figure import Figure
 from GamePaused import GamePaused
 from GameStateEnum import GameStateEnum
 import button
-
+from PIL import Image
+from CenterButton import CenterButton
 class MainGameplay:
     def __init__(self):
         w = Window()
         colours = Colours()
+        cb = CenterButton()
 
         scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
         scaleWVduDimensionsY = (int(w.vduDimensions[1]) / 400) * 20
@@ -116,17 +118,28 @@ class MainGameplay:
                 square_x = w.vduDimensions[0] // 2 - square_size // 2  # Center the square horizontally
                 square_y = w.vduDimensions[1] // 2 - square_size // 2 - 60
 
-                pygame.draw.rect(w.surface, square_color, (square_x, square_y, square_size, square_size))
+                # pygame.draw.rect(w.surface, square_color, (square_x, square_y, square_size, square_size))
 
-                resume_img = pygame.image.load("button images/resumeButton (Custom).png").convert_alpha()
-                mainMenuImage = pygame.image.load("button images/mainMenuButton (Custom).png").convert_alpha()
+                resumePath = "button images/Resume imagee.png"
+                restartPath = "button images/Restart buttonn.png"
+                mainMenuPath = "button images/Quit buttonn.png"
 
-                # create button instances
-                resume_button = button.Button(304, 160, resume_img, 1)
-                mainMenuButton = button.Button(304, 250, mainMenuImage, 1)
+                totalNumButtons = 2
+                margins = 20
+
+                resumeImage = pygame.image.load(resumePath).convert_alpha()
+                restartImage = pygame.image.load(restartPath).convert_alpha()
+                mainMenuImage = pygame.image.load(mainMenuPath).convert_alpha()
+
+                resume_button = button.Button(cb.centerButtonWidth(resumePath), cb.centerButtonHeight(resumePath, totalNumButtons, margins, 0), resumeImage, 1)
+                restartButton = button.Button(cb.centerButtonWidth(restartPath), cb.centerButtonHeight(restartPath, totalNumButtons, margins, 1), restartImage, 1)
+                mainMenuButton = button.Button(cb.centerButtonWidth(mainMenuPath), cb.centerButtonHeight(mainMenuPath, totalNumButtons, margins, 2), mainMenuImage, 1)
 
                 if resume_button.draw(w.surface):
                     game.state = GameStateEnum.STARTED
+                if restartButton.draw(w.surface):
+                    game.__init__(10, 20)
+                    game.newFigure()
                 if mainMenuButton.draw(w.surface):
                     print("Return to main menu button pressed")
             pygame.display.flip()

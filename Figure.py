@@ -28,8 +28,8 @@ class Figure:
     ]
 
     def __init__(self, x, y):
-        self.x = 0
-        self.y = 0
+        self.x = x
+        self.y = y
         self.type = random.randint(0, len(self.figures) - 1)
         self.color = random.randint(1, len(self.colors) - 1)
         self.rotation = 0

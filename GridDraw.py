@@ -1,7 +1,7 @@
-import pygame
 from Figure import Figure
 from Window import Window
 from GameStateEnum import GameStateEnum
+
 class Tetris:
     level = 2
     score = 0
@@ -15,8 +15,7 @@ class Tetris:
 
         self.field = []
         self.score = 0
-        self.state = GameStateEnum.STARTED
-        print(self.state)
+        self.state = GameStateEnum.INITIALISED
         for i in range(height):
             new_line = []
             for j in range(width):
@@ -24,7 +23,6 @@ class Tetris:
             self.field.append(new_line)
     def newFigure(self):
         self.figure = Figure(3, 0)
-
     def intersects(self):
         intersection = False
         for i in range(4):

@@ -5,6 +5,7 @@ from Window import Window
 import requests
 from GameStateEnum import GameStateEnum
 from hashGenerator import HashingGenerator
+from storeID import Csv
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
@@ -12,6 +13,7 @@ mainTheme= pygame_menu.themes.THEME_SOLARIZED
 window = Window()
 Tetris = Tetris(10, 20)
 hashGenerator = HashingGenerator()
+csvInstance = Csv()
 subwindow = (300,200)
 
 subTheme = pygame_menu.themes.THEME_SOLARIZED
@@ -39,7 +41,7 @@ class menuOptions:
 
     def userName(self, userName):
         self.user_name = userName
-        update_label_widget()
+        updateLabelWidget()
 
     def password(self, password):
         self.user_password = password
@@ -67,6 +69,8 @@ class menuOptions:
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
         self.response = requests.post('http://127.0.0.2:5000/player_details', params=signup)
         labelDisplay().labelDisplay(self.user_name)
+
+
 
     def login(self):
         print("def login running")
@@ -97,12 +101,8 @@ class menuOptions:
         else: # Handle the case when the request was not successful
             pass
 
-    def profileCreation():
-        pass
-
-def update_label_widget():
-    print('def update_label_widget', menuOptions.user_name)
-
+def updateLabelWidget():
+    print('def updateLabelWidget', menuOptions.user_name)
 
 menuOptions = menuOptions()
 surface = window.surface
@@ -119,6 +119,11 @@ def menuChanged(current, menu):
     global signupState
     global loginState
     if menu == 'signup':
+        labelDisplay().labelPro1('jeff')
+        labelDisplay().labelPro2('jeff')
+        labelDisplay().labelPro3('jeff')
+        labelDisplay().labelPro4('jeff')
+        labelDisplay().labelPro5('jeff')
         print('signUp')
         signupState = True
     elif menu == 'login':
@@ -186,6 +191,16 @@ mainMenu.add.button('Back', pygame_menu.events.BACK)
 class labelDisplay:
     def labelDisplay(self, userName):
         user_label = mainMenu.add.label(userName)
+    def labelPro1(self, token):
+        user_label1 = mainMenu.add.label(token)
+    def labelPro2(self, token):
+        user_label2 = mainMenu.add.label(token)
+    def labelPro3(self, token):
+        user_label3 = mainMenu.add.label(token)
+    def labelPro4(self, token):
+        user_label4 = mainMenu.add.label(token)
+    def labelPro5(self, token):
+        user_label5 = mainMenu.add.label(token)
 
 #settings
 settings.add.range_slider('Set screen size',

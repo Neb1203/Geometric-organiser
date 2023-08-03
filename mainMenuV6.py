@@ -18,7 +18,7 @@ height = w.vduDimensions[1]
 
 smallFont = pygame.font.SysFont('Corbel', 35)
 
-text = smallFont.render('wows', True, color)
+text = smallFont.render('Quit', True, color)
 
 while True:
 
@@ -33,21 +33,21 @@ while True:
                 pygame.quit()
 
     w.surface.fill(c.backgroundColour)
-    buttonX = 500
+    buttonX = 200
     buttonY = 60
     mouse = pygame.mouse.get_pos()
     totalNumButtons = 1
     margins = 20
-    mouseBoundrayX = cb.centerButtonWidth(buttonX) <= mouse[0] <= cb.centerButtonWidth(buttonX) + buttonX
-    mouseBoundrayY = cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0) <= mouse[1] <= cb.centerButtonHeight(buttonY,totalNumButtons,margins, 0) + buttonY
 
+    mouseBoundrayX = cb.centerButtonWidth(buttonX) <= mouse[0] <= cb.centerButtonWidth(buttonX) + buttonX
+    mouseBoundrayY = cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0) <= mouse[1] <= cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0) + buttonY
 
     if  mouseBoundrayX and mouseBoundrayY:
         pygame.draw.rect(surface, color_light, [cb.centerButtonWidth(buttonX), cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0), buttonX, buttonY])
     else:
         pygame.draw.rect(surface, color_dark, [cb.centerButtonWidth(buttonX), cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0), buttonX, buttonY])
 
-    surface.blit(text, (cb.centerButtonWidth(buttonX) + 35, cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0)))
+    surface.blit(text, (cb.centerButtonWidth(buttonX) + 35, cb.centerButtonHeight(buttonY, totalNumButtons, margins, 0) + buttonY / 4))
 
     # updates the frames of the game
     pygame.display.update()

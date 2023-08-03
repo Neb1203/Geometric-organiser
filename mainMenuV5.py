@@ -2,9 +2,21 @@ import pygame
 import button
 from Window import Window
 from CenterButton import CenterButton
-while True:
+from Colours import Colours
+running = True
+while running:
     w = Window()
+    c = Colours()
     cb = CenterButton()
+    w.surface.fill(c.backgroundColour)
+    square_color = (255, 255, 255)  # Red color
+    boxX = 300
+    boxY = 150
+    square_x = 300
+    square_y = 300
+
+    pygame.draw.rect(w.surface, square_color, (square_x, square_y, boxX, boxY))
+
     resumePath = "button images/Resume imagee.png"
 
     totalNumButtons = 0
@@ -16,3 +28,7 @@ while True:
 
     if resume_button.draw(w.surface):
         print("resume button")
+
+
+    pygame.display.flip()
+pygame.quit()

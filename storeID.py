@@ -1,20 +1,20 @@
 import csv
 
 class Csv:
-    file_path = 'tokens.csv'
+    filePath = 'tokens.csv'
     def write(self, token, userName):
-        num_entries = self.count_entries()
+        num_entries = self.countEntries()
         if num_entries >= 5:
             raise ValueError("Maximum number of entries (5) reached.")
         else:
-            with open(self.file_path, 'a', newline='') as csv_file:
+            with open(self.filePath, 'a', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
                 csv_writer.writerow([token, userName])
 
     def read(self):
-        if csv_instance.count_entries() > -1:
+        if csvInstance.countEntries() > -1:
             usernames = []  # List to store usernames
-            with open(self.file_path, 'r') as csv_file:
+            with open(self.filePath, 'r') as csv_file:
                 csv_reader = csv.reader(csv_file)
                 next(csv_reader)  # Skip the header row
                 for row in csv_reader:
@@ -23,29 +23,28 @@ class Csv:
         else:
             return "sheet doesn't exist"
 
-    def get_token_by_username(self, username):
-        if csv_instance.count_entries() > -1:
+    def getTokenByUsername(self, username):
+        if csvInstance.countEntries() > -1:
             with open('tokens.csv', 'r') as csv_file:
                 csv_reader = csv.reader(csv_file)
                 for row in csv_reader:
                     if row[1] == username:
                         return row[0]  # Return the token associated with the username
 
-    def count_entries(self):
-        with open(self.file_path, 'r') as csv_file:
+    def countEntries(self):
+        with open(self.filePath, 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
             return len(list(csv_reader)) - 1
 
     def reset(self):
-        self.file_path = 'tokens.csv'
-        with open(self.file_path, 'w', newline='') as csv_file:
-            pass
+        with open(self.filePath, 'w', newline='') as csv_file:
+            print("reset succesfull")
 
-csv_instance = Csv()
-usernames = csv_instance.read()
-if csv_instance.count_entries() > -1:
-    for idx, username in enumerate(usernames, start=1):
-        print(f"Username {idx}: {username}")
+csvInstance = Csv()
+usernames = csvInstance.read()
+
+for idx, username in enumerate(usernames, start=1):
+    print(f"Username {idx}: {username}")
 
 # Get all usernames individually
 print(usernames)
@@ -55,9 +54,10 @@ if len(usernames) >= 3:
     print("Username 10:", username_3)
 else:
     print("Username 10 not found.")
-username_to_find = "user2"
-token_found = csv_instance.get_token_by_username(username_to_find)
-if token_found:
-    print(f"The token for '{username_to_find}' is: {token_found}")
+usernameToFind = "user2"
+tokenFound = csvInstance.getTokenByUsername(usernameToFind)
+if tokenFound:
+    print(f"The token for '{usernameToFind}' is: {tokenFound}")
 else:
-    print(f"Username '{username_to_find}' not found.")
+    print(f"Username '{usernameToFind}' not found.")
+csvInstance.reset()

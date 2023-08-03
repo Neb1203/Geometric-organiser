@@ -1,16 +1,16 @@
-import pygame
 import pygame_menu
 from MainGameplay import MainGameplay
+from GridDraw import Tetris
 from Window import Window
 import requests
+from GameStateEnum import GameStateEnum
 from hashGenerator import HashingGenerator
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
-
-
-
+mainTheme= pygame_menu.themes.THEME_SOLARIZED
 window = Window()
+Tetris = Tetris(10, 20)
 hashGenerator = HashingGenerator()
 subwindow = (300,200)
 
@@ -53,6 +53,10 @@ class menuOptions:
         # Do the job here !
         if gameModeSelected == False:
             MainGameplay()
+            Tetris.state = GameStateEnum.STARTED
+            while True:
+                if Tetris.state.quit():
+                    print("cum")
         elif gameModeSelected == True:
             print("cum")
 
@@ -72,6 +76,7 @@ class menuOptions:
 
         if response.status_code == 200:
             try:
+
                 response_content = response.content.decode('utf-8')  # Decode the response content from bytes to a string
                 if response_content == 'null': # Handle the case when the response is 'null'
                     print('No account with details')
@@ -165,8 +170,6 @@ loginButton = login.add.button('Login', mainMenu)
 
 login.add.button('back', pygame_menu.events.BACK)
 
-
-
 #create buttons for startScreen
 middle_label = startScreen.add.label('Geometric Organiser')
 middle_label.set_alignment(pygame_menu.locals.ALIGN_CENTER)
@@ -200,9 +203,6 @@ settings.add.toggle_switch('Mute sounde effects', state_text=('Unmuted', 'Muted'
 #buttons for player profiles
 playerProfile.add.button('Create a profile', signup)
 playerProfile.add.button('back', pygame_menu.events.BACK)
-
-#world map
-
 
 if __name__ == "__main__":
     if startScreen.is_enabled():

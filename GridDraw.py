@@ -12,10 +12,9 @@ class Tetris:
     def __init__(self, width, height):
         self.height = height
         self.width = width
-
         self.field = []
         self.score = 0
-        self.state = GameStateEnum.INITIALISED
+        self.state = GameStateEnum.STARTED
         for i in range(height):
             new_line = []
             for j in range(width):

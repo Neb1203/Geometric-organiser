@@ -4,7 +4,6 @@ from Colours import Colours
 from GridDraw import Tetris
 from Window import Window
 from Figure import Figure
-from GamePaused import GamePaused
 from GameStateEnum import GameStateEnum
 import button
 from PIL import Image
@@ -17,8 +16,6 @@ class MainGameplay:
 
         scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
         scaleWVduDimensionsY = (int(w.vduDimensions[1]) / 400) * 20
-
-        g = GamePaused()
 
         game = Tetris(10, 20)
 
@@ -146,4 +143,3 @@ class MainGameplay:
             clock.tick(fps)
 
         pygame.quit()
-MainGameplay()

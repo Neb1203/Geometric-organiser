@@ -41,7 +41,7 @@ class menuOptions:
 
     def userName(self, userName):
         self.user_name = userName
-        updateLabelWidget()
+        # mainMenu.add.label(self.user_name)
 
     def password(self, password):
         self.user_password = password
@@ -68,7 +68,7 @@ class menuOptions:
         print("def signup running")
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
         self.response = requests.post('http://127.0.0.2:5000/player_details', params=signup)
-        labelDisplay().labelDisplay(self.user_name)
+        mainMenu.add.label(self.user_name)
 
 
 
@@ -101,9 +101,6 @@ class menuOptions:
         else: # Handle the case when the request was not successful
             pass
 
-def updateLabelWidget():
-    print('def updateLabelWidget', menuOptions.user_name)
-
 menuOptions = menuOptions()
 surface = window.surface
 
@@ -119,11 +116,12 @@ def menuChanged(current, menu):
     global signupState
     global loginState
     if menu == 'signup':
-        labelDisplay().labelPro1('jeff')
-        labelDisplay().labelPro2('jeff')
-        labelDisplay().labelPro3('jeff')
-        labelDisplay().labelPro4('jeff')
-        labelDisplay().labelPro5('jeff')
+        proLabel1 = mainMenu.add.label(csvInstance.userNameIndex(0))
+        proLabel1.set_alignment(pygame_menu.locals.ALIGN_CENTER)
+        proLabel2 = mainMenu.add.label(csvInstance.userNameIndex(1))
+        proLabel3 = mainMenu.add.label(csvInstance.userNameIndex(2))
+        proLabel4 = mainMenu.add.label(csvInstance.userNameIndex(3))
+        proLabel5 = mainMenu.add.label(csvInstance.userNameIndex(4))
         print('signUp')
         signupState = True
     elif menu == 'login':
@@ -188,19 +186,6 @@ startScreen.add.button('Quit', pygame_menu.events.EXIT)
 mainMenu.add.button('Play', playMenu)
 mainMenu.add.button('Settings', settings)
 mainMenu.add.button('Back', pygame_menu.events.BACK)
-class labelDisplay:
-    def labelDisplay(self, userName):
-        user_label = mainMenu.add.label(userName)
-    def labelPro1(self, token):
-        user_label1 = mainMenu.add.label(token)
-    def labelPro2(self, token):
-        user_label2 = mainMenu.add.label(token)
-    def labelPro3(self, token):
-        user_label3 = mainMenu.add.label(token)
-    def labelPro4(self, token):
-        user_label4 = mainMenu.add.label(token)
-    def labelPro5(self, token):
-        user_label5 = mainMenu.add.label(token)
 
 #settings
 settings.add.range_slider('Set screen size',
@@ -216,9 +201,10 @@ playMenu.add.button('back', pygame_menu.events.BACK)
 # settings.add.toggle_switch('Game music muted', [('Muted',False), ('Unmuted', True)])
 settings.add.toggle_switch('Mute sounde effects', state_text=('Unmuted', 'Muted'))
 #buttons for player profiles
-playerProfile.add.button('Create a profile', signup)
+playerProfile.add.button('signup', signup)
+playerProfile.add.button('login', login)
 playerProfile.add.button('back', pygame_menu.events.BACK)
 
 if __name__ == "__main__":
-    if startScreen.is_enabled():
-        startScreen.mainloop(surface)
+    if playerProfile.is_enabled():
+        playerProfile.mainloop(surface)

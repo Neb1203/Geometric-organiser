@@ -52,13 +52,13 @@ class menuOptions:
         global gameModeSelected
         gameModeSelected = gameMode
     def startGame(self):
-        # Do the job here !
+        global gameModeSelected
+        gameModeSelected = False
+
         if gameModeSelected == False:
-            MainGameplay()
-            Tetris.state = GameStateEnum.STARTED
-            while True:
-                if Tetris.state.quit():
-                    print("cum")
+            game = MainGameplay()
+            game.run_game()
+            # If the game loop has exited (returned to main menu), you can perform any post-game actions here.
         elif gameModeSelected == True:
             print("cum")
 
@@ -206,5 +206,6 @@ playerProfile.add.button('login', login)
 playerProfile.add.button('back', pygame_menu.events.BACK)
 
 if __name__ == "__main__":
-    if playerProfile.is_enabled():
-        playerProfile.mainloop(surface)
+    if startScreen.is_enabled():
+        startScreen.mainloop(surface)
+

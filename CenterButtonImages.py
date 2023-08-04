@@ -2,12 +2,16 @@ from Window import Window
 from PIL import Image
 window = Window()
 class CenterButton:
-    def centerButtonWidth(self, width):
+    def centerButtonWidth(self, filePath):
+        image = Image.open(filePath)
+        width = image.width
+
         centerWidth = 1/2 * (window.vduDimensions[0] - width)
         return centerWidth
 
-    def centerButtonHeight(self, height, totalNumButtons, margins, buttonNum):
-        self.height = height
+    def centerButtonHeight(self, filePath, totalNumButtons, margins, buttonNum):
+        image = Image.open(filePath)
+        self.height = image.height
         self.centerHeight = 1 / 2 * (window.vduDimensions[1] - ((self.height * (totalNumButtons + 1)) + (margins * totalNumButtons)))
         if buttonNum > totalNumButtons:
             print("Error: button number immpossibe")

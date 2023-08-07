@@ -1,6 +1,6 @@
 import csv
 
-class Csv:
+class UsernamesModel:
     filePath = 'tokens.csv'
     def write(self, token, userName):
         num_entries = self.countEntries()
@@ -12,14 +12,12 @@ class Csv:
                 csv_writer.writerow([token, userName])
 
     def read(self):
-        csvInstance = Csv()
         if csvInstance.countEntries() > -1:
             usernames = []  # List to store usernames
             with open(self.filePath, 'r') as csv_file:
                 csv_reader = csv.reader(csv_file)
-                next(csv_reader)  # Skip the header row
                 for row in csv_reader:
-                    usernames.append(row[1])  # Append the username to the list
+                    usernames.append((row[0], row[1]))
             return usernames
         else:
             print("Sheet is empty")
@@ -46,8 +44,7 @@ class Csv:
 
     def userNameIndex(self, targetIndex):
         # Print username 10 if it exists
-        csvInstance = Csv()
-        usernames = csvInstance.read()
+        usernames = self.read()
         if usernames != None:
             if len(usernames) >= targetIndex:
                 return usernames[targetIndex]
@@ -55,7 +52,7 @@ class Csv:
                 return "not found"
         else:
             print("There are no usernames stored")
-csvInstance = Csv()
+csvInstance = UsernamesModel()
 # usernames = csvInstance.read()
 #
 # # if isinstance(usernames, tuple):

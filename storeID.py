@@ -12,6 +12,7 @@ class Csv:
                 csv_writer.writerow([token, userName])
 
     def read(self):
+        csvInstance = Csv()
         if csvInstance.countEntries() > -1:
             usernames = []  # List to store usernames
             with open(self.filePath, 'r') as csv_file:
@@ -21,43 +22,54 @@ class Csv:
                     usernames.append(row[1])  # Append the username to the list
             return usernames
         else:
-            return "sheet doesn't exist"
+            print("Sheet is empty")
 
     def getTokenByUsername(self, username):
-        if csvInstance.countEntries() > -1:
-            with open('tokens.csv', 'r') as csv_file:
-                csv_reader = csv.reader(csv_file)
-                for row in csv_reader:
-                    if row[1] == username:
-                        return row[0]  # Return the token associated with the username
-
+        if username != None:
+            if csvInstance.countEntries() > -1:
+                with open('tokens.csv', 'r') as csv_file:
+                    csv_reader = csv.reader(csv_file)
+                    for row in csv_reader:
+                        if row[1] == username:
+                            return row[0]  # Return the token associated with the username
+        else:
+            return None
     def countEntries(self):
         with open(self.filePath, 'r') as csv_file:
             csv_reader = csv.reader(csv_file)
-            return len(list(csv_reader)) - 1
+            return len(list(csv_reader))
 
     def reset(self):
         with open(self.filePath, 'w', newline='') as csv_file:
-            print("reset succesfull")
+            for i in range(4):
+                csvInstance.write("clear", "clear")
 
+    def userNameIndex(self, targetIndex):
+        # Print username 10 if it exists
+        csvInstance = Csv()
+        usernames = csvInstance.read()
+        if usernames != None:
+            if len(usernames) >= targetIndex:
+                return usernames[targetIndex]
+            else:
+                return "not found"
+        else:
+            print("There are no usernames stored")
 csvInstance = Csv()
-usernames = csvInstance.read()
+# usernames = csvInstance.read()
+#
+# # if isinstance(usernames, tuple):
+# #     for idx, username in enumerate(usernames, start=1):
+# #         print(f"Username {idx}: {username}")
+# print(csvInstance.userNameIndex(0))
+# # Get all usernames individually
+# # print(usernames)
+# csvInstance.write("jay", "fat")
 
-for idx, username in enumerate(usernames, start=1):
-    print(f"Username {idx}: {username}")
-
-# Get all usernames individually
-print(usernames)
-# Print username 10 if it exists
-if len(usernames) >= 3:
-    username_3 = usernames[2]  # Index 9 corresponds to the 10th username
-    print("Username 10:", username_3)
-else:
-    print("Username 10 not found.")
-usernameToFind = "user2"
-tokenFound = csvInstance.getTokenByUsername(usernameToFind)
-if tokenFound:
-    print(f"The token for '{usernameToFind}' is: {tokenFound}")
-else:
-    print(f"Username '{usernameToFind}' not found.")
-csvInstance.reset()
+# usernameToFind = "user2"
+# tokenFound = csvInstance.getTokenByUsername(usernameToFind)
+# if tokenFound:
+#     print(f"The token for '{usernameToFind}' is: {tokenFound}")
+# else:
+#     print(f"Username '{usernameToFind}' not found.")
+# csvInstance.reset()

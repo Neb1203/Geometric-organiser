@@ -72,13 +72,16 @@ class menuOptions:
         new_date = responseTime + timedelta(days=30)
         if new_date <= datetime.now():
             existing_session_ids = tokenModifier.read_session_ids()
-
-            if existing_session_ids is not None:  # Replace with the session ID you want to remove
+            if existing_session_ids is not None:
                 if token in existing_session_ids:
                     existing_session_ids.remove(token)
                     tokenModifier.write_session_ids(existing_session_ids)
+                    print(f"Session ID '{token}' removed successfully.")
                 else:
                     print("Session ID not found in the file.")
+            else:
+                print("Error reading session IDs from the file.")
+
         else:
             print("valid")
     def cloudLogin(self):

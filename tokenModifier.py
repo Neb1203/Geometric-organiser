@@ -1,9 +1,14 @@
+import sys
+
 class TokenModifier:
-    file_path = "tokens.txt"
+    def __init__(self):
+
+        self.file_path = r"E:\Computer Science\Programming project\geometric-organiser-api\tokens.txt"
+            # os.path.join(self.current_directory, "tokens.txt")
     def read_session_ids(self):
         session_ids = []
         try:
-            with open(self.file_path, "r") as file:
+            with open(self.file_path, "r", encoding="utf-8") as file:
                 for line in file:
                     session_id = line.strip()  # Remove leading/trailing whitespace and newline
                     if session_id:

@@ -76,7 +76,7 @@ def menuChanged(current, menu):
             loginState = False
             signupState = False
         elif loginState == True:
-            menuOptions.login()
+            menuOptions.cloudLogin()
             loginState = False
             signupState = False
 
@@ -110,6 +110,7 @@ middle_label.set_font(font=pygame_menu.font.FONT_8BIT, font_size=35, color=(0, 0
                       background_color=(255, 247, 248))
 startScreen.add.button('Login', login)
 startScreen.add.button('SignUp', signup)
+startScreen.add.button('validateTest', menuOptions.validate)
 
 startScreen.add.button('Quit', pygame_menu.events.EXIT)
 
@@ -137,15 +138,16 @@ playerProfile.add.button('back', pygame_menu.events.BACK)
 # buttons for logged in accounts
 displayLabel = accountSwitcher.add.label('Pick a player profile:')
 displayLabel.set_alignment(pygame_menu.locals.ALIGN_CENTER)
-login = []
+dict = []
 
 usernamesModel = UsernamesModel()
 allUsernames = usernamesModel.read()
 allUsernamesFlipped = [(username, token) for token, username in allUsernames]
 
-accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped)
+accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped, onchange=menuOptions.selectAccount)
 # onchange = menuOptions.selectAccount
-accountSwitcher.add.button('Log-in with selected account', menuOptions.loggedSignin)
+# accountSwitcher.add.button('Log-in with selected account', menuOptions.login)
+darren = startScreen
 if __name__ == "__main__":
-    if accountSwitcher.is_enabled():
-        accountSwitcher.mainloop(surface)
+    if darren.is_enabled():
+        darren.mainloop(surface)

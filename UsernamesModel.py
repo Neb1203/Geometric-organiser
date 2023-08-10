@@ -1,15 +1,33 @@
 import csv
-
+import pandas as pd
 class UsernamesModel:
     filePath = 'tokens.csv'
+    noData = "noData"
     def write(self, token, userName):
-        num_entries = self.countEntries()
-        if num_entries >= 5:
+        if self.countEntries() >= 5:
             raise ValueError("Maximum number of entries (5) reached.")
         else:
             with open(self.filePath, 'a', newline='') as csv_file:
                 csv_writer = csv.writer(csv_file)
                 csv_writer.writerow([token, userName])
+
+    def update_csv_column(self, target_column_index, new_value):
+        df = pd.read_csv(self.filePath, header=None, na_values='nan')
+
+        # Update the values in the target column
+        df[target_column_index] = df[target_column_index].astype(str).str.strip().str.lower()
+
+        # Find the first occurrence of "nodata" or "empty slot" and replace it with the new value
+        first_occurrence_idx = df.index[
+            (df[target_column_index] == self.noData) | (df[target_column_index] == "empty slot")].min()
+        if pd.notna(first_occurrence_idx):
+            df.at[first_occurrence_idx, target_column_index] = new_value.lower()
+
+        # Convert NaN values to the desired string value
+        df = df.fillna(self.noData)
+
+        # Save the modified DataFrame back to the CSV file
+        df.to_csv(self.filePath, header=False, index=False)
 
     def read(self):
         if csvInstance.countEntries() > -1:
@@ -39,8 +57,8 @@ class UsernamesModel:
 
     def reset(self):
         with open(self.filePath, 'w', newline='') as csv_file:
-            for i in range(4):
-                csvInstance.write("clear", "clear")
+            for i in range(5):
+                csvInstance.write(self.noData, "Empty slot")
 
     def userNameIndex(self, targetIndex):
         # Print username 10 if it exists
@@ -52,9 +70,8 @@ class UsernamesModel:
                 return "not found"
         else:
             print("There are no usernames stored")
+
 csvInstance = UsernamesModel()
-# usernames = csvInstance.read()
-#
 # # if isinstance(usernames, tuple):
 # #     for idx, username in enumerate(usernames, start=1):
 # #         print(f"Username {idx}: {username}")
@@ -70,3 +87,9 @@ csvInstance = UsernamesModel()
 # else:
 #     print(f"Username '{usernameToFind}' not found.")
 # csvInstance.reset()
+# target_column_index = 0  # Replace this with the index of your target column (zero-based)
+# new_value = "gay"  # Replace this with the value you want to set for rows with "clear"
+#
+# csvInstance.update_csv_column(target_column_index, new_value)
+usernames = csvInstance.read()
+print(usernames)

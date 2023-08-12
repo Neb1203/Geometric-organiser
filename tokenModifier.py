@@ -13,6 +13,7 @@ class TokenModifier:
                     session_id = line.strip()  # Remove leading/trailing whitespace and newline
                     if session_id:
                         session_ids.append(session_id)
+                        print(session_ids)
             return session_ids
         except Exception as e:
             print(f"An error occurred: {e}")
@@ -27,4 +28,5 @@ class TokenModifier:
         except Exception as e:
             print(f"An error occurred: {e}")
 
-
+tokenModifer = TokenModifier()
+print(tokenModifer.read_session_ids())

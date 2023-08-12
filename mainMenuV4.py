@@ -1,10 +1,12 @@
 import pygame_menu
 
+from tokenModifier import TokenModifier
 from GridDraw import Tetris
 from MenuOptions import menuOptions
 from UsernamesModel import UsernamesModel
 from Window import Window
 from hashGenerator import HashingGenerator
+from MenuOptions import menuOptions
 
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
@@ -23,8 +25,14 @@ window.mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
 
 signupState = False
 loginState = False
-
+tokenModifier = TokenModifier()
+availableTokens = tokenModifier.read_session_ids()
+# TODO refactor to have a better syntax than using the len() function
+availableTokensLen = len(availableTokens)
+latestToken = availableTokens[availableTokensLen-1]
 menuOptions = menuOptions()
+menuOptions.validate(latestToken)
+
 surface = window.surface
 
 signup = pygame_menu.Menu('signup Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
@@ -55,6 +63,7 @@ def menuChanged(current, menu):
         print('login')
         loginState = True
     elif menu == 'startScreen':
+
         print('startscreen')
     elif menu == 'playMenu':
         print('playMenu')

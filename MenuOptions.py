@@ -39,6 +39,7 @@ class menuOptions:
 
 
     def startGame(self):
+        print("CUM")
         global gameModeSelected
         gameModeSelected = False
 
@@ -57,33 +58,14 @@ class menuOptions:
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
         self.response = requests.post('http://127.0.0.2:5000/player_details', params=signup)
 
-    def validate(self):
-        token = removeSpeach(self.sessionToken)
-        tokenModifier = TokenModifier()
-        tokenTup = {'sessionToken': token,}
+    def validate(self, session):
+        # token = removeSpeach(self.sessionToken)
+        print("session: " + session)
+        tokenTup = {'sessionToken': session,}
         response = requests.get('http://127.0.0.2:5000/validate', params=tokenTup)
         decoded = response.content.decode('utf-8')
-        print(decoded)
+        print("decoded: " + decoded)
 
-        data = json.loads(decoded)
-        date_time_str = data[0]
-
-        responseTime = datetime.strptime(date_time_str, "%Y-%m-%dT%H:%M:%S")
-        new_date = responseTime + timedelta(days=30)
-        if new_date <= datetime.now():
-            existing_session_ids = tokenModifier.read_session_ids()
-            if existing_session_ids is not None:
-                if token in existing_session_ids:
-                    existing_session_ids.remove(token)
-                    tokenModifier.write_session_ids(existing_session_ids)
-                    print(f"Session ID '{token}' removed successfully.")
-                else:
-                    print("Session ID not found in the file.")
-            else:
-                print("Error reading session IDs from the file.")
-
-        else:
-            print("valid")
     def cloudLogin(self):
         print("def cloudLogin running")
         login = {'email': self.user_email, 'password': self.user_password}

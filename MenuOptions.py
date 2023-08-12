@@ -63,8 +63,9 @@ class menuOptions:
         print("session: " + session)
         tokenTup = {'sessionToken': session,}
         response = requests.get('http://127.0.0.2:5000/validate', params=tokenTup)
-        decoded = response.content.decode('utf-8')
-        print("decoded: " + decoded)
+        if response.status_code != 200:
+            return False
+        return True
 
     def cloudLogin(self):
         print("def cloudLogin running")

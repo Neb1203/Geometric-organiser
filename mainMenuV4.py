@@ -48,7 +48,8 @@ else:
     mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     accountSwitcher = pygame_menu.Menu('Account switcher', window.vduDimensions[0], window.vduDimensions[1],
                                        theme=window.mainTheme)
-
+    campaign = pygame_menu.Menu('Campaign', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)
+    playerStatistics = pygame_menu.Menu('Player stats:', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     signup.set_onbeforeopen(lambda current, menu: menuChanged(current, 'signup'))
     login.set_onbeforeopen(lambda current, menu: menuChanged(current, 'login'))
     startScreen.set_onbeforeopen(lambda current, menu: menuChanged(current, 'startScreen'))
@@ -79,11 +80,11 @@ else:
     startScreen.add.button('Login', login)
     startScreen.add.button('SignUp', signup)
     startScreen.add.button('validateTest', menuOptions.validate)
-
     startScreen.add.button('Quit', pygame_menu.events.EXIT)
 
     # create buttons for mainMenu
     mainMenu.add.button('Play', playMenu)
+    mainMenu.add.button('Player statistics', playerStatistics)
     mainMenu.add.button('Settings', settings)
     mainMenu.add.button('Back', pygame_menu.events.BACK)
 
@@ -92,6 +93,10 @@ else:
                               range_values=[1, 2, 3, 4, 5],
                               default=3,
                               onchange=menuOptions.screenSize)
+    campaign.add.label('Campaign attempts: x')
+    campaign.add.label('Campaign completion rate: y')
+    campaign.add.dropselect('Level selector:', [('Level 1: Completed', 1), ('Level 2: Start', 2), ('Level 3: locked', 3), ('Level 4: locked', 4)], onchange=menuOptions.setDifficulty)
+    campaign.add.button('Start level')
 
     # Create buttons for playMenu
     playMenu.add.selector('Gamemode : ', [('Campaign', True), ('Endless', False)], onchange=menuOptions.pickGameMode)
@@ -104,7 +109,7 @@ else:
     playerProfile.add.button('signup', signup)
     playerProfile.add.button('login', login)
     playerProfile.add.button('back', pygame_menu.events.BACK)
-    # buttons for logged in accounts
+    # buttons for logged in accountslabel
     displayLabel = accountSwitcher.add.label('Pick a player profile:')
     displayLabel.set_alignment(pygame_menu.locals.ALIGN_CENTER)
     dict = []
@@ -115,9 +120,17 @@ else:
 
     accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
                                    onchange=menuOptions.selectAccount)
+    playerStatistics.add.label("Time played: timePlayed")
+    playerStatistics.add.label("Lifetime score: lifetimeScore")
+    playerStatistics.add.label("Games played: roundsPlayed")
+    playerStatistics.add.label("Campaign attempts: campaignAttempts")
+    playerStatistics.add.label("Campaign Completion Rate: campaignAttemps / campaignLosses")
+    playerStatistics.add.label("High score in endless: highScore")
+    playerStatistics.add.label("Number of game overs: deaths")
+    playerStatistics.add.button('back', pygame_menu.events.BACK)
     # onchange = menuOptions.selectAccount
     # accountSwitcher.add.button('Log-in with selected account', menuOptions.login)
-    darren = startScreen
+    darren = mainMenu
     if __name__ == "__main__":
         if darren.is_enabled():
             darren.mainloop(surface)
@@ -127,12 +140,6 @@ def menuChanged(current, menu):
     global signupState
     global loginState
     if menu == 'signup':
-        proLabel1 = mainMenu.add.label(csvInstance.userNameIndex(0))
-        proLabel1.set_alignment(pygame_menu.locals.ALIGN_CENTER)
-        proLabel2 = mainMenu.add.label(csvInstance.userNameIndex(1))
-        proLabel3 = mainMenu.add.label(csvInstance.userNameIndex(2))
-        proLabel4 = mainMenu.add.label(csvInstance.userNameIndex(3))
-        proLabel5 = mainMenu.add.label(csvInstance.userNameIndex(4))
         print('signUp')
         signupState = True
     elif menu == 'login':

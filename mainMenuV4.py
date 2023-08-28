@@ -28,10 +28,12 @@ loginState = False
 tokenModifier = TokenModifier()
 availableTokens = tokenModifier.read_session_ids()
 # TODO refactor to have a better syntax than using the len() function
-lastTokenIndex = len(availableTokens)-1
-latestToken = availableTokens[lastTokenIndex]
-menuOptions = menuOptions()
-isLoggedIn = menuOptions.validate(latestToken)
+isLoggedIn = False
+if availableTokens is not None:
+    lastTokenIndex = len(availableTokens)-1
+    latestToken = availableTokens[lastTokenIndex]
+    menuOptions = menuOptions()
+    isLoggedIn = menuOptions.validate(latestToken)
 
 if isLoggedIn:
     pass

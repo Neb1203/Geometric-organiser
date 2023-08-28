@@ -118,10 +118,11 @@ else:
 
     usernamesModel = UsernamesModel()
     allUsernames = usernamesModel.read()
-    allUsernamesFlipped = [(username, token) for token, username in allUsernames]
+    if len(allUsernames) >= 1:
+        allUsernamesFlipped = [(username, token) for token, username in allUsernames]
 
-    accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
-                                   onchange=menuOptions.selectAccount)
+        accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
+                                       onchange=menuOptions.selectAccount)
     playerStatistics.add.label("Time played: timePlayed")
     playerStatistics.add.label("Lifetime score: lifetimeScore")
     playerStatistics.add.label("Games played: roundsPlayed")

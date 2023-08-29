@@ -98,10 +98,12 @@ class Tetris:
     def getCurrentPiece(self):
         if self.heldFigure == None:
             self.heldFigure = self.figure
+            self.heldFigure.resetCoordinates()
             self.newFigure()
         else:
             # Swap the held piece for the current piece onscreen
             currentPiece = self.figure
+            currentPiece.resetCoordinates()
             self.figure = self.heldFigure
             self.heldFigure = currentPiece
 

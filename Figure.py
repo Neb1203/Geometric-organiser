@@ -42,3 +42,7 @@ class Figure:
         self.rotation = (self.rotation + 1) % len(self.figures[self.type])
     def rotateRight(self):
         self.rotation = (self.rotation + -1) % len(self.figures[self.type])
+
+    def resetCoordinates(self):
+        self.x = 3
+        self.y = 0

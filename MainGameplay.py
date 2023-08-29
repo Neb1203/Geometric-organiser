@@ -59,6 +59,8 @@ class MainGameplay:
                     game_running = False
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
+                    if event.key == pygame.K_l:
+                        self.game.getCurrentPiece()
                     if event.key == pygame.K_q:
                         self.game.rotateRight()
                     if event.key == pygame.K_e:
@@ -202,7 +204,6 @@ class MainGameplay:
         self.game.state = GameStateEnum.STARTED
         self.pause_menu.disable()
         self.pause_menu.clear()
-        print(self.game.state)
 
 
 

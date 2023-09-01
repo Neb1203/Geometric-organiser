@@ -22,12 +22,11 @@ def start_game():
     pygame.quit()
 class MainGameplay:
 
+    heldFigureContainerColor = (255, 255, 255)
     heldFigureContainer = pygame.Surface((150, 150))
-    heldFigureContainer.fill((255, 255, 255))
+    heldFigureContainer.fill(heldFigureContainerColor)
 
     def __init__(self):
-
-
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(w.vduDimensions[1]) / 400) * 20
 
@@ -64,17 +63,22 @@ class MainGameplay:
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == pygame.K_l:
                         self.game.setHeldPiece()
+                        self.heldFigureContainer.fill(self.heldFigureContainerColor)
 
                         for i in range(4):
                             for j in range(4):
                                 p = i * 4 + j
-                                if p in self.game.figure.image():
-                                    pygame.draw.rect(self.heldFigureContainer, Figure.colors[self.game.heldFigure.color],
-                                                     [(self.game.x + self.scaleWVduDimensionsX * (
-                                                                 j + self.game.heldFigure.x) + 1)/5,
+                                positionAndSize = pygame.Rect((self.game.x + self.scaleWVduDimensionsX * (
+                                                                 j + self.game.heldFigure.x) + 1)-320,
                                                       (self.game.y + self.scaleWVduDimensionsY * (
-                                                                  i + self.game.heldFigure.y) + 1)/3,
-                                                      (self.scaleWVduDimensionsX - 2)/3, (self.scaleWVduDimensionsY - 2)/3])
+                                                                  i + self.game.heldFigure.y) + 1)+15,
+                                                      (self.scaleWVduDimensionsX - 2), (self.scaleWVduDimensionsY - 2))
+                                if p in self.game.heldFigure.image():
+                                    pygame.draw.rect(
+                                        self.heldFigureContainer,
+                                        Figure.colors[self.game.heldFigure.color],
+                                        positionAndSize
+                                    )
                     if event.key == pygame.K_q:
                         self.game.rotateRight()
                     if event.key == pygame.K_e:
@@ -136,13 +140,16 @@ class MainGameplay:
                                               self.game.y + self.scaleWVduDimensionsY * (i + self.game.figure.y) + 1,
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
 
-            fontOpenSans = pygame.font.SysFont('sans', 35)
-            score_tracker = fontOpenSans.render("Score: " + str(self.game.score), True, colours.black)
-            pauseResumeButton = fontOpenSans.render("Resume", True, colours.black)
+            fontOpenSansBig = pygame.font.SysFont('sans', 35)
+            fontOpenSans = pygame.font.SysFont('sans', 24)
+            scoreTracker = fontOpenSansBig.render("Score: " + str(self.game.score), True, colours.black)
+            pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
 
-            w.surface.blit(score_tracker, [0, 0])
+            w.surface.blit(scoreTracker, [0, 0])
 
             w.surface.blit(self.heldFigureContainer, (50, 150))
+            heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
+            w.surface.blit(heldPieceMessage, (50, 120))
             if self.game.state.gameOver():
                 print("gameState = gameOver")
                 self.return_to_main_menu()

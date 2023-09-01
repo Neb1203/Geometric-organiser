@@ -22,6 +22,9 @@ def start_game():
     pygame.quit()
 class MainGameplay:
 
+    heldFigureContainer = pygame.Surface((150, 150))
+    heldFigureContainer.fill((255, 255, 255))
+
     def __init__(self):
 
 
@@ -60,7 +63,18 @@ class MainGameplay:
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == pygame.K_l:
-                        self.game.getCurrentPiece()
+                        self.game.setHeldPiece()
+
+                        for i in range(4):
+                            for j in range(4):
+                                p = i * 4 + j
+                                if p in self.game.figure.image():
+                                    pygame.draw.rect(self.heldFigureContainer, Figure.colors[self.game.heldFigure.color],
+                                                     [(self.game.x + self.scaleWVduDimensionsX * (
+                                                                 j + self.game.heldFigure.x) + 1)/5,
+                                                      (self.game.y + self.scaleWVduDimensionsY * (
+                                                                  i + self.game.heldFigure.y) + 1)/3,
+                                                      (self.scaleWVduDimensionsX - 2)/3, (self.scaleWVduDimensionsY - 2)/3])
                     if event.key == pygame.K_q:
                         self.game.rotateRight()
                     if event.key == pygame.K_e:
@@ -127,6 +141,8 @@ class MainGameplay:
             pauseResumeButton = fontOpenSans.render("Resume", True, colours.black)
 
             w.surface.blit(score_tracker, [0, 0])
+
+            w.surface.blit(self.heldFigureContainer, (50, 150))
             if self.game.state.gameOver():
                 print("gameState = gameOver")
                 self.return_to_main_menu()

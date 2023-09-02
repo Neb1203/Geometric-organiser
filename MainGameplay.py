@@ -22,6 +22,7 @@ def start_game():
     pygame.quit()
 class MainGameplay:
 
+    heldFigureContainerBorderColor = (0, 0, 0)
     heldFigureContainerColor = (255, 255, 255)
     heldFigureContainer = pygame.Surface((150, 150))
     heldFigureContainer.fill(heldFigureContainerColor)
@@ -147,7 +148,10 @@ class MainGameplay:
 
             w.surface.blit(scoreTracker, [0, 0])
 
-            w.surface.blit(self.heldFigureContainer, (50, 150))
+            heldFigureContainerOuter = pygame.Surface((160, 160))
+            heldFigureContainerOuter.fill(self.heldFigureContainerBorderColor)
+            heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
+            w.surface.blit(heldFigureContainerOuter, (50, 150))
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             w.surface.blit(heldPieceMessage, (50, 120))
             if self.game.state.gameOver():

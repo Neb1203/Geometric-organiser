@@ -1,6 +1,7 @@
 from Figure import Figure
 from Window import Window
 from GameStateEnum import GameStateEnum
+import random
 
 class Tetris:
     level = 2
@@ -10,6 +11,7 @@ class Tetris:
     y = 0
     figure = None
     heldFigure = None
+    upcomingFigureTypes = []
 
     def __init__(self, width, height):
         self.height = height
@@ -22,8 +24,17 @@ class Tetris:
             for j in range(width):
                 new_line.append(0)
             self.field.append(new_line)
+        for i in range(3):
+            type = self.newFigureType()
+            self.upcomingFigureTypes.append(type)
+
+    def newFigureType(self):
+        return random.randint(0, len(Figure.figures) - 1)
     def newFigure(self):
-        self.figure = Figure(3, 0)
+        self.figure = Figure(3, 0, self.upcomingFigureTypes[0])
+        self.upcomingFigureTypes.pop(0)
+        newType = self.newFigureType()
+        self.upcomingFigureTypes.append(newType)
     def intersects(self):
         intersection = False
         for i in range(4):

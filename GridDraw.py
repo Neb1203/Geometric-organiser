@@ -63,6 +63,7 @@ class Tetris:
             if self.intersects():
                 self.figure.y -= 1
                 self.freeze()
+                return True
 
     def freeze(self):
         for i in range(4):

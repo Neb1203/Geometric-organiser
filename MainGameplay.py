@@ -22,6 +22,7 @@ def start_game():
     pygame.quit()
 class MainGameplay:
 
+    heldFigureLocked = False
     heldFigureContainerBorderColor = (0, 0, 0)
     heldFigureContainerColor = (255, 255, 255)
     heldFigureContainer = pygame.Surface((150, 150))
@@ -45,6 +46,11 @@ class MainGameplay:
         self.pressing_left = False
 
     def run_game(self):
+        fontOpenSansBig = pygame.font.SysFont('sans', 35)
+        fontOpenSans = pygame.font.SysFont('sans', 24)
+        fontOpenSansItalic = pygame.font.SysFont('sans', 18)
+        fontOpenSansItalic.italic = True
+
         game_running = True
         while game_running:
             if self.game.figure is None:
@@ -55,14 +61,17 @@ class MainGameplay:
 
             if self.counter % (self.fps // self.game.level // 2) == 0 or self.pressing_down:
                 if self.game.state.gameStarted():
-                    self.game.goDown()
+                    reachedBottom = self.game.goDown()
+                    if reachedBottom:
+                        self.heldFigureLocked = False
+
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
                 if event.type == pygame.QUIT:
                     game_running = False
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
-                    if event.key == pygame.K_l:
+                    if event.key == pygame.K_l and not self.heldFigureLocked:
                         self.game.setHeldPiece()
                         self.heldFigureContainer.fill(self.heldFigureContainerColor)
 
@@ -80,6 +89,7 @@ class MainGameplay:
                                         Figure.colors[self.game.heldFigure.color],
                                         positionAndSize
                                     )
+                        self.heldFigureLocked = True
                     if event.key == pygame.K_q:
                         self.game.rotateRight()
                     if event.key == pygame.K_e:
@@ -97,17 +107,14 @@ class MainGameplay:
                         self.game.goSide(1)
                     if event.key == pygame.K_SPACE:
                         self.game.goSpace()
+                        self.heldFigureLocked = False
                     if event.key == pygame.K_ESCAPE:
-                        print("escape")
                         # self.return_to_main_menu()
                         # self.resume_game()
                         initialState = self.game.state
-                        print(initialState)
                         if initialState == GameStateEnum.PAUSED:
-                            print("dumy")
                             self.resume_game()
                         elif initialState == GameStateEnum.STARTED:
-                            print("dum")
                             self.pauseMenu()
 
                         # game.__init__(10, 20)
@@ -141,8 +148,6 @@ class MainGameplay:
                                               self.game.y + self.scaleWVduDimensionsY * (i + self.game.figure.y) + 1,
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
 
-            fontOpenSansBig = pygame.font.SysFont('sans', 35)
-            fontOpenSans = pygame.font.SysFont('sans', 24)
             scoreTracker = fontOpenSansBig.render("Score: " + str(self.game.score), True, colours.black)
             pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
 
@@ -154,6 +159,9 @@ class MainGameplay:
             w.surface.blit(heldFigureContainerOuter, (50, 150))
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             w.surface.blit(heldPieceMessage, (50, 120))
+            if self.heldFigureLocked:
+                heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
+                w.surface.blit(heldPieceMessage, (100, 315))
             if self.game.state.gameOver():
                 print("gameState = gameOver")
                 self.return_to_main_menu()

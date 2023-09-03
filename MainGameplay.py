@@ -78,12 +78,15 @@ class MainGameplay:
                         for i in range(4):
                             for j in range(4):
                                 p = i * 4 + j
-                                positionAndSize = pygame.Rect((self.game.x + self.scaleWVduDimensionsX * (
-                                                                 j + self.game.heldFigure.x) + 1)-320,
-                                                      (self.game.y + self.scaleWVduDimensionsY * (
-                                                                  i + self.game.heldFigure.y) + 1)+15,
-                                                      (self.scaleWVduDimensionsX - 2), (self.scaleWVduDimensionsY - 2))
                                 if p in self.game.heldFigure.image():
+                                    positionAndSize = pygame.Rect(
+                                        (self.game.x + self.scaleWVduDimensionsX * (
+                                            j + self.game.heldFigure.x) + 1) - 320,
+                                        (self.game.y + self.scaleWVduDimensionsY * (
+                                              i + self.game.heldFigure.y) + 1) + 15,
+                                        (self.scaleWVduDimensionsX - 2),
+                                        (self.scaleWVduDimensionsY - 2)
+                                    )
                                     pygame.draw.rect(
                                         self.heldFigureContainer,
                                         Figure.colors[self.game.heldFigure.color],

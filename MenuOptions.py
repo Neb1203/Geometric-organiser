@@ -56,13 +56,14 @@ class menuOptions:
         # mainMenu.set_current()
         print("def signup running")
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
-        self.response = requests.post('http://127.0.0.2:5000/player_details', params=signup)
+        self.response = requests.post('http://127.0.0.1:5000/player_details', params=signup)
 
     def validate(self, session):
         # token = removeSpeach(self.sessionToken)
         print("session: " + session)
         tokenTup = {'sessionToken': session,}
-        response = requests.get('http://127.0.0.2:5000/validate', params=tokenTup)
+        response = requests.get('http://127.0.0.1:5000/validate', params=tokenTup)
+        print(response)
         if response.status_code != 200:
             return False
         return True
@@ -70,9 +71,11 @@ class menuOptions:
     def cloudLogin(self):
         print("def cloudLogin running")
         login = {'email': self.user_email, 'password': self.user_password}
-        response = requests.post('http://127.0.0.2:5000/authenticate', params=login)
+        response = requests.post('http://127.0.0.1:5000/authenticate', params=login)
         if response.status_code == 200:
                 response_content = response.content.decode('utf-8')
+                with open("tokens.txt", "a") as file:
+                    file.write(response_content + "\n")
                 self.sessionToken = response_content
         else:
             print("code not equal to 200")

@@ -1,3 +1,4 @@
 .idea
 venv.py
 tokens.csv
+__pycache__

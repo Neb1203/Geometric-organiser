@@ -9,6 +9,8 @@ class Tetris:
     x = (int(Window().vduDimensions[0]) - (Window().zoomX * 10)) / 2
     y = 0
     figure = None
+    heldFigure = None
+
     def __init__(self, width, height):
         self.height = height
         self.width = width
@@ -61,6 +63,7 @@ class Tetris:
             if self.intersects():
                 self.figure.y -= 1
                 self.freeze()
+                return True
 
     def freeze(self):
         for i in range(4):
@@ -92,3 +95,16 @@ class Tetris:
             self.figure.rotateRight()
             if self.intersects():
                 self.figure.rotation = old_rotation
+
+    def setHeldPiece(self):
+        if self.heldFigure == None:
+            self.heldFigure = self.figure
+            self.heldFigure.resetCoordinates()
+            self.newFigure()
+        else:
+            # Swap the held piece for the current piece onscreen
+            currentPiece = self.figure
+            currentPiece.resetCoordinates()
+            self.figure = self.heldFigure
+            self.heldFigure = currentPiece
+

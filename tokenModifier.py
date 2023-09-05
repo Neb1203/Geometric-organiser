@@ -3,7 +3,7 @@ import sys
 class TokenModifier:
     def __init__(self):
 
-        self.file_path = r"E:\Computer Science\Programming project\geometric-organiser-api\tokens.txt"
+        self.file_path = r"tokens.txt"
             # os.path.join(self.current_directory, "tokens.txt")
     def read_session_ids(self):
         session_ids = []

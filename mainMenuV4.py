@@ -8,6 +8,42 @@ from Window import Window
 from hashGenerator import HashingGenerator
 from MenuOptions import menuOptions
 
+def menuChanged(current, menu):
+    global signupState
+    global loginState
+    if menu == 'signup':
+        print('signUp')
+        signupState = True
+    elif menu == 'login':
+        print('login')
+        loginState = True
+    elif menu == 'startScreen':
+
+        print('startscreen')
+    elif menu == 'playMenu':
+        print('playMenu')
+    elif menu == 'settings':
+        print('settings')
+    elif menu == 'playerProfile':
+        print('playerProfile')
+    elif menu == 'paused':
+        print('paused')
+    elif menu == 'resume':
+        print('resume')
+    elif menu == 'quitPauseMenu':
+        print('quitPauseMenu')
+    elif menu == 'mainMenu':
+        print('mainMenu')
+        mainMenu.add.label(menuOptions.user_name)
+        if signupState == True:
+            menuOptions.signup()
+            loginState = False
+            signupState = False
+        elif loginState == True:
+            menuOptions.cloudLogin()
+            loginState = False
+            signupState = False
+
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
@@ -118,10 +154,11 @@ else:
 
     usernamesModel = UsernamesModel()
     allUsernames = usernamesModel.read()
-    allUsernamesFlipped = [(username, token) for token, username in allUsernames]
+    if len(allUsernames) >= 1:
+        allUsernamesFlipped = [(username, token) for token, username in allUsernames]
 
-    accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
-                                   onchange=menuOptions.selectAccount)
+        accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
+                                       onchange=menuOptions.selectAccount)
     playerStatistics.add.label("Time played: timePlayed")
     playerStatistics.add.label("Lifetime score: lifetimeScore")
     playerStatistics.add.label("Games played: roundsPlayed")
@@ -136,41 +173,4 @@ else:
     if __name__ == "__main__":
         if darren.is_enabled():
             darren.mainloop(surface)
-
-
-def menuChanged(current, menu):
-    global signupState
-    global loginState
-    if menu == 'signup':
-        print('signUp')
-        signupState = True
-    elif menu == 'login':
-        print('login')
-        loginState = True
-    elif menu == 'startScreen':
-
-        print('startscreen')
-    elif menu == 'playMenu':
-        print('playMenu')
-    elif menu == 'settings':
-        print('settings')
-    elif menu == 'playerProfile':
-        print('playerProfile')
-    elif menu == 'paused':
-        print('paused')
-    elif menu == 'resume':
-        print('resume')
-    elif menu == 'quitPauseMenu':
-        print('quitPauseMenu')
-    elif menu == 'mainMenu':
-        print('mainMenu')
-        mainMenu.add.label(menuOptions.user_name)
-        if signupState == True:
-            menuOptions.signup()
-            loginState = False
-            signupState = False
-        elif loginState == True:
-            menuOptions.cloudLogin()
-            loginState = False
-            signupState = False
 

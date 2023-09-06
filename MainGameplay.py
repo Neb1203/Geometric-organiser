@@ -23,13 +23,7 @@ class MainGameplay:
 
     hudsDefaultColors = (255, 255, 255)
     hudsBorderColors = (0, 0, 0)
-
-    heldFigureLocked = False
-    heldFigureContainer = pygame.Surface((150, 150))
-    heldFigureContainer.fill(hudsDefaultColors)
-
     upcomingFiguresDisplay = pygame.Surface((150, 450))
-    upcomingFiguresDisplay.fill(hudsDefaultColors)
 
     def __init__(self):
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
@@ -54,6 +48,13 @@ class MainGameplay:
         fontOpenSansItalic = pygame.font.SysFont('sans', 18)
         fontOpenSansItalic.italic = True
 
+        heldFigureLocked = False
+        heldFigureContainer = pygame.Surface((150, 150))
+        heldFigureContainer.fill(self.hudsDefaultColors)
+
+
+        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
+
         game_running = True
         while game_running:
             if self.game.figure is None:
@@ -66,7 +67,7 @@ class MainGameplay:
                 if self.game.state.gameStarted():
                     reachedBottom = self.game.goDown()
                     if reachedBottom:
-                        self.heldFigureLocked = False
+                        heldFigureLocked = False
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
 
 
@@ -75,12 +76,12 @@ class MainGameplay:
                     game_running = False
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
-                    if event.key == pygame.K_l and not self.heldFigureLocked:
+                    if event.key == pygame.K_l and not heldFigureLocked:
                         newHeldPiece = self.game.figure
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                         self.game.swapHeldFigure()
                         self.game.setHeldFigure(newHeldPiece)
-                        self.heldFigureContainer.fill(self.hudsDefaultColors)
+                        heldFigureContainer.fill(self.hudsDefaultColors)
 
                         for i in range(4):
                             for j in range(4):
@@ -95,11 +96,11 @@ class MainGameplay:
                                         (self.scaleWVduDimensionsY - 2)
                                     )
                                     pygame.draw.rect(
-                                        self.heldFigureContainer,
+                                        heldFigureContainer,
                                         Figure.colors[self.game.heldFigure.color],
                                         positionAndSize
                                     )
-                        self.heldFigureLocked = True
+                        heldFigureLocked = True
                     if event.key == pygame.K_q:
                         self.game.rotateRight()
                     if event.key == pygame.K_e:
@@ -117,7 +118,7 @@ class MainGameplay:
                         self.game.goSide(1)
                     if event.key == pygame.K_SPACE:
                         self.game.goSpace()
-                        self.heldFigureLocked = False
+                        heldFigureLocked = False
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                     if event.key == pygame.K_ESCAPE:
                         # self.return_to_main_menu()
@@ -191,7 +192,7 @@ class MainGameplay:
             w.surface.blit(heldPieceMessage, (50, 120))
             heldFigureContainerOuter = pygame.Surface((160, 160))
             heldFigureContainerOuter.fill(self.hudsBorderColors)
-            heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
+            heldFigureContainerOuter.blit(heldFigureContainer, (5, 5))
 
             w.surface.blit(heldFigureContainerOuter, (50, 150))
 
@@ -203,7 +204,7 @@ class MainGameplay:
 
             w.surface.blit(upcomingFiguresDisplayOuter, (590, 70))
 
-            if self.heldFigureLocked:
+            if heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 w.surface.blit(heldPieceMessage, (100, 315))
             if self.game.state.gameOver():
@@ -252,12 +253,12 @@ class MainGameplay:
         self.pause_menu.disable()
         self.pause_menu.clear()
     def restartGame(self):
-        print("def return_to_main_menu")
         self.pause_menu.disable()
         self.pause_menu.clear()
         self.game.state = GameStateEnum.STARTED
         self.game.__init__(10, 20)
         self.game.newFigure()
+        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
         global gameRunning
         gameRunning = False
 

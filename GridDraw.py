@@ -1,6 +1,7 @@
 from Figure import Figure
 from Window import Window
 from GameStateEnum import GameStateEnum
+import random
 
 class Tetris:
     level = 2
@@ -10,6 +11,8 @@ class Tetris:
     y = 0
     figure = None
     heldFigure = None
+    numUpcomingFigures = 3
+    upcomingFigureTypes = []
 
     def __init__(self, width, height):
         self.height = height
@@ -17,13 +20,34 @@ class Tetris:
         self.field = []
         self.score = 0
         self.state = GameStateEnum.STARTED
+        self.upcomingFigureTypes = []
+        self.upcomingFigureColors = []
         for i in range(height):
             new_line = []
             for j in range(width):
                 new_line.append(0)
             self.field.append(new_line)
+        for i in range(self.numUpcomingFigures):
+            self.upcomingFigureTypes.append(self.newFigureType())
+            self.upcomingFigureColors.append(self.newFigureColor())
+
+    def newFigureType(self):
+        return random.randint(0, len(Figure.figures) - 1)
+    def newFigureColor(self):
+        return random.randint(1, len(Figure.colors) - 1)
     def newFigure(self):
-        self.figure = Figure(3, 0)
+        self.figure = Figure(3, 0, self.upcomingFigureTypes[0], self.upcomingFigureColors[0])
+        self.upcomingFigureTypes.pop(0)
+        self.upcomingFigureColors.pop(0)
+        self.upcomingFigureTypes.append(self.newFigureType())
+        self.upcomingFigureColors.append(self.newFigureColor())
+
+    def swapHeldFigure(self):
+        self.figure = self.heldFigure
+        self.upcomingFigureTypes.pop(0)
+        self.upcomingFigureColors.pop(0)
+        self.upcomingFigureTypes.append(self.newFigureType())
+        self.upcomingFigureColors.append(self.newFigureColor())
     def intersects(self):
         intersection = False
         for i in range(4):
@@ -96,14 +120,14 @@ class Tetris:
             if self.intersects():
                 self.figure.rotation = old_rotation
 
-    def setHeldPiece(self):
+    def setHeldFigure(self, heldPiece):
         if self.heldFigure == None:
-            self.heldFigure = self.figure
+            self.heldFigure = heldPiece
             self.heldFigure.resetCoordinates()
             self.newFigure()
         else:
             # Swap the held piece for the current piece onscreen
-            currentPiece = self.figure
+            currentPiece = heldPiece
             currentPiece.resetCoordinates()
             self.figure = self.heldFigure
             self.heldFigure = currentPiece

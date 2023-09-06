@@ -5,8 +5,6 @@ from GridDraw import Tetris
 from Window import Window
 from Figure import Figure
 from GameStateEnum import GameStateEnum
-import button
-from PIL import Image
 from CenterButton import CenterButton
 gameRunning = True
 w = Window()
@@ -21,12 +19,17 @@ def start_game():
     game.run_game()
     pygame.quit()
 class MainGameplay:
+    numUpcomingFigures = 3
+
+    hudsDefaultColors = (255, 255, 255)
+    hudsBorderColors = (0, 0, 0)
 
     heldFigureLocked = False
-    heldFigureContainerBorderColor = (0, 0, 0)
-    heldFigureContainerColor = (255, 255, 255)
     heldFigureContainer = pygame.Surface((150, 150))
-    heldFigureContainer.fill(heldFigureContainerColor)
+    heldFigureContainer.fill(hudsDefaultColors)
+
+    upcomingFiguresDisplay = pygame.Surface((150, 450))
+    upcomingFiguresDisplay.fill(hudsDefaultColors)
 
     def __init__(self):
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
@@ -64,6 +67,7 @@ class MainGameplay:
                     reachedBottom = self.game.goDown()
                     if reachedBottom:
                         self.heldFigureLocked = False
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
@@ -72,8 +76,11 @@ class MainGameplay:
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == pygame.K_l and not self.heldFigureLocked:
-                        self.game.setHeldPiece()
-                        self.heldFigureContainer.fill(self.heldFigureContainerColor)
+                        newHeldPiece = self.game.figure
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
+                        self.game.swapHeldFigure()
+                        self.game.setHeldFigure(newHeldPiece)
+                        self.heldFigureContainer.fill(self.hudsDefaultColors)
 
                         for i in range(4):
                             for j in range(4):
@@ -111,6 +118,7 @@ class MainGameplay:
                     if event.key == pygame.K_SPACE:
                         self.game.goSpace()
                         self.heldFigureLocked = False
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                     if event.key == pygame.K_ESCAPE:
                         # self.return_to_main_menu()
                         # self.resume_game()
@@ -151,17 +159,50 @@ class MainGameplay:
                                               self.game.y + self.scaleWVduDimensionsY * (i + self.game.figure.y) + 1,
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
 
+            spaceYBetweenFigs = 20
+            for figIndex in range(Tetris.numUpcomingFigures):
+                for i in range(4):
+                    for j in range(4):
+                        p = i * 4 + j
+                        figTypeIndex = self.game.upcomingFigureTypes[figIndex]
+                        figColorIndex = self.game.upcomingFigureColors[figIndex]
+                        upcomingFigure = Figure(3, 0, figTypeIndex, figColorIndex)
+                        if p in upcomingFigure.image():
+                            positionAndSize = pygame.Rect(
+                                (self.game.x + self.scaleWVduDimensionsX * (
+                                    j + upcomingFigure.x) + 1) - 320,
+                                (self.game.y + self.scaleWVduDimensionsY * (
+                                      i + upcomingFigure.y) + 1) + spaceYBetweenFigs,
+                                (self.scaleWVduDimensionsX - 2),
+                                (self.scaleWVduDimensionsY - 2)
+                            )
+                            pygame.draw.rect(
+                                self.upcomingFiguresDisplay,
+                                Figure.colors[figColorIndex],
+                                positionAndSize
+                            )
+                spaceYBetweenFigs += 150
             scoreTracker = fontOpenSansBig.render("Score: " + str(self.game.score), True, colours.black)
             pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
 
             w.surface.blit(scoreTracker, [0, 0])
 
-            heldFigureContainerOuter = pygame.Surface((160, 160))
-            heldFigureContainerOuter.fill(self.heldFigureContainerBorderColor)
-            heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
-            w.surface.blit(heldFigureContainerOuter, (50, 150))
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             w.surface.blit(heldPieceMessage, (50, 120))
+            heldFigureContainerOuter = pygame.Surface((160, 160))
+            heldFigureContainerOuter.fill(self.hudsBorderColors)
+            heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
+
+            w.surface.blit(heldFigureContainerOuter, (50, 150))
+
+            upcomingFiguresMessage = fontOpenSans.render("Upcoming pieces", True, colours.black)
+            w.surface.blit(upcomingFiguresMessage, (590, 40))
+            upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
+            upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
+            upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
+
+            w.surface.blit(upcomingFiguresDisplayOuter, (590, 70))
+
             if self.heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 w.surface.blit(heldPieceMessage, (100, 315))

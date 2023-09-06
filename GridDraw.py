@@ -11,6 +11,7 @@ class Tetris:
     y = 0
     figure = None
     heldFigure = None
+    numUpcomingFigures = 3
     upcomingFigureTypes = []
 
     def __init__(self, width, height):
@@ -19,22 +20,27 @@ class Tetris:
         self.field = []
         self.score = 0
         self.state = GameStateEnum.STARTED
+        self.upcomingFigureTypes = []
+        self.upcomingFigureColors = []
         for i in range(height):
             new_line = []
             for j in range(width):
                 new_line.append(0)
             self.field.append(new_line)
-        for i in range(3):
-            type = self.newFigureType()
-            self.upcomingFigureTypes.append(type)
+        for i in range(self.numUpcomingFigures):
+            self.upcomingFigureTypes.append(self.newFigureType())
+            self.upcomingFigureColors.append(self.newFigureColor())
 
     def newFigureType(self):
         return random.randint(0, len(Figure.figures) - 1)
+    def newFigureColor(self):
+        return random.randint(1, len(Figure.colors) - 1)
     def newFigure(self):
-        self.figure = Figure(3, 0, self.upcomingFigureTypes[0])
+        self.figure = Figure(3, 0, self.upcomingFigureTypes[0], self.upcomingFigureColors[0])
         self.upcomingFigureTypes.pop(0)
-        newType = self.newFigureType()
-        self.upcomingFigureTypes.append(newType)
+        self.upcomingFigureColors.pop(0)
+        self.upcomingFigureTypes.append(self.newFigureType())
+        self.upcomingFigureColors.append(self.newFigureColor())
     def intersects(self):
         intersection = False
         for i in range(4):

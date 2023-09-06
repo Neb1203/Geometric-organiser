@@ -29,11 +29,11 @@ class Figure:
         (247, 221, 114),
     ]
 
-    def __init__(self, x, y, type):
+    def __init__(self, x, y, type, color):
         self.x = x
         self.y = y
         self.type = type
-        self.color = random.randint(1, len(self.colors) - 1)
+        self.color = color
         self.rotation = 0
 
 

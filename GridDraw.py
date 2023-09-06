@@ -41,6 +41,13 @@ class Tetris:
         self.upcomingFigureColors.pop(0)
         self.upcomingFigureTypes.append(self.newFigureType())
         self.upcomingFigureColors.append(self.newFigureColor())
+
+    def swapHeldFigure(self):
+        self.figure = self.heldFigure
+        self.upcomingFigureTypes.pop(0)
+        self.upcomingFigureColors.pop(0)
+        self.upcomingFigureTypes.append(self.newFigureType())
+        self.upcomingFigureColors.append(self.newFigureColor())
     def intersects(self):
         intersection = False
         for i in range(4):
@@ -113,14 +120,14 @@ class Tetris:
             if self.intersects():
                 self.figure.rotation = old_rotation
 
-    def setHeldPiece(self):
+    def setHeldPiece(self, heldPiece):
         if self.heldFigure == None:
-            self.heldFigure = self.figure
+            self.heldFigure = heldPiece
             self.heldFigure.resetCoordinates()
             self.newFigure()
         else:
             # Swap the held piece for the current piece onscreen
-            currentPiece = self.figure
+            currentPiece = heldPiece
             currentPiece.resetCoordinates()
             self.figure = self.heldFigure
             self.heldFigure = currentPiece

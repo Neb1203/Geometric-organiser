@@ -76,7 +76,10 @@ class MainGameplay:
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == pygame.K_l and not self.heldFigureLocked:
-                        self.game.setHeldPiece()
+                        newHeldPiece = self.game.figure
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
+                        self.game.swapHeldFigure()
+                        self.game.setHeldPiece(newHeldPiece)
                         self.heldFigureContainer.fill(self.hudsDefaultColors)
 
                         for i in range(4):

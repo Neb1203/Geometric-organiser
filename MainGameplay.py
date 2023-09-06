@@ -184,15 +184,22 @@ class MainGameplay:
 
             w.surface.blit(scoreTracker, [0, 0])
 
+            heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
+            w.surface.blit(heldPieceMessage, (50, 120))
             heldFigureContainerOuter = pygame.Surface((160, 160))
             heldFigureContainerOuter.fill(self.hudsBorderColors)
             heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
 
             w.surface.blit(heldFigureContainerOuter, (50, 150))
-            w.surface.blit(self.upcomingFiguresDisplay, (600, 80))
 
-            heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
-            w.surface.blit(heldPieceMessage, (50, 120))
+            upcomingFiguresMessage = fontOpenSans.render("Upcoming pieces", True, colours.black)
+            w.surface.blit(upcomingFiguresMessage, (590, 40))
+            upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
+            upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
+            upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
+
+            w.surface.blit(upcomingFiguresDisplayOuter, (590, 70))
+
             if self.heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 w.surface.blit(heldPieceMessage, (100, 315))

@@ -120,7 +120,7 @@ class Tetris:
             if self.intersects():
                 self.figure.rotation = old_rotation
 
-    def setHeldPiece(self, heldPiece):
+    def setHeldFigure(self, heldPiece):
         if self.heldFigure == None:
             self.heldFigure = heldPiece
             self.heldFigure.resetCoordinates()

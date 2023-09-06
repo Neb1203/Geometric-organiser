@@ -79,7 +79,7 @@ class MainGameplay:
                         newHeldPiece = self.game.figure
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                         self.game.swapHeldFigure()
-                        self.game.setHeldPiece(newHeldPiece)
+                        self.game.setHeldFigure(newHeldPiece)
                         self.heldFigureContainer.fill(self.hudsDefaultColors)
 
                         for i in range(4):

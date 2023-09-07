@@ -2,12 +2,29 @@ import pygame_menu
 
 from tokenModifier import TokenModifier
 from GridDraw import Tetris
-from MenuOptions import menuOptions
 from UsernamesModel import UsernamesModel
 from Window import Window
 from hashGenerator import HashingGenerator
-from MenuOptions import menuOptions
+from MenuOptions import menuOptions, updateKey
 
+mainTheme = pygame_menu.themes.THEME_SOLARIZED
+window = Window()
+Tetris = Tetris(10, 20)
+hashGenerator = HashingGenerator()
+csvInstance = UsernamesModel()
+menuOptions = menuOptions()
+keyChanger = updateKey()
+
+window.mainTheme.widget_margin = (20, 15)
+window.mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
+
+window.noTitle.widget_margin = (0, 8)
+# window.mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
+
+signupState = False
+loginState = False
+tokenModifier = TokenModifier()
+availableTokens = tokenModifier.read_session_ids()
 def menuChanged(current, menu):
     global signupState
     global loginState
@@ -47,28 +64,13 @@ def menuChanged(current, menu):
 # pygame.mixer.init()
 # pygame.mixer.music.load('mmm.mp3')
 # pygame.mixer.music.play(-1, 0)
-mainTheme = pygame_menu.themes.THEME_SOLARIZED
-window = Window()
-Tetris = Tetris(10, 20)
-hashGenerator = HashingGenerator()
-csvInstance = UsernamesModel()
-subwindow = (300, 200)
 
-subTheme = pygame_menu.themes.THEME_SOLARIZED
-
-window.mainTheme.widget_margin = (20, 15)
-window.mainTheme.widget_alignment = pygame_menu.locals.ALIGN_LEFT
-
-signupState = False
-loginState = False
-tokenModifier = TokenModifier()
-availableTokens = tokenModifier.read_session_ids()
 # TODO refactor to have a better syntax than using the len() function
 isLoggedIn = False
 if availableTokens is not None:
     lastTokenIndex = len(availableTokens)-1
     latestToken = availableTokens[lastTokenIndex]
-    menuOptions = menuOptions()
+
     isLoggedIn = menuOptions.validate(latestToken)
 
 if isLoggedIn:
@@ -81,12 +83,14 @@ else:
     startScreen = pygame_menu.Menu('Start Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     playMenu = pygame_menu.Menu('Play', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
-    changeControls = pygame_menu.Menu('Change controls', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+    changeControls = pygame_menu.Menu(None, window.vduDimensions[0], window.vduDimensions[1], theme=window.noTitle)
     playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     accountSwitcher = pygame_menu.Menu('Account switcher', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)
     campaign = pygame_menu.Menu('Campaign', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)
     playerStatistics = pygame_menu.Menu('Player stats:', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+
+
     signup.set_onbeforeopen(lambda current, menu: menuChanged(current, 'signup'))
     login.set_onbeforeopen(lambda current, menu: menuChanged(current, 'login'))
     startScreen.set_onbeforeopen(lambda current, menu: menuChanged(current, 'startScreen'))
@@ -126,12 +130,26 @@ else:
     mainMenu.add.button('Back', pygame_menu.events.BACK)
 
     # settings
+    settings.add.clock()
     settings.add.range_slider('Set screen size',
                               range_values=[1, 2, 3, 4, 5],
                               default=3,
                               onchange=menuOptions.screenSize)
     settings.add.button('Change controls', changeControls)
-    changeControls.add.button('select new key', menuOptions.setNewKey)
+
+    text = "Click the key you want to change\nand then the press the key you want to change it to."
+    textBox = changeControls.add.label(text, max_char=-1, font_size=15)
+
+    changeControls.add.button('Left movement', keyChanger.left)
+    changeControls.add.button('Right movement', keyChanger.right)
+    changeControls.add.button('Instantly drop', keyChanger.hardDrop)
+    changeControls.add.button('Slowly drop', keyChanger.softDrop)
+    changeControls.add.button('Rotate left', keyChanger.rotateLeft)
+    changeControls.add.button('Rotate right', keyChanger.rotateRight)
+    changeControls.add.button('Hold piece', keyChanger.lockPiece)
+    changeControls.add.button('Pause', keyChanger.pause)
+    changeControls.add.button('back', pygame_menu.events.BACK)
+
     campaign.add.label('Campaign attempts: x')
     campaign.add.label('Campaign completion rate: y')
     campaign.add.dropselect('Level selector:', [('Level 1: Completed', 1), ('Level 2: Start', 2), ('Level 3: locked', 3), ('Level 4: locked', 4)], onchange=menuOptions.setDifficulty)
@@ -144,6 +162,7 @@ else:
     playMenu.add.button('Start Game', menuOptions.startGame)
     playMenu.add.button('back', pygame_menu.events.BACK)
     settings.add.toggle_switch('Mute sounde effects', state_text=('Unmuted', 'Muted'))
+    settings.add.button('back', pygame_menu.events.BACK)
     # buttons for player profiles
     playerProfile.add.button('signup', signup)
     playerProfile.add.button('login', login)

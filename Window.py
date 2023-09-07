@@ -15,15 +15,24 @@ class Window:
         self.zoomY = (int(self.vduDimensions[1]) / 400) * 20
 
         self.mainTheme = pygame_menu.themes.Theme(background_color=(255, 166, 158),
-                                             title_font_antialias=True,
-                                             title_background_color=(252, 100, 88),
-                                             selection_color=(140, 94, 88),
-                                             widget_background_color=(255, 247, 248),
-                                             widget_font_antialias=True,
-                                             title_close_button=False,
-                                             widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
-                                             title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
-                                             widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
+                                                 title_font_antialias=True,
+                                                 title_background_color=(252, 100, 88),
+                                                 selection_color=(140, 94, 88),
+                                                 widget_background_color=(255, 247, 248),
+                                                 widget_font_antialias=True,
+                                                 title_close_button=False,
+                                                 widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
+                                                 title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_TITLE_ONLY_DIAGONAL,
+                                                 widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
+        self.noTitle = pygame_menu.themes.Theme(background_color=(255, 166, 158),
+                                                selection_color=(140, 94, 88),
+                                                widget_background_color=(255, 247, 248),
+                                                widget_font_antialias=True,
+                                                title_close_button=False,
+                                                title_font_color = (255, 166, 158),
+                                                widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
+                                                title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_NONE,
+                                                widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
     def invisibleGrid(self):
         self.gridColour = self.backgroundColor
 

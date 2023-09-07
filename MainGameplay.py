@@ -101,9 +101,9 @@ class MainGameplay:
                                         positionAndSize
                                     )
                         heldFigureLocked = True
-                    if event.key == pygame.K_q:
+                    if event.key == pygame.K_f:
                         self.game.rotateRight()
-                    if event.key == pygame.K_e:
+                    if event.key == pygame.K_c:
                         self.game.rotateLeft()
 
                     if event.key == pygame.K_s:
@@ -131,13 +131,14 @@ class MainGameplay:
 
                         # game.__init__(10, 20)
 
-                    if event.type == pygame.KEYUP:
-                        if event.key == pygame.K_s:  # Knows when I lift the down key up
-                            self.pressing_down = False
-                        if event.key == pygame.K_d or pygame.K_RIGHT:
-                            self.pressing_right = False
-                        if event.key == pygame.K_a or pygame.K_LEFT:
-                            self.pressing_left = False
+                if event.type == pygame.KEYUP:
+                    print("keyup")
+                    if event.key == pygame.K_s:  # Knows when I lift the down key up
+                        self.pressing_down = False
+                    if event.key == pygame.K_d or pygame.K_RIGHT:
+                        self.pressing_right = False
+                    if event.key == pygame.K_a or pygame.K_LEFT:
+                        self.pressing_left = False
 
                 # The rest of the code (drawing, button handling, etc.) remains the same
                 # ...

@@ -1,10 +1,11 @@
 import pygame
-
+import time
 class keyChanger:
     def __init__(self):
         pygame.init()
         self.running = True
         self.pressed_key = None
+        self.inputKey = None
     def get_pressed_key(self):
         while self.running:
             for event in pygame.event.get():
@@ -12,13 +13,14 @@ class keyChanger:
                     self.running = False
                 elif event.type == pygame.KEYDOWN:
                     # Check if a key is pressed
-                    self.pressed_key = event.key  # Exit the loop on key press
-                    self.running = False
+                    self.pressed_key = event.key
+                    self.running = False# Exit the loop on key press
         if self.pressed_key is not None:
+            self.running = True
             return self.keyDictionary(pygame.key.name(self.pressed_key))
         else:
             return None
-    def keyDictionary(self, input_key):
+    def keyDictionary(self, inputKey):
         key_mapping = {
             'a': pygame.K_a,
             'b': pygame.K_b,
@@ -88,9 +90,9 @@ class keyChanger:
             'f12': pygame.K_F12,
             # Add more keys as needed
         }
-
-        input_key = input_key.lower()
-        if input_key in key_mapping:
-            return key_mapping[input_key]
+        self.pressed_key = None
+        inputKey = inputKey.lower()
+        if inputKey in key_mapping:
+            return key_mapping[inputKey]
         else:
             return None

@@ -11,5 +11,6 @@ key_mapping = {
     'pause': pygame.K_ESCAPE
 }
 
-def update(target, newValue):
-    key_mapping['target'] = newValue
+class update:
+    def update(self, targetKey, targetValue):
+        key_mapping[targetKey] = targetValue

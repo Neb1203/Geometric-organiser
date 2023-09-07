@@ -4,8 +4,9 @@ from datetime import datetime, timedelta
 import json
 from tokenModifier import TokenModifier
 from removeSpeach import removeSpeach
+from controlArray import *
 from keyChanger import keyChanger
-keyChanger = keyChanger()
+import time
 class menuOptions:
     def __init__(self):
         self.user_email = 'null'
@@ -17,8 +18,7 @@ class menuOptions:
         # Do the job here
         # window(50)
         pass
-    def setNewKey(self):
-        print(keyChanger.get_pressed_key())
+
 
     def screenSize(self, screenSize):
         # window.newScreenSize = screenSize
@@ -82,3 +82,48 @@ class menuOptions:
                 self.sessionToken = response_content
         else:
             print("code not equal to 200")
+keyChanger = keyChanger()
+update = update()
+class updateKey:
+    def __init__(self):
+        self.delay_seconds = 0.15
+    def left(self):
+        time.sleep(self.delay_seconds)
+        print("updateKey.left")
+        targetKey = 'left'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def right(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'right'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def hardDrop(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'hardDrop'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def softDrop(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'softDrop'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def rotateLeft(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'rotateLeft'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def rotateRight(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'rotateRight'
+        update.update(targetKey, keyChanger.get_pressed_key())
+
+    def lockPiece(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'lockPiece'
+        update.update(targetKey, keyChanger.get_pressed_key())
+    def pause(self):
+        time.sleep(self.delay_seconds)
+        targetKey = 'pause'
+        update.update(targetKey, keyChanger.get_pressed_key())
+

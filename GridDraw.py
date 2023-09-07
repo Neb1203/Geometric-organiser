@@ -109,7 +109,7 @@ class Tetris:
     def rotateLeft(self):
         if self.state.gameStarted():
             old_rotation = self.figure.rotation
-            self.figure.rotateRight()
+            self.figure.rotateLeft()
             if self.intersects():
                 self.figure.rotation = old_rotation
 

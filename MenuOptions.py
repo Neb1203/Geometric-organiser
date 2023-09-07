@@ -4,7 +4,8 @@ from datetime import datetime, timedelta
 import json
 from tokenModifier import TokenModifier
 from removeSpeach import removeSpeach
-
+from keyChanger import keyChanger
+keyChanger = keyChanger()
 class menuOptions:
     def __init__(self):
         self.user_email = 'null'
@@ -16,6 +17,8 @@ class menuOptions:
         # Do the job here
         # window(50)
         pass
+    def setNewKey(self):
+        print(keyChanger.get_pressed_key())
 
     def screenSize(self, screenSize):
         # window.newScreenSize = screenSize

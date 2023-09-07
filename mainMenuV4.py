@@ -81,11 +81,10 @@ else:
     startScreen = pygame_menu.Menu('Start Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     playMenu = pygame_menu.Menu('Play', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
-    playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1],
-                                     theme=window.mainTheme)
+    changeControls = pygame_menu.Menu('Change controls', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
+    playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
-    accountSwitcher = pygame_menu.Menu('Account switcher', window.vduDimensions[0], window.vduDimensions[1],
-                                       theme=window.mainTheme)
+    accountSwitcher = pygame_menu.Menu('Account switcher', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)
     campaign = pygame_menu.Menu('Campaign', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)
     playerStatistics = pygame_menu.Menu('Player stats:', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     signup.set_onbeforeopen(lambda current, menu: menuChanged(current, 'signup'))
@@ -131,6 +130,8 @@ else:
                               range_values=[1, 2, 3, 4, 5],
                               default=3,
                               onchange=menuOptions.screenSize)
+    settings.add.button('Change controls', changeControls)
+    changeControls.add.button('select new key', menuOptions.setNewKey)
     campaign.add.label('Campaign attempts: x')
     campaign.add.label('Campaign completion rate: y')
     campaign.add.dropselect('Level selector:', [('Level 1: Completed', 1), ('Level 2: Start', 2), ('Level 3: locked', 3), ('Level 4: locked', 4)], onchange=menuOptions.setDifficulty)

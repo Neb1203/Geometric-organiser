@@ -6,13 +6,11 @@ from Window import Window
 from Figure import Figure
 from GameStateEnum import GameStateEnum
 from CenterButton import CenterButton
+import controlArray
 gameRunning = True
 w = Window()
 colours = Colours()
 cb = CenterButton()
-
-
-
 def start_game():
     pygame.init()
     game = MainGameplay()
@@ -76,7 +74,7 @@ class MainGameplay:
                     game_running = False
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
-                    if event.key == pygame.K_l and not heldFigureLocked:
+                    if event.key == controlArray.key_mapping['lockPiece'] and not heldFigureLocked:
                         newHeldPiece = self.game.figure
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                         self.game.swapHeldFigure()
@@ -101,26 +99,26 @@ class MainGameplay:
                                         positionAndSize
                                     )
                         heldFigureLocked = True
-                    if event.key == pygame.K_f:
+                    if event.key == controlArray.key_mapping['rotateRight']:
                         self.game.rotateRight()
-                    if event.key == pygame.K_c:
+                    if event.key == controlArray.key_mapping['rotateLeft']:
                         self.game.rotateLeft()
 
-                    if event.key == pygame.K_s:
+                    if event.key == controlArray.key_mapping['softDrop']:
                         self.pressing_down = True
 
-                    if event.key == pygame.K_a or event.key == pygame.K_LEFT:
+                    if event.key == controlArray.key_mapping['left'] or event.key == pygame.K_LEFT:
                         pygame.key.set_repeat(self.delay, self.interval)
                         self.game.goSide(-1)
 
-                    if event.key == pygame.K_d or event.key == pygame.K_RIGHT:
+                    if controlArray.key_mapping['right'] or event.key == pygame.K_RIGHT:
                         pygame.key.set_repeat(self.delay, self.interval)
                         self.game.goSide(1)
-                    if event.key == pygame.K_SPACE:
+                    if event.key == controlArray.key_mapping['hardDrop']:
                         self.game.goSpace()
                         heldFigureLocked = False
                         self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
-                    if event.key == pygame.K_ESCAPE:
+                    if event.key == controlArray.key_mapping['pause']:
                         # self.return_to_main_menu()
                         # self.resume_game()
                         initialState = self.game.state
@@ -133,11 +131,11 @@ class MainGameplay:
 
                 if event.type == pygame.KEYUP:
                     print("keyup")
-                    if event.key == pygame.K_s:  # Knows when I lift the down key up
+                    if controlArray.key_mapping['softDrop']:  # Knows when I lift the down key up
                         self.pressing_down = False
-                    if event.key == pygame.K_d or pygame.K_RIGHT:
+                    if controlArray.key_mapping['right'] or pygame.K_RIGHT:
                         self.pressing_right = False
-                    if event.key == pygame.K_a or pygame.K_LEFT:
+                    if event.key == controlArray.key_mapping['left'] or pygame.K_LEFT:
                         self.pressing_left = False
 
                 # The rest of the code (drawing, button handling, etc.) remains the same

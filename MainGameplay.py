@@ -108,10 +108,11 @@ class MainGameplay:
                         self.pressing_down = True
 
                     if event.key == controlArray.key_mapping['left'] or event.key == pygame.K_LEFT:
+                        print("left key pressed")
                         pygame.key.set_repeat(self.delay, self.interval)
                         self.game.goSide(-1)
 
-                    if controlArray.key_mapping['right'] or event.key == pygame.K_RIGHT:
+                    if event.key == controlArray.key_mapping['right'] or event.key == pygame.K_RIGHT:
                         pygame.key.set_repeat(self.delay, self.interval)
                         self.game.goSide(1)
                     if event.key == controlArray.key_mapping['hardDrop']:

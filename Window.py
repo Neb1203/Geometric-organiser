@@ -29,7 +29,7 @@ class Window:
                                                 widget_background_color=(255, 247, 248),
                                                 widget_font_antialias=True,
                                                 title_close_button=False,
-                                                title_font_color = (255, 166, 158),
+                                                title_font_color=(0, 0, 0),
                                                 widget_selection_effect=pygame_menu.widgets.HighlightSelection(),
                                                 title_bar_style=pygame_menu.widgets.MENUBAR_STYLE_NONE,
                                                 widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)

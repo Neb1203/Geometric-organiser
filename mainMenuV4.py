@@ -83,7 +83,7 @@ else:
     startScreen = pygame_menu.Menu('Start Screen', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     playMenu = pygame_menu.Menu('Play', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     settings = pygame_menu.Menu('settings', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
-    changeControls = pygame_menu.Menu(None, window.vduDimensions[0], window.vduDimensions[1], theme=window.noTitle)
+    changeControls = pygame_menu.Menu("", window.vduDimensions[0], window.vduDimensions[1], theme=window.noTitle)
     playerProfile = pygame_menu.Menu('Change player Profiles', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     mainMenu = pygame_menu.Menu('Main Menu', window.vduDimensions[0], window.vduDimensions[1], theme=window.mainTheme)
     accountSwitcher = pygame_menu.Menu('Account switcher', window.vduDimensions[0], window.vduDimensions[1], theme = window.mainTheme)

@@ -1,9 +1,7 @@
 import requests
+
+from GameModeEnum import GameModeEnum
 from MainGameplay import MainGameplay
-from datetime import datetime, timedelta
-import json
-from tokenModifier import TokenModifier
-from removeSpeach import removeSpeach
 from controlArray import *
 from keyChanger import keyChanger
 import time
@@ -13,6 +11,7 @@ class menuOptions:
         self.user_password = 'null'
         self.user_name = 'null'
         self.sessionToken = 'null'
+        self.gameMode = GameModeEnum.CAMPAIGN
 
     def setDifficulty(self, value, difficulty):
         # Do the job here
@@ -33,26 +32,20 @@ class menuOptions:
 
     def email(self, email):
         self.user_email = email
-    def pickGameMode(self, value, gameMode):
-        global gameModeSelected
-        gameModeSelected = gameMode
+    def setGameMode(self, selector, gameMode):
+        self.gameMode = gameMode
 
     def selectAccount(self, data, value):
         self.selectedAccount = value
 
 
     def startGame(self):
-        print("CUM")
-        global gameModeSelected
-        gameModeSelected = False
-
-        if gameModeSelected == False:
+        if self.gameMode == GameModeEnum.ENDLESS:
             game = MainGameplay()
             game.run_game()
-
-            # If the game loop has exited (returned to main menu), you can perform any post-game actions here.
-        elif gameModeSelected == True:
-            print("cum")
+        elif self.gameMode == GameModeEnum.CAMPAIGN:
+            game = MainGameplay()
+            game.run_game()
 
     def signup(self):
         # menuChanged()

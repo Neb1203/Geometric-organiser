@@ -1,5 +1,6 @@
 import pygame_menu
 
+from GameModeEnum import GameModeEnum
 from tokenModifier import TokenModifier
 from GridDraw import Tetris
 from UsernamesModel import UsernamesModel
@@ -156,7 +157,7 @@ else:
     campaign.add.button('Start level')
 
     # Create buttons for playMenu
-    playMenu.add.selector('Gamemode : ', [('Campaign', True), ('Endless', False)], onchange=menuOptions.pickGameMode)
+    playMenu.add.selector('Gamemodes: ', [('Campaign', GameModeEnum.CAMPAIGN), ('Endless', GameModeEnum.ENDLESS)], onchange=menuOptions.setGameMode)
     playMenu.add.dropselect('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)],
                             onchange=menuOptions.setDifficulty)
     playMenu.add.button('Start Game', menuOptions.startGame)

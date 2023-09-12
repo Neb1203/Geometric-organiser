@@ -42,13 +42,12 @@ class menuOptions:
 
 
     def startGame(self):
-        print("CUM")
         global gameModeSelected
         gameModeSelected = False
 
         if gameModeSelected == False:
             game = MainGameplay()
-            game.run_game()
+            game.runGame()
 
             # If the game loop has exited (returned to main menu), you can perform any post-game actions here.
         elif gameModeSelected == True:

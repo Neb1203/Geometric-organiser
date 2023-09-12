@@ -11,10 +11,10 @@ gameRunning = True
 w = Window()
 colours = Colours()
 cb = CenterButton()
-def start_game():
+def initialiseGame():
     pygame.init()
     game = MainGameplay()
-    game.run_game()
+    game.runGame()
     pygame.quit()
 class MainGameplay:
     numUpcomingFigures = 3
@@ -40,7 +40,7 @@ class MainGameplay:
         self.pressing_right = False
         self.pressing_left = False
 
-    def run_game(self):
+    def runGame(self):
         fontOpenSansBig = pygame.font.SysFont('sans', 35)
         fontOpenSans = pygame.font.SysFont('sans', 24)
         fontOpenSansItalic = pygame.font.SysFont('sans', 18)
@@ -209,38 +209,9 @@ class MainGameplay:
                 w.surface.blit(heldPieceMessage, (100, 315))
             if self.game.state.gameOver():
                 print("gameState = gameOver")
-                self.return_to_main_menu()
+                self.returnToMainMenu()
             if self.game.state.paused():
                 pass
-                # square_color = (255, 255, 255)  # Red color
-                # square_size = 200
-                # square_x = w.vduDimensions[0] // 2 - square_size // 2  # Center the square horizontally
-                # square_y = w.vduDimensions[1] // 2 - square_size // 2 - 60
-                #
-                # # pygame.draw.rect(w.surface, square_color, (square_x, square_y, square_size, square_size))
-                #
-                # resumePath = "button images/Resume imagee.png"
-                # restartPath = "button images/Restart buttonn.png"
-                # mainMenuPath = "button images/Quit buttonn.png"
-                #
-                # totalNumButtons = 2
-                # margins = 20
-                #
-                # resumeImage = pygame.image.load(resumePath).convert_alpha()
-                # restartImage = pygame.image.load(restartPath).convert_alpha()
-                # mainMenuImage = pygame.image.load(mainMenuPath).convert_alpha()
-                #
-                # resume_button = button.Button(cb.centerButtonWidth(resumePath), cb.centerButtonHeight(resumePath, totalNumButtons, margins, 0), resumeImage, 1)
-                # restartButton = button.Button(cb.centerButtonWidth(restartPath), cb.centerButtonHeight(restartPath, totalNumButtons, margins, 1), restartImage, 1)
-                # mainMenuButton = button.Button(cb.centerButtonWidth(mainMenuPath), cb.centerButtonHeight(mainMenuPath, totalNumButtons, margins, 2), mainMenuImage, 1)
-                #
-                # if resume_button.draw(w.surface):
-                #     self.game.state = GameStateEnum.STARTED
-                # if restartButton.draw(w.surface):
-                #     self.game.__init__(10, 20)
-                #     self.game.newFigure()
-                # if mainMenuButton.draw(w.surface):
-                #     print("Return to main menu button pressed")
             pygame.display.flip()
             self.clock.tick(self.fps)
 
@@ -248,8 +219,7 @@ class MainGameplay:
                 game_running = False
                 gameRunning = False
 
-    def return_to_main_menu(self):
-        print("return to main menu")
+    def returnToMainMenu(self):
         self.pause_menu.disable()
         self.pause_menu.clear()
     def restartGame(self):
@@ -263,7 +233,6 @@ class MainGameplay:
         gameRunning = False
 
     def pauseMenu(self):
-        print("def pauseMenu")
         self.game.state = GameStateEnum.PAUSED
         # Create a pause menu
         self.pause_menu = pygame_menu.Menu('Pause Menu', w.vduDimensions[0], w.vduDimensions[1], theme=w.mainTheme)
@@ -271,15 +240,11 @@ class MainGameplay:
         # Add items to the pause menu (e.g., resume and quit options)
         self.pause_menu.add.button('Resume', self.resume_game)
         self.pause_menu.add.button('Restart', self.restartGame)
-        self.pause_menu.add.button('Quit', self.return_to_main_menu)
+        self.pause_menu.add.button('Quit', self.returnToMainMenu)
         # Run the pause menu
         self.pause_menu.mainloop(w.surface)
 
-    def resume_game(self):
-        # print("def resume")
-        # if self.game.state.paused():
-        #     print("paused")
-        global gameRunning
+    def resume_game(self):global gameRunning
         gameRunning = True
         self.game.state = GameStateEnum.STARTED
         self.pause_menu.disable()
@@ -288,4 +253,4 @@ class MainGameplay:
 
 
 if __name__ == "__main__":
-    start_game()
+    initialiseGame()

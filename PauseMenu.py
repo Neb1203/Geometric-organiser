@@ -6,7 +6,7 @@ from GridDraw import Tetris
 from Window import Window
 
 
-class Menus:
+class PauseMenu:
 
     # game = Tetris(10, 20)
     upcomingFiguresDisplay = pygame.Surface((150, 450))
@@ -14,7 +14,7 @@ class Menus:
     hudsDefaultColors = (255, 255, 255)
 
     def __init__(self):
-        self.upcomingFiguresDisplay.fill(Menus.hudsDefaultColors)
+        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
         self.tetris = Tetris(10, 20)
 
     def quit(self):

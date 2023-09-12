@@ -40,12 +40,8 @@ class menuOptions:
 
 
     def startGame(self):
-        if self.gameMode == GameModeEnum.ENDLESS:
-            game = MainGameplay()
-            game.run_game()
-        elif self.gameMode == GameModeEnum.CAMPAIGN:
-            game = MainGameplay()
-            game.run_game()
+        game = MainGameplay()
+        game.runGame(self.gameMode)
 
     def signup(self):
         # menuChanged()

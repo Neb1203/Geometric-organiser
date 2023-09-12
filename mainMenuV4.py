@@ -10,7 +10,6 @@ from MenuOptions import menuOptions, updateKey
 
 mainTheme = pygame_menu.themes.THEME_SOLARIZED
 window = Window()
-Tetris = Tetris(10, 20)
 hashGenerator = HashingGenerator()
 csvInstance = UsernamesModel()
 menuOptions = menuOptions()

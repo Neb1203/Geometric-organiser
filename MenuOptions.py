@@ -1,7 +1,9 @@
 import requests
-
-from GameModeEnum import GameModeEnum
 from MainGameplay import MainGameplay
+from datetime import datetime, timedelta
+import json
+from tokenModifier import TokenModifier
+from removeSpeach import removeSpeach
 from controlArray import *
 from keyChanger import keyChanger
 import time
@@ -11,7 +13,6 @@ class menuOptions:
         self.user_password = 'null'
         self.user_name = 'null'
         self.sessionToken = 'null'
-        self.gameMode = GameModeEnum.CAMPAIGN
 
     def setDifficulty(self, value, difficulty):
         # Do the job here

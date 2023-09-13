@@ -1,21 +1,20 @@
 import pygame
-
-import controlArray
-from CenterButton import CenterButton
+import pygame_menu
 from Colours import Colours
-from Figure import Figure
-from GameModeEnum import GameModeEnum
-from GameStateEnum import GameStateEnum
-from PauseMenu import PauseMenu
 from GridDraw import Tetris
 from Window import Window
-
+from Figure import Figure
+from GameStateEnum import GameStateEnum
+from CenterButton import CenterButton
+import controlArray
+gameRunning = True
 w = Window()
 colours = Colours()
 cb = CenterButton()
-
 class MainGameplay:
     numUpcomingFigures = 3
+
+    hudsDefaultColors = (255, 255, 255)
     hudsBorderColors = (0, 0, 0)
     upcomingFiguresDisplay = pygame.Surface((150, 450))
 
@@ -23,7 +22,7 @@ class MainGameplay:
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(w.vduDimensions[1]) / 400) * 20
 
-        self.tetris = Tetris(10, 20)
+        self.game = Tetris(10, 20)
 
         self.clock = pygame.time.Clock()
         self.fps = 25
@@ -36,7 +35,7 @@ class MainGameplay:
         self.pressing_right = False
         self.pressing_left = False
 
-    def runGame(self, gameMode: GameModeEnum):
+    def runGame(self):
         fontOpenSansBig = pygame.font.SysFont('sans', 35)
         fontOpenSans = pygame.font.SysFont('sans', 24)
         fontOpenSansItalic = pygame.font.SysFont('sans', 18)
@@ -44,28 +43,25 @@ class MainGameplay:
 
         heldFigureLocked = False
         heldFigureContainer = pygame.Surface((150, 150))
-        heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
+        heldFigureContainer.fill(self.hudsDefaultColors)
 
-        self.pauseMenu = PauseMenu()
-        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
-        # self.gameplayHelpers.upcomingFiguresDisplay.fill(GameplayHelpers.hudsDefaultColors)
-        # self.gameplayHelpers.game.state = GameStateEnum.STARTED
-        # self.gameplayHelpers.game = Tetris(10, 20)
+
+        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
 
         game_running = True
         while game_running:
-            if self.tetris.figure is None:
-                self.tetris.newFigure()
+            if self.game.figure is None:
+                self.game.newFigure()
             self.counter += 1
             if self.counter > 100000:
                 self.counter = 0
 
-            if self.counter % (self.fps // self.tetris.level // 2) == 0 or self.pressing_down:
-                if self.tetris.state.gameStarted():
-                    reachedBottom = self.tetris.goDown()
+            if self.counter % (self.fps // self.game.level // 2) == 0 or self.pressing_down:
+                if self.game.state.gameStarted():
+                    reachedBottom = self.game.goDown()
                     if reachedBottom:
                         heldFigureLocked = False
-                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
@@ -74,34 +70,34 @@ class MainGameplay:
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == controlArray.key_mapping['lockPiece'] and not heldFigureLocked:
-                        newHeldPiece = self.tetris.figure
-                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
-                        self.tetris.swapHeldFigure()
-                        self.tetris.setHeldFigure(newHeldPiece)
-                        heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
+                        newHeldPiece = self.game.figure
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
+                        self.game.swapHeldFigure()
+                        self.game.setHeldFigure(newHeldPiece)
+                        heldFigureContainer.fill(self.hudsDefaultColors)
 
                         for i in range(4):
                             for j in range(4):
                                 p = i * 4 + j
-                                if p in self.tetris.heldFigure.image():
+                                if p in self.game.heldFigure.image():
                                     positionAndSize = pygame.Rect(
-                                        (self.tetris.x + self.scaleWVduDimensionsX * (
-                                            j + self.tetris.heldFigure.x) + 1) - 320,
-                                        (self.tetris.y + self.scaleWVduDimensionsY * (
-                                              i + self.tetris.heldFigure.y) + 1) + 15,
+                                        (self.game.x + self.scaleWVduDimensionsX * (
+                                            j + self.game.heldFigure.x) + 1) - 320,
+                                        (self.game.y + self.scaleWVduDimensionsY * (
+                                              i + self.game.heldFigure.y) + 1) + 15,
                                         (self.scaleWVduDimensionsX - 2),
                                         (self.scaleWVduDimensionsY - 2)
                                     )
                                     pygame.draw.rect(
                                         heldFigureContainer,
-                                        Figure.colors[self.tetris.heldFigure.color],
+                                        Figure.colors[self.game.heldFigure.color],
                                         positionAndSize
                                     )
                         heldFigureLocked = True
                     if event.key == controlArray.key_mapping['rotateRight']:
-                        self.tetris.rotateRight()
+                        self.game.rotateRight()
                     if event.key == controlArray.key_mapping['rotateLeft']:
-                        self.tetris.rotateLeft()
+                        self.game.rotateLeft()
 
                     if event.key == controlArray.key_mapping['softDrop']:
                         self.pressing_down = True
@@ -109,28 +105,26 @@ class MainGameplay:
                     if event.key == controlArray.key_mapping['left'] or event.key == pygame.K_LEFT:
                         print("left key pressed")
                         pygame.key.set_repeat(self.delay, self.interval)
-                        self.tetris.goSide(-1)
+                        self.game.goSide(-1)
 
                     if event.key == controlArray.key_mapping['right'] or event.key == pygame.K_RIGHT:
                         pygame.key.set_repeat(self.delay, self.interval)
-                        self.tetris.goSide(1)
+                        self.game.goSide(1)
                     if event.key == controlArray.key_mapping['hardDrop']:
-                        self.tetris.goSpace()
+                        self.game.goSpace()
                         heldFigureLocked = False
-                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
+                        self.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
                     if event.key == controlArray.key_mapping['pause']:
-                        # GameplayHelpers.return_to_main_menu()
+                        # self.return_to_main_menu()
                         # self.resume_game()
-                        initialState = self.tetris.state
+                        initialState = self.game.state
                         if initialState == GameStateEnum.PAUSED:
-                            self.pauseMenu.resume()
-                            self.tetris.state = GameStateEnum.STARTED
+                            self.resume_game()
                         elif initialState == GameStateEnum.STARTED:
-                            print("RUNNING")
-                            self.tetris.state = GameStateEnum.PAUSED
-                            self.pauseMenu.open(w, self)
+                            self.pauseMenu()
 
                         # game.__init__(10, 20)
+
                 if event.type == pygame.KEYUP:
                     print("keyup")
                     if controlArray.key_mapping['softDrop']:  # Knows when I lift the down key up
@@ -142,22 +136,23 @@ class MainGameplay:
 
                 # The rest of the code (drawing, button handling, etc.) remains the same
                 # ...
+
             w.surface.fill(colours.backgroundColour)
 
-            for i in range(self.tetris.height):
-                for j in range(self.tetris.width):
-                    pygame.draw.rect(w.surface, colours.gridColour, [self.tetris.x + self.scaleWVduDimensionsX * j, self.tetris.y + self.scaleWVduDimensionsY * i, self.scaleWVduDimensionsX, self.scaleWVduDimensionsY], 1)
-                    if self.tetris.field[i][j] > 0:
-                        pygame.draw.rect(w.surface, Figure.colors[self.tetris.field[i][j]],
-                                         [self.tetris.x + self.scaleWVduDimensionsX * j + 1, self.tetris.y + self.scaleWVduDimensionsY * i + 1, self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 1])
-            if self.tetris.figure is not None:
+            for i in range(self.game.height):
+                for j in range(self.game.width):
+                    pygame.draw.rect(w.surface, colours.gridColour, [self.game.x + self.scaleWVduDimensionsX * j, self.game.y + self.scaleWVduDimensionsY * i, self.scaleWVduDimensionsX, self.scaleWVduDimensionsY], 1)
+                    if self.game.field[i][j] > 0:
+                        pygame.draw.rect(w.surface, Figure.colors[self.game.field[i][j]],
+                                         [self.game.x + self.scaleWVduDimensionsX * j + 1, self.game.y + self.scaleWVduDimensionsY * i + 1, self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 1])
+            if self.game.figure is not None:
                 for i in range(4):
                     for j in range(4):
                         p = i * 4 + j
-                        if p in self.tetris.figure.image():
-                            pygame.draw.rect(w.surface, Figure.colors[self.tetris.figure.color],
-                                             [self.tetris.x + self.scaleWVduDimensionsX * (j + self.tetris.figure.x) + 1,
-                                              self.tetris.y + self.scaleWVduDimensionsY * (i + self.tetris.figure.y) + 1,
+                        if p in self.game.figure.image():
+                            pygame.draw.rect(w.surface, Figure.colors[self.game.figure.color],
+                                             [self.game.x + self.scaleWVduDimensionsX * (j + self.game.figure.x) + 1,
+                                              self.game.y + self.scaleWVduDimensionsY * (i + self.game.figure.y) + 1,
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
 
             spaceYBetweenFigs = 20
@@ -165,14 +160,14 @@ class MainGameplay:
                 for i in range(4):
                     for j in range(4):
                         p = i * 4 + j
-                        figTypeIndex = self.tetris.upcomingFigureTypes[figIndex]
-                        figColorIndex = self.tetris.upcomingFigureColors[figIndex]
+                        figTypeIndex = self.game.upcomingFigureTypes[figIndex]
+                        figColorIndex = self.game.upcomingFigureColors[figIndex]
                         upcomingFigure = Figure(3, 0, figTypeIndex, figColorIndex)
                         if p in upcomingFigure.image():
                             positionAndSize = pygame.Rect(
-                                (self.tetris.x + self.scaleWVduDimensionsX * (
+                                (self.game.x + self.scaleWVduDimensionsX * (
                                     j + upcomingFigure.x) + 1) - 320,
-                                (self.tetris.y + self.scaleWVduDimensionsY * (
+                                (self.game.y + self.scaleWVduDimensionsY * (
                                       i + upcomingFigure.y) + 1) + spaceYBetweenFigs,
                                 (self.scaleWVduDimensionsX - 2),
                                 (self.scaleWVduDimensionsY - 2)
@@ -183,8 +178,7 @@ class MainGameplay:
                                 positionAndSize
                             )
                 spaceYBetweenFigs += 150
-
-            scoreTracker = fontOpenSansBig.render("Score: " + str(self.tetris.score), True, colours.black)
+            scoreTracker = fontOpenSansBig.render("Score: " + str(self.game.score), True, colours.black)
             pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
 
             w.surface.blit(scoreTracker, [0, 0])
@@ -199,18 +193,19 @@ class MainGameplay:
 
             upcomingFiguresMessage = fontOpenSans.render("Upcoming pieces", True, colours.black)
             w.surface.blit(upcomingFiguresMessage, (590, 40))
-            self.upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
-            self.upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
-            self.upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
-            w.surface.blit(self.upcomingFiguresDisplayOuter, (590, 70))
+            upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
+            upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
+            upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
+
+            w.surface.blit(upcomingFiguresDisplayOuter, (590, 70))
 
             if heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 w.surface.blit(heldPieceMessage, (100, 315))
-            if self.tetris.state.gameOver():
+            if self.game.state.gameOver():
                 print("gameState = gameOver")
-                self.pauseMenu.quit()
-            if self.tetris.state.paused():
+                self.return_to_main_menu()
+            if self.game.state.paused():
                 pass
                 # square_color = (255, 255, 255)  # Red color
                 # square_size = 200
@@ -235,14 +230,15 @@ class MainGameplay:
                 # mainMenuButton = button.Button(cb.centerButtonWidth(mainMenuPath), cb.centerButtonHeight(mainMenuPath, totalNumButtons, margins, 2), mainMenuImage, 1)
                 #
                 # if resume_button.draw(w.surface):
-                #     self.gameplayHelpers.game.state = GameStateEnum.STARTED
+                #     self.game.state = GameStateEnum.STARTED
                 # if restartButton.draw(w.surface):
-                #     self.gameplayHelpers.game.__init__(10, 20)
-                #     self.gameplayHelpers.game.newFigure()
+                #     self.game.__init__(10, 20)
+                #     self.game.newFigure()
                 # if mainMenuButton.draw(w.surface):
                 #     print("Return to main menu button pressed")
             pygame.display.flip()
             self.clock.tick(self.fps)
-            if self.tetris.state.gameOver() or self.tetris.state.paused():
+
+            if self.game.state.gameOver() or self.game.state.paused():
                 game_running = False
-                self.tetris.state = GameStateEnum.QUIT
+                gameRunning = False

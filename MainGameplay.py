@@ -244,7 +244,8 @@ class MainGameplay:
         # Run the pause menu
         self.pause_menu.mainloop(w.surface)
 
-    def resume_game(self):global gameRunning
+    def resume_game(self):
+        global gameRunning
         gameRunning = True
         self.game.state = GameStateEnum.STARTED
         self.pause_menu.disable()

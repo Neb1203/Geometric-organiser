@@ -17,6 +17,7 @@ cb = CenterButton()
 class MainGameplay:
     numUpcomingFigures = 3
     hudsBorderColors = (0, 0, 0)
+    upcomingFiguresDisplay = pygame.Surface((150, 450))
 
     def __init__(self):
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
@@ -46,6 +47,7 @@ class MainGameplay:
         heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
 
         self.pauseMenu = PauseMenu()
+        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
         # self.gameplayHelpers.upcomingFiguresDisplay.fill(GameplayHelpers.hudsDefaultColors)
         # self.gameplayHelpers.game.state = GameStateEnum.STARTED
         # self.gameplayHelpers.game = Tetris(10, 20)
@@ -63,7 +65,7 @@ class MainGameplay:
                     reachedBottom = self.tetris.goDown()
                     if reachedBottom:
                         heldFigureLocked = False
-                        self.pauseMenu.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
+                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
@@ -73,7 +75,7 @@ class MainGameplay:
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
                     if event.key == controlArray.key_mapping['lockPiece'] and not heldFigureLocked:
                         newHeldPiece = self.tetris.figure
-                        self.pauseMenu.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
+                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
                         self.tetris.swapHeldFigure()
                         self.tetris.setHeldFigure(newHeldPiece)
                         heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
@@ -115,7 +117,7 @@ class MainGameplay:
                     if event.key == controlArray.key_mapping['hardDrop']:
                         self.tetris.goSpace()
                         heldFigureLocked = False
-                        self.pauseMenu.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
+                        self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
                     if event.key == controlArray.key_mapping['pause']:
                         # GameplayHelpers.return_to_main_menu()
                         # self.resume_game()
@@ -126,7 +128,7 @@ class MainGameplay:
                         elif initialState == GameStateEnum.STARTED:
                             print("RUNNING")
                             self.tetris.state = GameStateEnum.PAUSED
-                            self.pauseMenu.open(w, self.tetris)
+                            self.pauseMenu.open(w, self)
 
                         # game.__init__(10, 20)
                 if event.type == pygame.KEYUP:
@@ -176,7 +178,7 @@ class MainGameplay:
                                 (self.scaleWVduDimensionsY - 2)
                             )
                             pygame.draw.rect(
-                                self.pauseMenu.upcomingFiguresDisplay,
+                                self.upcomingFiguresDisplay,
                                 Figure.colors[figColorIndex],
                                 positionAndSize
                             )
@@ -197,10 +199,10 @@ class MainGameplay:
 
             upcomingFiguresMessage = fontOpenSans.render("Upcoming pieces", True, colours.black)
             w.surface.blit(upcomingFiguresMessage, (590, 40))
-            self.pauseMenu.upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
-            self.pauseMenu.upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
-            self.pauseMenu.upcomingFiguresDisplayOuter.blit(self.pauseMenu.upcomingFiguresDisplay, (5, 5))
-            w.surface.blit(self.pauseMenu.upcomingFiguresDisplayOuter, (590, 70))
+            self.upcomingFiguresDisplayOuter = pygame.Surface((160, 460))
+            self.upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
+            self.upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
+            w.surface.blit(self.upcomingFiguresDisplayOuter, (590, 70))
 
             if heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)

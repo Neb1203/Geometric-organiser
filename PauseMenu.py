@@ -6,9 +6,7 @@ from Window import Window
 
 
 class PauseMenu:
-
     hudsDefaultColors = (255, 255, 255)
-
 
     def quit(self):
         self.pause_menu.disable()

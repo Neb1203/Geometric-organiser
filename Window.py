@@ -8,7 +8,7 @@ class Window:
         pygame.init()
         pygame.display.set_caption("Geometric Organiser")
         self.screenSize = (5)
-        self.vduDimensions = (self.screenSize * 160, self.screenSize * 120)
+        self.vduDimensions = (self.screenSize * 180, self.screenSize * 140)
         self.surface = pygame.display.set_mode(self.vduDimensions)
 
         self.zoomX = (int(self.vduDimensions[0]) / 500) * 20

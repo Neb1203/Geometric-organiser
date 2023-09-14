@@ -1,9 +1,8 @@
 import requests
-from MainGameplay import MainGameplay
-from datetime import datetime, timedelta
-import json
-from tokenModifier import TokenModifier
-from removeSpeach import removeSpeach
+
+from Campaign import Campaign
+from GameModeEnum import GameModeEnum
+from Endless import Endless
 from controlArray import *
 from keyChanger import keyChanger
 import time
@@ -13,6 +12,7 @@ class menuOptions:
         self.user_password = 'null'
         self.user_name = 'null'
         self.sessionToken = 'null'
+        self.gameMode = GameModeEnum.CAMPAIGN
 
     def setDifficulty(self, value, difficulty):
         # Do the job here
@@ -41,8 +41,12 @@ class menuOptions:
 
 
     def startGame(self):
-        game = MainGameplay()
-        game.runGame(self.gameMode)
+        if self.gameMode == GameModeEnum.ENDLESS:
+            endless = Endless()
+            endless.runGame()
+        else:
+            campaign = Campaign()
+            campaign.runGame()
 
     def signup(self):
         # menuChanged()

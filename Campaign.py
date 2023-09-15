@@ -42,7 +42,7 @@ class Campaign:
         fontOpenSansItalic.italic = True
 
         heldFigureLocked = False
-        heldFigureContainer = pygame.Surface((150, 150))
+        heldFigureContainer = pygame.Surface((170, 170))
         heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
 
         self.pauseMenu = PauseMenu()
@@ -84,7 +84,7 @@ class Campaign:
                                 if p in self.tetris.heldFigure.image():
                                     positionAndSize = pygame.Rect(
                                         (self.tetris.x + self.scaleWVduDimensionsX * (
-                                            j + self.tetris.heldFigure.x) + 1) - 320,
+                                            j + self.tetris.heldFigure.x) + 1) - 365,
                                         (self.tetris.y + self.scaleWVduDimensionsY * (
                                               i + self.tetris.heldFigure.y) + 1) + 15,
                                         (self.scaleWVduDimensionsX - 2),
@@ -189,20 +189,20 @@ class Campaign:
 
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             w.surface.blit(heldPieceMessage, (50, 120))
-            heldFigureContainerOuter = pygame.Surface((160, 160))
+            heldFigureContainerOuter = pygame.Surface((180, 180))
             heldFigureContainerOuter.fill(self.hudsBorderColors)
             heldFigureContainerOuter.blit(heldFigureContainer, (5, 5))
 
             w.surface.blit(heldFigureContainerOuter, (50, 150))
 
             level = 1
-            targetScore = 2
-            if self.tetris.score == targetScore:
+            targetScore = 1
+            if self.tetris.score == targetScore + 1:
                 level += 1
                 targetScore += targetScore ** 2
 
             levelMessage = fontOpenSansBig.render("Level " + str(level), True, colours.tiffanyBlue)
-            w.surface.blit(levelMessage, (20, 540))
+            w.surface.blit(levelMessage, (20, 640))
             targetScoreMessage = fontOpenSans.render("Target score: " + str(targetScore), True, colours.black)
             w.surface.blit(targetScoreMessage, (675, 0))
 
@@ -215,7 +215,7 @@ class Campaign:
 
             if heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
-                w.surface.blit(heldPieceMessage, (100, 315))
+                w.surface.blit(heldPieceMessage, (100, 335))
             if self.tetris.state.gameOver():
                 print("gameState = gameOver")
                 self.pauseMenu.quit()

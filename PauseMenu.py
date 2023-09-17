@@ -7,6 +7,7 @@ from Window import Window
 
 class PauseMenu:
     hudsDefaultColors = (255, 255, 255)
+    pause_menu = None
 
     def quit(self):
         self.pause_menu.disable()
@@ -19,18 +20,20 @@ class PauseMenu:
 
         # Add items to the pause menu (e.g., resume and quit options)
         self.pause_menu.add.button('Resume', self.resume, mainGameplay.tetris)
-        self.pause_menu.add.button('Restart', self.restart, mainGameplay)
+        self.pause_menu.add.button('Restart', self.restart, mainGameplay, True)
         self.pause_menu.add.button('Quit', self.quit)
         # Run the pause menu
         self.pause_menu.mainloop(w.surface)
 
-    def restart(self, mainGameplay):
-        self.pause_menu.disable()
-        self.pause_menu.clear()
+    def restart(self, mainGameplay, resetLives=False):
+        if self.pause_menu != None:
+            self.pause_menu.disable()
+            self.pause_menu.clear()
         mainGameplay.tetris.state = GameStateEnum.STARTED
         mainGameplay.tetris.__init__(10, 20)
         mainGameplay.tetris.newFigure()
         mainGameplay.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
+        mainGameplay.refreshLivesLeftDisplay(resetLives=resetLives)
         global gameRunning
         gameRunning = False
         return mainGameplay.tetris

@@ -17,6 +17,8 @@ class Campaign:
     numUpcomingFigures = 3
     hudsBorderColors = (0, 0, 0)
     upcomingFiguresDisplay = pygame.Surface((170, 540))
+    livesLeftContainer = pygame.Surface((200, 60))
+    lives = 3
 
     def __init__(self):
         self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
@@ -64,6 +66,7 @@ class Campaign:
                     if reachedBottom:
                         heldFigureLocked = False
                         self.refreshUpcomingDisplay()
+                        self.refreshLivesLeftDisplay()
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
@@ -74,6 +77,7 @@ class Campaign:
                     if event.key == controlArray.key_mapping['lockPiece'] and not heldFigureLocked:
                         newHeldPiece = self.tetris.figure
                         self.refreshUpcomingDisplay()
+                        self.refreshLivesLeftDisplay()
                         self.tetris.swapHeldFigure()
                         self.tetris.setHeldFigure(newHeldPiece)
                         heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
@@ -116,6 +120,7 @@ class Campaign:
                         self.tetris.goSpace()
                         heldFigureLocked = False
                         self.refreshUpcomingDisplay()
+                        self.refreshLivesLeftDisplay()
                     if event.key == controlArray.key_mapping['pause']:
                         # GameplayHelpers.return_to_main_menu()
                         # self.resume_game()
@@ -187,19 +192,31 @@ class Campaign:
 
             w.surface.blit(scoreTracker, [0, 0])
 
+
+            livesLeftMessage = fontOpenSans.render("Lives", True, colours.black)
+            w.surface.blit(livesLeftMessage, (30, 70))
+
+
+            livesLeftContainerOuter = pygame.Surface((210, 70))
+            livesLeftContainerOuter.fill(self.hudsBorderColors)
+            self.refreshLivesLeftDisplay()
+            livesLeftContainerOuter.blit(self.livesLeftContainer, (5, 5))
+
+            w.surface.blit(livesLeftContainerOuter, (30, 100))
+
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
-            w.surface.blit(heldPieceMessage, (50, 120))
+            w.surface.blit(heldPieceMessage, (50, 240))
             heldFigureContainerOuter = pygame.Surface((180, 180))
             heldFigureContainerOuter.fill(self.hudsBorderColors)
             heldFigureContainerOuter.blit(heldFigureContainer, (5, 5))
 
-            w.surface.blit(heldFigureContainerOuter, (50, 150))
+            w.surface.blit(heldFigureContainerOuter, (50, 270))
 
             level = 1
-            targetScore = 1
-            if self.tetris.score == targetScore + 1:
+            targetScore = 30
+            if self.tetris.score == targetScore:
                 level += 1
-                targetScore += targetScore ** 2
+                targetScore += level ** 2
 
             levelMessage = fontOpenSansBig.render("Level " + str(level), True, colours.tiffanyBlue)
             w.surface.blit(levelMessage, (20, 640))
@@ -215,10 +232,15 @@ class Campaign:
 
             if heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
-                w.surface.blit(heldPieceMessage, (100, 335))
+                w.surface.blit(heldPieceMessage, (100, 455))
             if self.tetris.state.gameOver():
-                print("gameState = gameOver")
-                self.pauseMenu.quit()
+                print("if self.tetris.state.gameOver():")
+                self.lives -= 1
+                if self.lives + 1 <= 0:
+                    self.pauseMenu.quit()
+                else:
+                    self.pauseMenu.restart(self)
+
             if self.tetris.state.paused():
                 pass
                 # square_color = (255, 255, 255)  # Red color
@@ -270,3 +292,14 @@ class Campaign:
             (15, 365),
             (155, 365)
         )
+
+    def refreshLivesLeftDisplay(self, resetLives = False):
+        if resetLives:
+            self.lives = 3
+        self.livesLeftContainer.fill((255, 255, 255))
+        livesIcon = pygame.image.load("heart-icon.png").convert()
+        livesIconWidth = livesIcon.get_size()[0]
+        spaceXBetween = 5
+        for i in range(self.lives):
+            self.livesLeftContainer.blit(livesIcon, (spaceXBetween, 0))
+            spaceXBetween += livesIconWidth

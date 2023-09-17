@@ -9,20 +9,24 @@ from PauseMenu import PauseMenu
 from GridDraw import Tetris
 from Window import Window
 
-w = Window()
 colours = Colours()
 cb = CenterButton()
 
 class Campaign:
+    w = Window()
     numUpcomingFigures = 3
     hudsBorderColors = (0, 0, 0)
     upcomingFiguresDisplay = pygame.Surface((170, 540))
     livesLeftContainer = pygame.Surface((200, 60))
+    heldFigureContainer = pygame.Surface((170, 170))
+    heldFigureLocked = False
+    level = 1
+    targetScore = 30
     lives = 3
 
     def __init__(self):
-        self.scaleWVduDimensionsX = (int(w.vduDimensions[0]) / 500) * 20
-        self.scaleWVduDimensionsY = (int(w.vduDimensions[1]) / 400) * 20
+        self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
+        self.scaleWVduDimensionsY = (int(self.w.vduDimensions[1]) / 400) * 20
 
         self.tetris = Tetris(10, 20)
 
@@ -43,9 +47,7 @@ class Campaign:
         fontOpenSansItalic = pygame.font.SysFont('sans', 18)
         fontOpenSansItalic.italic = True
 
-        heldFigureLocked = False
-        heldFigureContainer = pygame.Surface((170, 170))
-        heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
+        self.heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
 
         self.pauseMenu = PauseMenu()
         self.refreshUpcomingDisplay()
@@ -64,9 +66,10 @@ class Campaign:
                 if self.tetris.state.gameStarted():
                     reachedBottom = self.tetris.goDown()
                     if reachedBottom:
-                        heldFigureLocked = False
+                        self.heldFigureLocked = False
+                        self.tetris.score += 1
                         self.refreshUpcomingDisplay()
-                        self.refreshLivesLeftDisplay()
+                        Window.refreshLivesLeftDisplay(self)
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
@@ -74,13 +77,13 @@ class Campaign:
                     game_running = False
 
                 if event.type == pygame.KEYDOWN:  # Down keys for rotating
-                    if event.key == controlArray.key_mapping['lockPiece'] and not heldFigureLocked:
+                    if event.key == controlArray.key_mapping['lockPiece'] and not self.heldFigureLocked:
                         newHeldPiece = self.tetris.figure
                         self.refreshUpcomingDisplay()
-                        self.refreshLivesLeftDisplay()
+                        Window.refreshLivesLeftDisplay(self)
                         self.tetris.swapHeldFigure()
                         self.tetris.setHeldFigure(newHeldPiece)
-                        heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
+                        self.heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
 
                         for i in range(4):
                             for j in range(4):
@@ -95,11 +98,11 @@ class Campaign:
                                         (self.scaleWVduDimensionsY - 2)
                                     )
                                     pygame.draw.rect(
-                                        heldFigureContainer,
+                                        self.heldFigureContainer,
                                         Figure.colors[self.tetris.heldFigure.color],
                                         positionAndSize
                                     )
-                        heldFigureLocked = True
+                        self.heldFigureLocked = True
                     if event.key == controlArray.key_mapping['rotateRight']:
                         self.tetris.rotateRight()
                     if event.key == controlArray.key_mapping['rotateLeft']:
@@ -118,9 +121,10 @@ class Campaign:
                         self.tetris.goSide(1)
                     if event.key == controlArray.key_mapping['hardDrop']:
                         self.tetris.goSpace()
-                        heldFigureLocked = False
+                        self.heldFigureLocked = False
+                        self.tetris.score += 1
                         self.refreshUpcomingDisplay()
-                        self.refreshLivesLeftDisplay()
+                        Window.refreshLivesLeftDisplay(self)
                     if event.key == controlArray.key_mapping['pause']:
                         # GameplayHelpers.return_to_main_menu()
                         # self.resume_game()
@@ -131,7 +135,7 @@ class Campaign:
                         elif initialState == GameStateEnum.STARTED:
                             print("RUNNING")
                             self.tetris.state = GameStateEnum.PAUSED
-                            self.pauseMenu.open(w, self)
+                            self.pauseMenu.open(self)
 
                         # game.__init__(10, 20)
                 if event.type == pygame.KEYUP:
@@ -145,20 +149,20 @@ class Campaign:
 
                 # The rest of the code (drawing, button handling, etc.) remains the same
                 # ...
-            w.surface.fill(colours.backgroundColour)
+            self.w.surface.fill(colours.backgroundColour)
 
             for i in range(self.tetris.height):
                 for j in range(self.tetris.width):
-                    pygame.draw.rect(w.surface, colours.gridColour, [self.tetris.x + self.scaleWVduDimensionsX * j, self.tetris.y + self.scaleWVduDimensionsY * i, self.scaleWVduDimensionsX, self.scaleWVduDimensionsY], 1)
+                    pygame.draw.rect(self.w.surface, colours.gridColour, [self.tetris.x + self.scaleWVduDimensionsX * j, self.tetris.y + self.scaleWVduDimensionsY * i, self.scaleWVduDimensionsX, self.scaleWVduDimensionsY], 1)
                     if self.tetris.field[i][j] > 0:
-                        pygame.draw.rect(w.surface, Figure.colors[self.tetris.field[i][j]],
+                        pygame.draw.rect(self.w.surface, Figure.colors[self.tetris.field[i][j]],
                                          [self.tetris.x + self.scaleWVduDimensionsX * j + 1, self.tetris.y + self.scaleWVduDimensionsY * i + 1, self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 1])
             if self.tetris.figure is not None:
                 for i in range(4):
                     for j in range(4):
                         p = i * 4 + j
                         if p in self.tetris.figure.image():
-                            pygame.draw.rect(w.surface, Figure.colors[self.tetris.figure.color],
+                            pygame.draw.rect(self.w.surface, Figure.colors[self.tetris.figure.color],
                                              [self.tetris.x + self.scaleWVduDimensionsX * (j + self.tetris.figure.x) + 1,
                                               self.tetris.y + self.scaleWVduDimensionsY * (i + self.tetris.figure.y) + 1,
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
@@ -190,49 +194,46 @@ class Campaign:
             scoreTracker = fontOpenSansBig.render("Score: " + str(self.tetris.score), True, colours.black)
             pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
 
-            w.surface.blit(scoreTracker, [0, 0])
+            self.w.surface.blit(scoreTracker, [0, 0])
 
 
             livesLeftMessage = fontOpenSans.render("Lives", True, colours.black)
-            w.surface.blit(livesLeftMessage, (30, 70))
-
+            self.w.surface.blit(livesLeftMessage, (30, 70))
 
             livesLeftContainerOuter = pygame.Surface((210, 70))
             livesLeftContainerOuter.fill(self.hudsBorderColors)
-            self.refreshLivesLeftDisplay()
+            Window.refreshLivesLeftDisplay(self)
             livesLeftContainerOuter.blit(self.livesLeftContainer, (5, 5))
 
-            w.surface.blit(livesLeftContainerOuter, (30, 100))
+            self.w.surface.blit(livesLeftContainerOuter, (30, 100))
 
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
-            w.surface.blit(heldPieceMessage, (50, 240))
+            self.w.surface.blit(heldPieceMessage, (50, 240))
             heldFigureContainerOuter = pygame.Surface((180, 180))
             heldFigureContainerOuter.fill(self.hudsBorderColors)
-            heldFigureContainerOuter.blit(heldFigureContainer, (5, 5))
+            heldFigureContainerOuter.blit(self.heldFigureContainer, (5, 5))
 
-            w.surface.blit(heldFigureContainerOuter, (50, 270))
+            self.w.surface.blit(heldFigureContainerOuter, (50, 270))
 
-            level = 1
-            targetScore = 30
-            if self.tetris.score == targetScore:
-                level += 1
-                targetScore += level ** 2
+            if self.tetris.score == self.targetScore:
+                self.level += 1
+                self.targetScore += self.level ** 2
 
-            levelMessage = fontOpenSansBig.render("Level " + str(level), True, colours.tiffanyBlue)
-            w.surface.blit(levelMessage, (20, 640))
-            targetScoreMessage = fontOpenSans.render("Target score: " + str(targetScore), True, colours.black)
-            w.surface.blit(targetScoreMessage, (675, 0))
+            levelMessage = fontOpenSansBig.render("Level " + str(self.level), True, colours.tiffanyBlue)
+            self.w.surface.blit(levelMessage, (20, 640))
+            targetScoreMessage = fontOpenSans.render("Target score: " + str(self.targetScore), True, colours.black)
+            self.w.surface.blit(targetScoreMessage, (675, 0))
 
             upcomingFiguresMessage = fontOpenSans.render("Upcoming pieces", True, colours.black)
-            w.surface.blit(upcomingFiguresMessage, (675, 60))
+            self.w.surface.blit(upcomingFiguresMessage, (675, 60))
             self.upcomingFiguresDisplayOuter = pygame.Surface((180, 550))
             self.upcomingFiguresDisplayOuter.fill(self.hudsBorderColors)
             self.upcomingFiguresDisplayOuter.blit(self.upcomingFiguresDisplay, (5, 5))
-            w.surface.blit(self.upcomingFiguresDisplayOuter, (675, 90))
+            self.w.surface.blit(self.upcomingFiguresDisplayOuter, (675, 90))
 
-            if heldFigureLocked:
+            if self.heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
-                w.surface.blit(heldPieceMessage, (100, 455))
+                self.w.surface.blit(heldPieceMessage, (100, 455))
             if self.tetris.state.gameOver():
                 print("if self.tetris.state.gameOver():")
                 self.lives -= 1
@@ -245,10 +246,10 @@ class Campaign:
                 pass
                 # square_color = (255, 255, 255)  # Red color
                 # square_size = 200
-                # square_x = w.vduDimensions[0] // 2 - square_size // 2  # Center the square horizontally
-                # square_y = w.vduDimensions[1] // 2 - square_size // 2 - 60
+                # square_x = self.w.vduDimensions[0] // 2 - square_size // 2  # Center the square horizontally
+                # square_y = self.w.vduDimensions[1] // 2 - square_size // 2 - 60
                 #
-                # # pygame.draw.rect(w.surface, square_color, (square_x, square_y, square_size, square_size))
+                # # pygame.draw.rect(self.w.surface, square_color, (square_x, square_y, square_size, square_size))
                 #
                 # resumePath = "button images/Resume imagee.png"
                 # restartPath = "button images/Restart buttonn.png"
@@ -265,12 +266,12 @@ class Campaign:
                 # restartButton = button.Button(cb.centerButtonWidth(restartPath), cb.centerButtonHeight(restartPath, totalNumButtons, margins, 1), restartImage, 1)
                 # mainMenuButton = button.Button(cb.centerButtonWidth(mainMenuPath), cb.centerButtonHeight(mainMenuPath, totalNumButtons, margins, 2), mainMenuImage, 1)
                 #
-                # if resume_button.draw(w.surface):
+                # if resume_button.draw(self.w.surface):
                 #     self.gameplayHelpers.game.state = GameStateEnum.STARTED
-                # if restartButton.draw(w.surface):
+                # if restartButton.draw(self.w.surface):
                 #     self.gameplayHelpers.game.__init__(10, 20)
                 #     self.gameplayHelpers.game.newFigure()
-                # if mainMenuButton.draw(w.surface):
+                # if mainMenuButton.draw(self.w.surface):
                 #     print("Return to main menu button pressed")
             pygame.display.flip()
             self.clock.tick(self.fps)
@@ -292,14 +293,3 @@ class Campaign:
             (15, 365),
             (155, 365)
         )
-
-    def refreshLivesLeftDisplay(self, resetLives = False):
-        if resetLives:
-            self.lives = 3
-        self.livesLeftContainer.fill((255, 255, 255))
-        livesIcon = pygame.image.load("heart-icon.png").convert()
-        livesIconWidth = livesIcon.get_size()[0]
-        spaceXBetween = 5
-        for i in range(self.lives):
-            self.livesLeftContainer.blit(livesIcon, (spaceXBetween, 0))
-            spaceXBetween += livesIconWidth

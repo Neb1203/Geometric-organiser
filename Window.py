@@ -1,8 +1,12 @@
+from __future__ import annotations
 import pygame
-from Colours import Colours
+from typing import TYPE_CHECKING
 import pygame_menu
 
 class Window:
+    if TYPE_CHECKING:
+        from Campaign import Campaign
+
     def __init__(self):
         # Initialize the game engine
         pygame.init()
@@ -35,6 +39,17 @@ class Window:
                                                 widget_font=pygame_menu.font.FONT_OPEN_SANS_LIGHT)
     def invisibleGrid(self):
         self.gridColour = self.backgroundColor
+
+    def refreshLivesLeftDisplay(campaign: Campaign, resetLives = False):
+        if resetLives:
+            campaign.lives = 3
+        campaign.livesLeftContainer.fill((255, 255, 255))
+        livesIcon = pygame.image.load("heart-icon.png").convert()
+        livesIconWidth = livesIcon.get_size()[0]
+        spaceXBetween = 5
+        for i in range(campaign.lives):
+            campaign.livesLeftContainer.blit(livesIcon, (spaceXBetween, 0))
+            spaceXBetween += livesIconWidth
 
 
 

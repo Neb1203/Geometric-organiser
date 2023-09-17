@@ -67,7 +67,6 @@ class Endless:
                     reachedBottom = self.tetris.goDown()
                     if reachedBottom:
                         self.heldFigureLocked = False
-                        self.tetris.score += 1
                         self.refreshUpcomingDisplay()
                         Window.refreshLivesLeftDisplay(self)
 
@@ -126,7 +125,6 @@ class Endless:
                     if event.key == controlArray.key_mapping['hardDrop']:
                         self.tetris.goSpace()
                         self.heldFigureLocked = False
-                        self.tetris.score += 1
                         self.refreshUpcomingDisplay()
                         Window.refreshLivesLeftDisplay(self)
                     if event.key == controlArray.key_mapping['pause']:

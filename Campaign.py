@@ -23,6 +23,7 @@ class Campaign:
     level = 1
     targetScore = 30
     lives = 3
+    DEFAULT_TIMER_DURATION = 60
 
     def __init__(self):
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
@@ -55,6 +56,7 @@ class Campaign:
         # self.gameplayHelpers.game = Tetris(10, 20)
 
         game_running = True
+        self.timeLeft = self.DEFAULT_TIMER_DURATION
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -73,6 +75,11 @@ class Campaign:
 
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
+                if event.type == Window.TIMER_END_EVENT:
+                    if self.DEFAULT_TIMER_DURATION > 0:
+                        self.timeLeft -= 1
+                    if self.timeLeft <= 0:
+                        self.gameEnded()
                 if event.type == pygame.QUIT:
                     game_running = False
 
@@ -191,21 +198,24 @@ class Campaign:
                             )
                 spaceYBetween += 190
 
-            scoreTracker = fontOpenSansBig.render("Score: " + str(self.tetris.score), True, colours.black)
-            pauseResumeButton = fontOpenSansBig.render("Resume", True, colours.black)
+            scoreTrackerMessage = fontOpenSansBig.render("Score: ", True, colours.black)
+            scoreTracker = fontOpenSansBig.render(str(self.tetris.score), True, colours.forestGreen)
+            timeTrackerMessage = fontOpenSansBig.render("Timer: " + str(self.timeLeft), True, colours.black)
 
-            self.w.surface.blit(scoreTracker, [0, 0])
+            self.w.surface.blit(scoreTrackerMessage, [10, 0])
+            self.w.surface.blit(scoreTracker, [125, 0])
+            self.w.surface.blit(timeTrackerMessage, [10, 40])
 
 
             livesLeftMessage = fontOpenSans.render("Lives", True, colours.black)
-            self.w.surface.blit(livesLeftMessage, (30, 70))
+            self.w.surface.blit(livesLeftMessage, (30, 100))
 
             livesLeftContainerOuter = pygame.Surface((210, 70))
             livesLeftContainerOuter.fill(self.hudsBorderColors)
             Window.refreshLivesLeftDisplay(self)
             livesLeftContainerOuter.blit(self.livesLeftContainer, (5, 5))
 
-            self.w.surface.blit(livesLeftContainerOuter, (30, 100))
+            self.w.surface.blit(livesLeftContainerOuter, (30, 130))
 
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             self.w.surface.blit(heldPieceMessage, (50, 240))
@@ -235,12 +245,7 @@ class Campaign:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 self.w.surface.blit(heldPieceMessage, (100, 455))
             if self.tetris.state.gameOver():
-                print("if self.tetris.state.gameOver():")
-                self.lives -= 1
-                if self.lives + 1 <= 0:
-                    self.pauseMenu.quit()
-                else:
-                    self.pauseMenu.restart(self)
+                self.gameEnded()
 
             if self.tetris.state.paused():
                 pass
@@ -293,3 +298,10 @@ class Campaign:
             (15, 365),
             (155, 365)
         )
+
+    def gameEnded(self):
+        self.lives -= 1
+        if self.lives + 1 <= 0:
+            self.pauseMenu.quit()
+        else:
+            self.pauseMenu.restart(self)

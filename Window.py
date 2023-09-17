@@ -6,10 +6,12 @@ import pygame_menu
 class Window:
     if TYPE_CHECKING:
         from Campaign import Campaign
+    TIMER_END_EVENT = pygame.USEREVENT + 1
 
     def __init__(self):
         # Initialize the game engine
         pygame.init()
+        pygame.time.set_timer(self.TIMER_END_EVENT, 1000)
         pygame.display.set_caption("Geometric Organiser")
         self.screenSize = (5)
         self.vduDimensions = (self.screenSize * 180, self.screenSize * 140)

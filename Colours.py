@@ -5,3 +5,4 @@ class Colours:
         self.tiffanyBlue = (54, 117, 136)
         self.backgroundColour = (255, 166, 158)
         self.gridColour = self.gray
+        self.forestGreen = (34, 139, 34)

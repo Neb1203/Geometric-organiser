@@ -42,6 +42,7 @@ class PauseMenu:
         game.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
         game.heldFigureLocked = False
         game.heldFigureContainer.fill(self.hudsDefaultColors)
+        game.timeLeft = game.DEFAULT_TIMER_DURATION
         if isinstance(game, Campaign.Campaign):
             game.targetScore = 30
             game.level = 1

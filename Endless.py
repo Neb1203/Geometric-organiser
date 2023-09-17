@@ -21,13 +21,13 @@ class Endless:
     heldFigureContainer = pygame.Surface((170, 170))
     heldFigureLocked = False
     lives = 3
-    DEFAULT_TIMER_DURATION = 180
 
-    def __init__(self):
+    def __init__(self, difficultyLevel: int):
+        self.defaultTimerDuration = 180
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(self.w.vduDimensions[1]) / 400) * 20
 
-        self.tetris = Tetris(10, 20)
+        self.tetris = Tetris(10, 20, difficultyLevel)
 
         self.clock = pygame.time.Clock()
         self.fps = 25
@@ -54,7 +54,7 @@ class Endless:
         # self.gameplayHelpers.game = Tetris(10, 20)
 
         game_running = True
-        self.timeLeft = self.DEFAULT_TIMER_DURATION
+        self.timeLeft = self.defaultTimerDuration
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -73,7 +73,7 @@ class Endless:
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
                 if event.type == Window.TIMER_END_EVENT:
-                    if self.DEFAULT_TIMER_DURATION > 0:
+                    if self.defaultTimerDuration > 0:
                         self.timeLeft -= 1
                     if self.timeLeft <= 0:
                         game_running = False

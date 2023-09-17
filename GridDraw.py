@@ -14,9 +14,10 @@ class Tetris:
     numUpcomingFigures = 3
     upcomingFigureTypes = []
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, level: int = 2):
         self.height = height
         self.width = width
+        self.level = level
         self.field = []
         self.score = 0
         self.state = GameStateEnum.STARTED

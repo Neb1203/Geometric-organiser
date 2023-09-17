@@ -23,9 +23,9 @@ class Campaign:
     level = 1
     targetScore = 30
     lives = 3
-    DEFAULT_TIMER_DURATION = 60
 
-    def __init__(self):
+    def __init__(self, timerDuration):
+        self.defaultTimerDuration = timerDuration
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(self.w.vduDimensions[1]) / 400) * 20
 
@@ -56,7 +56,7 @@ class Campaign:
         # self.gameplayHelpers.game = Tetris(10, 20)
 
         game_running = True
-        self.timeLeft = self.DEFAULT_TIMER_DURATION
+        self.timeLeft = self.defaultTimerDuration
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -76,7 +76,7 @@ class Campaign:
 
             for event in pygame.event.get():  # Move this loop inside the main game loop
                 if event.type == Window.TIMER_END_EVENT:
-                    if self.DEFAULT_TIMER_DURATION > 0:
+                    if self.defaultTimerDuration > 0:
                         self.timeLeft -= 1
                     if self.timeLeft <= 0:
                         self.gameEnded()

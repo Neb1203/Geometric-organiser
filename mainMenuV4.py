@@ -1,5 +1,6 @@
 import pygame_menu
 
+from GameDifficultyEnum import GameDifficultyEnum
 from GameModeEnum import GameModeEnum
 from tokenModifier import TokenModifier
 from GridDraw import Tetris
@@ -157,8 +158,8 @@ else:
 
     # Create buttons for playMenu
     playMenu.add.selector('Gamemodes: ', [('Campaign', GameModeEnum.CAMPAIGN), ('Endless', GameModeEnum.ENDLESS)], onchange=menuOptions.setGameMode)
-    playMenu.add.dropselect('Difficulty :', [('Hard', 1), ('Normal', 2), ('Easy', 3)],
-                            onchange=menuOptions.setDifficulty)
+    playMenu.add.dropselect('Difficulty :', [('Easy', GameDifficultyEnum.EASY), ('Normal', GameDifficultyEnum.MEDIUM), ('Hard', GameDifficultyEnum.HARD)],
+                            onchange=menuOptions.setDifficulty, default=0)
     playMenu.add.button('Start Game', menuOptions.startGame)
     playMenu.add.button('back', pygame_menu.events.BACK)
     settings.add.toggle_switch('Mute sounde effects', state_text=('Unmuted', 'Muted'))

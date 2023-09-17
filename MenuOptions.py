@@ -1,6 +1,7 @@
 import requests
 
 from Campaign import Campaign
+from GameDifficultyEnum import GameDifficultyEnum
 from GameModeEnum import GameModeEnum
 from Endless import Endless
 from controlArray import *
@@ -13,11 +14,10 @@ class menuOptions:
         self.user_name = 'null'
         self.sessionToken = 'null'
         self.gameMode = GameModeEnum.CAMPAIGN
+        self.difficulty = GameDifficultyEnum.EASY
 
-    def setDifficulty(self, value, difficulty):
-        # Do the job here
-        # window(50)
-        pass
+    def setDifficulty(self, name, difficulty: GameDifficultyEnum):
+        self.difficulty = difficulty
 
 
     def screenSize(self, screenSize):
@@ -42,10 +42,10 @@ class menuOptions:
 
     def startGame(self):
         if self.gameMode == GameModeEnum.ENDLESS:
-            endless = Endless()
+            endless = Endless(self.difficulty.getDifficultyLevel())
             endless.runGame()
         else:
-            campaign = Campaign()
+            campaign = Campaign(self.difficulty.getTimerDuration())
             campaign.runGame()
 
     def signup(self):

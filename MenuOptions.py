@@ -56,19 +56,16 @@ class menuOptions:
         self.response = requests.post('http://127.0.0.1:5000/player_details', params=signup)
 
     def validate(self, session):
-        # token = removeSpeach(self.sessionToken)
-        print("session: " + session)
         tokenTup = {'sessionToken': session,}
         response = requests.get('http://127.0.0.1:5000/validate', params=tokenTup)
-        print(response)
         if response.status_code != 200:
             return False
         return True
 
     def cloudLogin(self):
-        print("def cloudLogin running")
         login = {'email': self.user_email, 'password': self.user_password}
         response = requests.post('http://127.0.0.1:5000/authenticate', params=login)
+        print("cloudLogin response code is " + str(response.status_code))
         if response.status_code == 200:
                 response_content = response.content.decode('utf-8')
                 with open("tokens.txt", "a") as file:

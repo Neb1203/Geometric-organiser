@@ -23,7 +23,6 @@ class Endless:
     lives = 3
 
     def __init__(self, difficultyLevel: int):
-        self.defaultTimerDuration = 180
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(self.w.vduDimensions[1]) / 400) * 20
 
@@ -54,7 +53,6 @@ class Endless:
         # self.gameplayHelpers.game = Tetris(10, 20)
 
         game_running = True
-        self.timeLeft = self.defaultTimerDuration
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -70,12 +68,7 @@ class Endless:
                         self.refreshUpcomingDisplay()
                         Window.refreshLivesLeftDisplay(self)
 
-            for event in pygame.event.get():  # Move this loop inside the main game loop
-                if event.type == Window.TIMER_END_EVENT:
-                    if self.defaultTimerDuration > 0:
-                        self.timeLeft -= 1
-                    if self.timeLeft <= 0:
-                        game_running = False
+            for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_running = False
 
@@ -195,11 +188,9 @@ class Endless:
 
             scoreTrackerMessage = fontOpenSansBig.render("Score: ", True, colours.black)
             scoreTracker = fontOpenSansBig.render(str(self.tetris.score), True, colours.forestGreen)
-            timeTrackerMessage = fontOpenSansBig.render("Timer: " + str(self.timeLeft), True, colours.black)
 
             self.w.surface.blit(scoreTrackerMessage, [10, 0])
             self.w.surface.blit(scoreTracker, [125, 0])
-            self.w.surface.blit(timeTrackerMessage, [10, 40])
 
             heldPieceMessage = fontOpenSans.render("Held Piece", True, colours.black)
             self.w.surface.blit(heldPieceMessage, (50, 240))
@@ -229,35 +220,6 @@ class Endless:
 
             if self.tetris.state.paused():
                 pass
-                # square_color = (255, 255, 255)  # Red color
-                # square_size = 200
-                # square_x = self.w.vduDimensions[0] // 2 - square_size // 2  # Center the square horizontally
-                # square_y = self.w.vduDimensions[1] // 2 - square_size // 2 - 60
-                #
-                # # pygame.draw.rect(self.w.surface, square_color, (square_x, square_y, square_size, square_size))
-                #
-                # resumePath = "button images/Resume imagee.png"
-                # restartPath = "button images/Restart buttonn.png"
-                # mainMenuPath = "button images/Quit buttonn.png"
-                #
-                # totalNumButtons = 2
-                # margins = 20
-                #
-                # resumeImage = pygame.image.load(resumePath).convert_alpha()
-                # restartImage = pygame.image.load(restartPath).convert_alpha()
-                # mainMenuImage = pygame.image.load(mainMenuPath).convert_alpha()
-                #
-                # resume_button = button.Button(cb.centerButtonWidth(resumePath), cb.centerButtonHeight(resumePath, totalNumButtons, margins, 0), resumeImage, 1)
-                # restartButton = button.Button(cb.centerButtonWidth(restartPath), cb.centerButtonHeight(restartPath, totalNumButtons, margins, 1), restartImage, 1)
-                # mainMenuButton = button.Button(cb.centerButtonWidth(mainMenuPath), cb.centerButtonHeight(mainMenuPath, totalNumButtons, margins, 2), mainMenuImage, 1)
-                #
-                # if resume_button.draw(self.w.surface):
-                #     self.gameplayHelpers.game.state = GameStateEnum.STARTED
-                # if restartButton.draw(self.w.surface):
-                #     self.gameplayHelpers.game.__init__(10, 20)
-                #     self.gameplayHelpers.game.newFigure()
-                # if mainMenuButton.draw(self.w.surface):
-                #     print("Return to main menu button pressed")
             pygame.display.flip()
             self.clock.tick(self.fps)
             if self.tetris.state.gameOver() or self.tetris.state.paused():

@@ -17,10 +17,8 @@ class Endless:
     numUpcomingFigures = 3
     hudsBorderColors = (0, 0, 0)
     upcomingFiguresDisplay = pygame.Surface((170, 540))
-    livesLeftContainer = pygame.Surface((200, 60))
     heldFigureContainer = pygame.Surface((170, 170))
     heldFigureLocked = False
-    lives = 3
 
     def __init__(self, difficultyLevel: int):
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
@@ -66,7 +64,6 @@ class Endless:
                     if reachedBottom:
                         self.heldFigureLocked = False
                         self.refreshUpcomingDisplay()
-                        Window.refreshLivesLeftDisplay(self)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -76,7 +73,6 @@ class Endless:
                     if event.key == controlArray.key_mapping['lockPiece'] and not self.heldFigureLocked:
                         newHeldPiece = self.tetris.figure
                         self.refreshUpcomingDisplay()
-                        Window.refreshLivesLeftDisplay(self)
                         self.tetris.swapHeldFigure()
                         self.tetris.setHeldFigure(newHeldPiece)
                         self.heldFigureContainer.fill(PauseMenu.hudsDefaultColors)
@@ -119,7 +115,6 @@ class Endless:
                         self.tetris.goSpace()
                         self.heldFigureLocked = False
                         self.refreshUpcomingDisplay()
-                        Window.refreshLivesLeftDisplay(self)
                     if event.key == controlArray.key_mapping['pause']:
                         # GameplayHelpers.return_to_main_menu()
                         # self.resume_game()
@@ -212,11 +207,7 @@ class Endless:
                 self.w.surface.blit(heldPieceMessage, (100, 455))
             if self.tetris.state.gameOver():
                 print("if self.tetris.state.gameOver():")
-                self.lives -= 1
-                if self.lives + 1 <= 0:
-                    self.pauseMenu.quit()
-                else:
-                    self.pauseMenu.restart(self)
+                self.pauseMenu.quit()
 
             if self.tetris.state.paused():
                 pass

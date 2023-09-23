@@ -4,10 +4,13 @@ import controlArray
 from CenterButton import CenterButton
 from Colours import Colours
 from Figure import Figure
+from GameModeEnum import GameModeEnum
+from GameSaves import GameSaves
 from GameStateEnum import GameStateEnum
 from PauseMenu import PauseMenu
 from GridDraw import Tetris
 from Window import Window
+from tokenModifier import TokenModifier
 
 colours = Colours()
 cb = CenterButton()
@@ -205,9 +208,6 @@ class Endless:
             if self.heldFigureLocked:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 self.w.surface.blit(heldPieceMessage, (100, 455))
-            if self.tetris.state.gameOver():
-                print("if self.tetris.state.gameOver():")
-                self.pauseMenu.quit()
 
             if self.tetris.state.paused():
                 pass
@@ -216,6 +216,16 @@ class Endless:
             if self.tetris.state.gameOver() or self.tetris.state.paused():
                 game_running = False
                 self.tetris.state = GameStateEnum.QUIT
+                print("The game is over")
+        tokenModifier = TokenModifier()
+        lastSession = tokenModifier.get_last_session()
+        if lastSession != None:
+            GameSaves.store(
+                GameModeEnum.ENDLESS,
+                self.tetris.score,
+                tokenModifier.get_last_session()
+            )
+
     def refreshUpcomingDisplay(self):
         self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
         pygame.draw.line(

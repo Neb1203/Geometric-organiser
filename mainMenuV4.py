@@ -25,7 +25,7 @@ window.noTitle.widget_margin = (0, 8)
 signupState = False
 loginState = False
 tokenModifier = TokenModifier()
-availableTokens = tokenModifier.read_session_ids()
+latestSession = tokenModifier.get_last_session()
 def menuChanged(current, menu):
     global signupState
     global loginState
@@ -68,11 +68,8 @@ def menuChanged(current, menu):
 
 # TODO refactor to have a better syntax than using the len() function
 isLoggedIn = False
-if availableTokens:
-    lastTokenIndex = len(availableTokens)-1
-    latestToken = availableTokens[lastTokenIndex]
-
-    isLoggedIn = menuOptions.validate(latestToken)
+if latestSession:
+    isLoggedIn = menuOptions.validate(latestSession)
 
 surface = window.surface
 

@@ -5,7 +5,7 @@ class TokenModifier:
 
         self.file_path = r"tokens.txt"
             # os.path.join(self.current_directory, "tokens.txt")
-    def read_session_ids(self):
+    def get_last_session(self):
         session_ids = []
         try:
             with open(self.file_path, "r", encoding="utf-8") as file:
@@ -13,8 +13,10 @@ class TokenModifier:
                     session_id = line.strip()  # Remove leading/trailing whitespace and newline
                     if session_id:
                         session_ids.append(session_id)
-                        print(session_ids)
-            return session_ids
+            if session_ids:
+                lastSessionIndex = len(session_ids) - 1
+                return session_ids[lastSessionIndex]
+            return None
         except Exception as e:
             print(f"An error occurred: {e}")
             return None
@@ -28,5 +30,3 @@ class TokenModifier:
         except Exception as e:
             print(f"An error occurred: {e}")
 
-tokenModifer = TokenModifier()
-print(tokenModifer.read_session_ids())

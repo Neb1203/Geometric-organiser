@@ -48,19 +48,17 @@ class menuOptions:
             campaign = Campaign(self.difficulty.getTimerDuration())
             campaign.runGame()
 
-    def signup(self):
+    def signup(self) -> None:
         # menuChanged()
         # mainMenu.set_current()
         print("def signup running")
         signup = {'email': self.user_email, 'password': self.user_password, 'user_name': self.user_name}
         self.response = requests.post('http://127.0.0.1:5000/player_details', params=signup)
 
-    def validate(self, session):
+    def validate(self, session) -> bool:
         tokenTup = {'sessionToken': session,}
         response = requests.get('http://127.0.0.1:5000/validate', params=tokenTup)
-        if response.status_code != 200:
-            return False
-        return True
+        return response.status_code == 200
 
     def cloudLogin(self):
         login = {'email': self.user_email, 'password': self.user_password}
@@ -69,6 +67,7 @@ class menuOptions:
         if response.status_code == 200:
                 response_content = response.content.decode('utf-8')
                 with open("tokens.txt", "a") as file:
+                    response_content = response_content.replace('"', '')
                     file.write(response_content + "\n")
                 self.sessionToken = response_content
         else:

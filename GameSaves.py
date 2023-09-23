@@ -1,8 +1,11 @@
+import json
 from datetime import time
 
 from CampaignWinStateEnum import CampaignWinStateEnum
 from GameModeEnum import GameModeEnum
 import requests
+
+from GameSavesObj import GameSavesObj
 
 
 class GameSaves:
@@ -20,3 +23,11 @@ class GameSaves:
             'campaignWinOrLoss': campaignWinOrLoss.toString()
         }
         requests.post('http://127.0.0.1:5000/game_saves', params=data)
+
+    def get(self, session: str) -> GameSavesObj:
+        data = {'session': session}
+        response = requests.get('http://127.0.0.1:5000/game_saves', params=data)
+        gameSavesJson = json.loads(response.content)
+
+        return GameSavesObj(gameSavesJson)
+

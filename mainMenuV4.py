@@ -1,13 +1,15 @@
+import json
+
 import pygame_menu
 
 from GameDifficultyEnum import GameDifficultyEnum
 from GameModeEnum import GameModeEnum
-from tokenModifier import TokenModifier
-from GridDraw import Tetris
+from GameSaves import GameSaves
+from MenuOptions import menuOptions, updateKey
 from UsernamesModel import UsernamesModel
 from Window import Window
 from hashGenerator import HashingGenerator
-from MenuOptions import menuOptions, updateKey
+from tokenModifier import TokenModifier
 
 mainTheme = pygame_menu.themes.THEME_SOLARIZED
 window = Window()
@@ -174,16 +176,23 @@ if len(allUsernames) >= 1:
 
     accountSwitcher.add.dropselect(title="Logged in usernames: ", items=allUsernamesFlipped,
                                    onchange=menuOptions.selectAccount)
-playerStatistics.add.label("Time played: timePlayed")
-playerStatistics.add.label("Lifetime score: lifetimeScore")
-playerStatistics.add.label("Games played: roundsPlayed")
-playerStatistics.add.label("Campaign attempts: campaignAttempts")
-playerStatistics.add.label("Campaign Completion Rate: campaignAttemps / campaignLosses")
-playerStatistics.add.label("High score in endless: highScore")
-playerStatistics.add.label("Number of game overs: deaths")
-playerStatistics.add.button('back', pygame_menu.events.BACK)
-# onchange = menuOptions.selectAccount
-# accountSwitcher.add.button('Log-in with selected account', menuOptions.login)
+
+gameSaves = GameSaves()
+tokenModifier = TokenModifier()
+lastSession = tokenModifier.get_last_session()
+if lastSession != None:
+    savesObj = gameSaves.get(lastSession)
+    playerAnalysis = savesObj.getPlayerAnalysis()
+
+    playerStatistics.add.label("Time played: " + str(playerAnalysis["totalTime"]))
+    playerStatistics.add.label("Lifetime score: " + str(playerAnalysis["lifetimeScore"]))
+    playerStatistics.add.label("Games played: " + str(playerAnalysis["roundsPlayed"]))
+    playerStatistics.add.label("Campaign attempts: " + str(playerAnalysis["campaignRoundsPlayed"]))
+    playerStatistics.add.label("Campaign Completion Rate: campaignAttemps / campaignLosses")
+    playerStatistics.add.label("High score in endless: " + str(playerAnalysis["endlessHighScore"]))
+    playerStatistics.add.label("Number of game overs: deaths")
+    playerStatistics.add.button('back', pygame_menu.events.BACK)
+
 if isLoggedIn:
     screenToShow = mainMenu
 else:

@@ -1,3 +1,6 @@
+import time
+import datetime
+
 import pygame
 
 import controlArray
@@ -285,6 +288,7 @@ class Campaign:
             if self.tetris.state.gameOver() or self.tetris.state.paused():
                 game_running = False
                 self.tetris.state = GameStateEnum.QUIT
+        self.gameEnded()
     def refreshUpcomingDisplay(self):
         self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
         pygame.draw.line(
@@ -302,18 +306,23 @@ class Campaign:
         )
 
     def gameEnded(self):
-        self.lives -= 1
-        if self.lives + 1 <= 0:
-            self.pauseMenu.quit()
-        else:
-            self.pauseMenu.restart(self)
         tokenModifier = TokenModifier()
         lastSession = tokenModifier.get_last_session()
+        durationObj = self.secondsToTime(self.defaultTimerDuration - self.timeLeft)
         if lastSession:
             GameSaves.storeCampaign(
                 GameModeEnum.CAMPAIGN,
                 self.tetris.score,
                 lastSession,
+                durationObj,
                 self.level,
                 CampaignWinStateEnum.LOSS
             )
+        self.lives -= 1
+        if self.lives + 1 <= 0:
+            self.pauseMenu.quit()
+        else:
+            self.pauseMenu.restart(self)
+
+    def secondsToTime(self, seconds: int) -> time:
+        return datetime.time(0, 0, seconds)

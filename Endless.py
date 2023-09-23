@@ -1,3 +1,6 @@
+import datetime
+import time
+
 import pygame
 
 import controlArray
@@ -22,6 +25,7 @@ class Endless:
     upcomingFiguresDisplay = pygame.Surface((170, 540))
     heldFigureContainer = pygame.Surface((170, 170))
     heldFigureLocked = False
+    defaultTimerDuration = 60
 
     def __init__(self, difficultyLevel: int):
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
@@ -54,6 +58,7 @@ class Endless:
         # self.gameplayHelpers.game = Tetris(10, 20)
 
         game_running = True
+        self.timeLeft = self.defaultTimerDuration
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -69,6 +74,11 @@ class Endless:
                         self.refreshUpcomingDisplay()
 
             for event in pygame.event.get():
+                if event.type == Window.TIMER_END_EVENT:
+                    if self.defaultTimerDuration > 0:
+                        self.timeLeft -= 1
+                    if self.timeLeft <= 0:
+                        self.gameEnded()
                 if event.type == pygame.QUIT:
                     game_running = False
 
@@ -216,15 +226,9 @@ class Endless:
             if self.tetris.state.gameOver() or self.tetris.state.paused():
                 game_running = False
                 self.tetris.state = GameStateEnum.QUIT
+                self.gameEnded()
                 print("The game is over")
-        tokenModifier = TokenModifier()
-        lastSession = tokenModifier.get_last_session()
-        if lastSession != None:
-            GameSaves.storeEndless(
-                GameModeEnum.ENDLESS,
-                self.tetris.score,
-                tokenModifier.get_last_session()
-            )
+        self.gameEnded()
 
     def refreshUpcomingDisplay(self):
         self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)
@@ -241,3 +245,18 @@ class Endless:
             (15, 365),
             (155, 365)
         )
+
+    def gameEnded(self):
+        tokenModifier = TokenModifier()
+        lastSession = tokenModifier.get_last_session()
+        durationObj = self.secondsToTime(self.defaultTimerDuration - self.timeLeft)
+        if lastSession != None:
+            GameSaves.storeEndless(
+                GameModeEnum.ENDLESS,
+                self.tetris.score,
+                tokenModifier.get_last_session(),
+                durationObj
+            )
+
+    def secondsToTime(self, seconds: int) -> time:
+        return datetime.time(0, 0, seconds)

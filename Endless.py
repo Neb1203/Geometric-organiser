@@ -220,7 +220,7 @@ class Endless:
         tokenModifier = TokenModifier()
         lastSession = tokenModifier.get_last_session()
         if lastSession != None:
-            GameSaves.store(
+            GameSaves.storeEndless(
                 GameModeEnum.ENDLESS,
                 self.tetris.score,
                 tokenModifier.get_last_session()

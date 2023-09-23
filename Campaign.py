@@ -1,13 +1,17 @@
 import pygame
 
 import controlArray
+from CampaignWinStateEnum import CampaignWinStateEnum
 from CenterButton import CenterButton
 from Colours import Colours
 from Figure import Figure
+from GameModeEnum import GameModeEnum
+from GameSaves import GameSaves
 from GameStateEnum import GameStateEnum
 from PauseMenu import PauseMenu
 from GridDraw import Tetris
 from Window import Window
+from tokenModifier import TokenModifier
 
 colours = Colours()
 cb = CenterButton()
@@ -303,3 +307,13 @@ class Campaign:
             self.pauseMenu.quit()
         else:
             self.pauseMenu.restart(self)
+        tokenModifier = TokenModifier()
+        lastSession = tokenModifier.get_last_session()
+        if lastSession:
+            GameSaves.storeCampaign(
+                GameModeEnum.CAMPAIGN,
+                self.tetris.score,
+                lastSession,
+                self.level,
+                CampaignWinStateEnum.LOSS
+            )

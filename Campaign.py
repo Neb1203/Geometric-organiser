@@ -4,7 +4,6 @@ import datetime
 import pygame
 
 import controlArray
-from CampaignWinStateEnum import CampaignWinStateEnum
 from CenterButton import CenterButton
 from Colours import Colours
 from Figure import Figure
@@ -315,8 +314,7 @@ class Campaign:
                 self.tetris.score,
                 lastSession,
                 durationObj,
-                self.level,
-                CampaignWinStateEnum.LOSS
+                self.level
             )
         self.lives -= 1
         if self.lives + 1 <= 0:

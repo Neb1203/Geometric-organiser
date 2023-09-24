@@ -188,9 +188,8 @@ if lastSession != None:
     playerStatistics.add.label("Lifetime score: " + str(playerAnalysis["lifetimeScore"]))
     playerStatistics.add.label("Games played: " + str(playerAnalysis["roundsPlayed"]))
     playerStatistics.add.label("Campaign attempts: " + str(playerAnalysis["campaignRoundsPlayed"]))
-    playerStatistics.add.label("Campaign Completion Rate: campaignAttemps / campaignLosses")
+    playerStatistics.add.label("Campaign Completion Rate: " + str(playerAnalysis["campaignCompletionRate"]))
     playerStatistics.add.label("High score in endless: " + str(playerAnalysis["endlessHighScore"]))
-    playerStatistics.add.label("Number of game overs: deaths")
     playerStatistics.add.button('back', pygame_menu.events.BACK)
 
 if isLoggedIn:

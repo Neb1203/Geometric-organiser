@@ -22,6 +22,9 @@ class GameSavesObj:
         roundsPlayed = 0
         campaignRoundsPlayed = 0
         endlessHighScore = 0
+        # number of campaign attempts/ number of campaign losses
+        campaignLosses = 0
+        campaignHighScore = 0
         for save in self.saves:
             duration = save["duration"]
             totalTime = totalTime + duration
@@ -30,6 +33,10 @@ class GameSavesObj:
             roundsPlayed += 1
             if save["mode"] == GameModeEnum.CAMPAIGN:
                 campaignRoundsPlayed += 1
+                if save["score"] > campaignHighScore:
+                    campaignHighScore = save["score"]
+                else:
+                    campaignLosses += 1
             elif save["mode"] == GameModeEnum.ENDLESS and save["score"] > endlessHighScore:
                 endlessHighScore = save["score"]
 
@@ -39,6 +46,7 @@ class GameSavesObj:
         analysis['roundsPlayed'] = roundsPlayed
         analysis['campaignRoundsPlayed'] = campaignRoundsPlayed
         analysis['endlessHighScore'] = endlessHighScore
+        analysis['campaignCompletionRate'] = campaignRoundsPlayed / campaignLosses
 
         return analysis
 

@@ -37,7 +37,7 @@ class PauseMenu:
             self.pause_menu.disable()
             self.pause_menu.clear()
         game.tetris.state = GameStateEnum.STARTED
-        game.tetris.__init__(10, 20)
+        game.tetris.__init__(10, 20, game.tetris.numUpcomingFigures, game.tetris.level)
         game.tetris.newFigure()
         game.upcomingFiguresDisplay.fill(self.hudsDefaultColors)
         game.heldFigureLocked = False

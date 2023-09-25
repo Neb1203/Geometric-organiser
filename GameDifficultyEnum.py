@@ -16,3 +16,12 @@ class GameDifficultyEnum(Enum):
 
     def getDifficultyLevel(self):
         return self.value
+
+    def getUpcomingPiecesNumber(self):
+        match self:
+            case self.EASY:
+                return 3
+            case self.MEDIUM:
+                return 2
+            case self.HARD:
+                return 1

@@ -42,10 +42,10 @@ class menuOptions:
 
     def startGame(self):
         if self.gameMode == GameModeEnum.ENDLESS:
-            endless = Endless(self.difficulty.getDifficultyLevel())
+            endless = Endless(self.difficulty)
             endless.runGame()
         else:
-            campaign = Campaign(self.difficulty.getTimerDuration())
+            campaign = Campaign(self.difficulty)
             campaign.runGame()
 
     def signup(self) -> None:

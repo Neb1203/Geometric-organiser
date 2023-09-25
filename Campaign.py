@@ -7,6 +7,7 @@ import controlArray
 from CenterButton import CenterButton
 from Colours import Colours
 from Figure import Figure
+from GameDifficultyEnum import GameDifficultyEnum
 from GameModeEnum import GameModeEnum
 from GameSaves import GameSaves
 from GameStateEnum import GameStateEnum
@@ -20,7 +21,6 @@ cb = CenterButton()
 
 class Campaign:
     w = Window()
-    numUpcomingFigures = 3
     hudsBorderColors = (0, 0, 0)
     upcomingFiguresDisplay = pygame.Surface((170, 540))
     livesLeftContainer = pygame.Surface((200, 60))
@@ -30,12 +30,12 @@ class Campaign:
     targetScore = 30
     lives = 3
 
-    def __init__(self, timerDuration):
-        self.defaultTimerDuration = timerDuration
+    def __init__(self, difficultyLevel: GameDifficultyEnum):
+        self.defaultTimerDuration = difficultyLevel.getTimerDuration()
         self.scaleWVduDimensionsX = (int(self.w.vduDimensions[0]) / 500) * 20
         self.scaleWVduDimensionsY = (int(self.w.vduDimensions[1]) / 400) * 20
 
-        self.tetris = Tetris(10, 20)
+        self.tetris = Tetris(10, 20, numUpcomingFigures=difficultyLevel.getUpcomingPiecesNumber())
 
         self.clock = pygame.time.Clock()
         self.fps = 25
@@ -179,7 +179,7 @@ class Campaign:
                                               self.scaleWVduDimensionsX - 2, self.scaleWVduDimensionsY - 2])
 
             spaceYBetween = 10
-            for figIndex in range(Tetris.numUpcomingFigures):
+            for figIndex in range(self.tetris.numUpcomingFigures):
                 for i in range(4):
                     for j in range(4):
                         p = i * 4 + j

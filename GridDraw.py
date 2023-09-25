@@ -11,13 +11,13 @@ class Tetris:
     y = 0
     figure = None
     heldFigure = None
-    numUpcomingFigures = 3
     upcomingFigureTypes = []
 
-    def __init__(self, width, height, level: int = 2):
+    def __init__(self, width, height, numUpcomingFigures: int, difficulty: int = 2):
         self.height = height
         self.width = width
-        self.level = level
+        self.level = difficulty
+        self.numUpcomingFigures = numUpcomingFigures
         self.field = []
         self.score = 0
         self.state = GameStateEnum.STARTED

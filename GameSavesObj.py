@@ -40,13 +40,13 @@ class GameSavesObj:
             elif save["mode"] == GameModeEnum.ENDLESS and save["score"] > endlessHighScore:
                 endlessHighScore = save["score"]
 
-
+# Have a look at ticket and see if it's necessary or i done it already
         analysis['totalTime'] = totalTime
         analysis['lifetimeScore'] = lifetimeScore
         analysis['roundsPlayed'] = roundsPlayed
         analysis['campaignRoundsPlayed'] = campaignRoundsPlayed
         analysis['endlessHighScore'] = endlessHighScore
-        analysis['campaignCompletionRate'] = campaignRoundsPlayed / campaignLosses
+        analysis['campaignCompletionRate'] = campaignRoundsPlayed / campaignLosses if (campaignRoundsPlayed != 0 or campaignLosses != 0) else 0
 
         return analysis
 

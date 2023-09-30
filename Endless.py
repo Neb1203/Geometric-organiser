@@ -2,6 +2,7 @@ import datetime
 import time
 
 import pygame
+import pygame_menu.widgets
 
 import controlArray
 from CenterButton import CenterButton
@@ -60,6 +61,7 @@ class Endless:
 
         game_running = True
         self.timeLeft = self.defaultTimerDuration
+        timeAtGameOver = None
         while game_running:
             if self.tetris.figure is None:
                 self.tetris.newFigure()
@@ -195,6 +197,15 @@ class Endless:
                             )
                 spaceYBetween += 190
 
+
+            if self.tetris.state == GameStateEnum.GAME_OVER:
+                gameOverDisplay = pygame.Surface((401, 300), pygame.SRCALPHA)
+                gameOverDisplay.fill((255, 255, 255, 160))
+                gameOverScore = fontOpenSansBig.render('Score: ' + str(self.tetris.score), True, colours.black)
+
+                gameOverDisplay.blit(gameOverScore, [15, 20])
+                self.w.surface.blit(gameOverDisplay, (250, 130))
+
             scoreTrackerMessage = fontOpenSansBig.render("Score: ", True, colours.black)
             scoreTracker = fontOpenSansBig.render(str(self.tetris.score), True, colours.forestGreen)
 
@@ -220,16 +231,13 @@ class Endless:
                 heldPieceMessage = fontOpenSansItalic.render("Locked", True, colours.black)
                 self.w.surface.blit(heldPieceMessage, (100, 455))
 
-            if self.tetris.state.paused():
-                pass
             pygame.display.flip()
             self.clock.tick(self.fps)
-            if self.tetris.state.gameOver() or self.tetris.state.paused():
+            if self.tetris.state.gameOver() and timeAtGameOver == None:
+                timeAtGameOver = self.timeLeft
+            elif timeAtGameOver != None and timeAtGameOver - self.timeLeft > 5:
                 game_running = False
-                self.tetris.state = GameStateEnum.QUIT
-                self.gameEnded()
-                print("The game is over")
-        self.gameEnded()
+            # TODO add quit, restart continue for campaign to game over popup
 
     def refreshUpcomingDisplay(self):
         self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)

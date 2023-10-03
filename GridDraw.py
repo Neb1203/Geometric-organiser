@@ -3,7 +3,7 @@ from Window import Window
 from GameStateEnum import GameStateEnum
 import random
 
-class Tetris:
+class game:
     level = 2
     score = 0
     field = []

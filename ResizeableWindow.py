@@ -10,7 +10,5 @@ class resizableWindowUpdate:
         newScaleWVduDimensionsX = (int(self.windowSize[0]) / 500) * 20
         newScaleWVduDimensionsY = (int(self.windowSize[1]) / 400) * 20
 
-        Tetris(20, 10, newScaleWVduDimensionsX, newScaleWVduDimensionsY, self.windowSize)
+        Game(20, 10, newScaleWVduDimensionsX, newScaleWVduDimensionsY, self.windowSize)
 
-    # def reDraw(self,):
-    #     Figure.Tetris()

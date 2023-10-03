@@ -1,5 +1,5 @@
 import pygame
-from gridDraw import Tetris
+from gridDraw import game
 from Window import Window
 class resizableWindowUpdate:
     def __init__(self):
@@ -12,7 +12,4 @@ class resizableWindowUpdate:
         newScaleWVduDimensionsX = (int(self.windowSize[0]) / 500) * 20
         newScaleWVduDimensionsY = (int(self.windowSize[1]) / 400) * 20
 
-        Tetris(20, 10, newScaleWVduDimensionsX, newScaleWVduDimensionsY, self.windowSize)
-
-    # def reDraw(self,):
-    #     Figure.Tetris()
+        game(20, 10, newScaleWVduDimensionsX, newScaleWVduDimensionsY, self.windowSize)

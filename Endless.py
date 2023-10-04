@@ -238,6 +238,7 @@ class Endless:
             elif timeAtGameOver != None and timeAtGameOver - self.timeLeft > 5:
                 game_running = False
             # TODO add quit, restart continue for campaign to game over popup
+        self.gameEnded()
 
     def refreshUpcomingDisplay(self):
         self.upcomingFiguresDisplay.fill(PauseMenu.hudsDefaultColors)

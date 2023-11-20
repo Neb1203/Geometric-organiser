@@ -318,8 +318,9 @@ class Campaign:
             )
         self.lives -= 1
         if self.lives + 1 <= 0:
-            self.pauseMenu.quit()
+            self.pauseMenu.open(self)
         else:
+            print("Else")
             self.pauseMenu.restart(self)
 
     def secondsToTime(self, seconds: int) -> time:
